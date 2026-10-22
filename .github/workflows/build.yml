@@ -1,12 +1,12 @@
 # ============================================================================
 # Protection légale pour le trading, propriété exclusive de Pirate Pips ™.
-# AVERTISSEMENT LÉGAL & DISCLAIMER : Ce script de compilation automatisée est
-# la propriété exclusive de Pirate Pips ™. Les outils logiciels fournis le sont
+# AVERTISSEMENT LÉGAL & DISCLAIMER : Ce script d'intégration continue est la
+# propriété exclusive de Pirate Pips ™. Les outils logiciels fournis le sont
 # à titre purement technologique et indicatif et ne constituent aucun conseil
 # en investissement ou fiscal. Le trading comporte un risque élevé de perte.
 # ============================================================================
 
-name: Build Pirate Pips KiloTracker APK
+name: Build Pirate Pips KiloTracker Pro APK
 
 on:
   push:
@@ -33,21 +33,21 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: 4. Generation du projet Android et injection du code Pirate Pips
+      - name: 4. Creation du projet Android et injection des permissions natives
         run: |
-          flutter create --platforms=android --org com.piratepips kilotracker_app
-          cp main.dart kilotracker_app/lib/main.dart
-          cd kilotracker_app
+          flutter create --platforms=android --org com.piratepips kilotracker_pro
+          cp main.dart kilotracker_pro/lib/main.dart
+          cd kilotracker_pro
           flutter pub add shared_preferences http
-          sed -i 's/<application/<uses-permission android:name="android.permission.INTERNET"\/>\n    <application/g' android/app/src/main/AndroidManifest.xml
+          sed -i 's/<application/<uses-permission android:name="android.permission.INTERNET"\/>\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"\/>\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"\/>\n    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"\/>\n    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"\/>\n    <uses-permission android:name="android.permission.BLUETOOTH"\/>\n    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"\/>\n    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"\/>\n    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"\/>\n    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"\/>\n    <uses-permission android:name="android.permission.CAMERA"\/>\n    <application/g' android/app/src/main/AndroidManifest.xml
           sed -i 's/android:label="[^"]*"/android:label="Pirate Pips KiloTracker"/g' android/app/src/main/AndroidManifest.xml
 
       - name: 5. Compilation du fichier APK Release
-        working-directory: kilotracker_app
+        working-directory: kilotracker_pro
         run: flutter build apk --release
 
-      - name: 6. Publication de l'APK pret au telechargement
+      - name: 6. Publication de l'APK dans les Artifacts GitHub
         uses: actions/upload-artifact@v4
         with:
-          name: PiratePips-KiloTracker-APK
-          path: kilotracker_app/build/app/outputs/flutter-apk/app-release.apk
+          name: PiratePips-KiloTracker-Pro-APK
+          path: kilotracker_pro/build/app/outputs/flutter-apk/app-release.apk
