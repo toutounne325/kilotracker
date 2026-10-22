@@ -1,12 +1,13 @@
 // ============================================================================
 // Protection légale pour le trading, propriété exclusive de Pirate Pips ™.
-// AVERTISSEMENT LÉGAL & DISCLAIMER : Ce logiciel et ses algorithmes de calcul
-// sont la propriété exclusive de Pirate Pips ™. Toute reproduction,
-// distribution ou modification non autorisée est strictement interdite.
-// Les informations financières, fiscales et de trading fournies par les outils
-// Pirate Pips ™ le sont à titre purement indicatif et technologique et ne
-// constituent en aucun cas un conseil en investissement, fiscal ou juridique.
-// Le trading sur les marchés financiers comporte un niveau de risque élevé.
+// AVERTISSEMENT LÉGAL & DISCLAIMER : Ce logiciel, son architecture et ses
+// algorithmes de calcul sont la propriété exclusive de Pirate Pips ™.
+// Toute reproduction, rétro-ingénierie ou distribution non autorisée est
+// strictement interdite. Les calculs fiscaux, financiers et indicateurs
+// fournis par Pirate Pips ™ ont une vocation purement informative et
+// technologique et ne constituent ni un conseil fiscal certifié ni un conseil
+// en investissement. Le trading sur les marchés financiers présente un risque
+// élevé de perte en capital.
 // ============================================================================
 
 import 'dart:async';
@@ -27,62 +28,62 @@ void main() {
       systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
-  runApp(const PiratePipsKiloApp());
+  runApp(const PiratePipsDriversApp());
 }
 
 // ============================================================================
-// 1. DESIGN TOKENS & CHARTE GRAPHIQUE PIRATE PIPS™
+// 1. DESIGN SYSTEM & TOKENS PIRATE PIPS™ (DARK MODE EXCLUSIF)
 // ============================================================================
-class PirateTheme {
-  static const Color bgPrimary = Color(0xFF0E0E0E);
-  static const Color bgSecondary = Color(0xFF161616);
-  static const Color bgElevated = Color(0xFF1E1E1E);
+class PiratePalette {
+  static const Color bgDeep = Color(0xFF0E0E0E);
+  static const Color bgSurface = Color(0xFF161616);
+  static const Color bgElevated = Color(0xFF1F1F1F);
   static const Color goldPrimary = Color(0xFFF5A623);
-  static const Color goldSecondary = Color(0xFFE5A93C);
-  static const Color textWhite = Color(0xFFFFFFFF);
-  static const Color textMuted = Color(0xFF9CA3AF);
+  static const Color goldWarm = Color(0xFFE5A93C);
   static const Color bullGreen = Color(0xFF22C55E);
   static const Color bearRed = Color(0xFFEF4444);
-  static const Color borderDark = Color(0xFF2A2A2A);
+  static const Color textPure = Color(0xFFFFFFFF);
+  static const Color textSteel = Color(0xFF9CA3AF);
+  static const Color borderSubtle = Color(0xFF2B2B2B);
 
-  static ThemeData get darkTheme {
+  static ThemeData get theme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: bgPrimary,
+      scaffoldBackgroundColor: bgDeep,
       primaryColor: goldPrimary,
       colorScheme: const ColorScheme.dark(
         primary: goldPrimary,
-        secondary: goldSecondary,
-        surface: bgSecondary,
+        secondary: goldWarm,
+        surface: bgSurface,
         error: bearRed,
         onPrimary: Colors.black,
         onSecondary: Colors.black,
-        onSurface: textWhite,
+        onSurface: textPure,
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: bgPrimary,
-        foregroundColor: textWhite,
+        backgroundColor: bgDeep,
+        foregroundColor: textPure,
         elevation: 0,
         centerTitle: false,
       ),
       cardTheme: CardThemeData(
-        color: bgSecondary,
+        color: bgSurface,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: const BorderSide(color: borderDark, width: 1),
+          side: const BorderSide(color: borderSubtle, width: 1),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: bgElevated,
-        labelStyle: const TextStyle(color: textMuted, fontSize: 13),
-        hintStyle: const TextStyle(color: Color(0xFF6B7280), fontSize: 13),
+        labelStyle: const TextStyle(color: textSteel, fontSize: 13),
+        hintStyle: const TextStyle(color: Color(0xFF6B7280), fontSize: 12),
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: borderDark),
+          borderSide: const BorderSide(color: borderSubtle),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -93,8 +94,8 @@ class PirateTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: goldPrimary,
           foregroundColor: Colors.black,
-          textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -105,99 +106,97 @@ class PirateTheme {
 }
 
 // ============================================================================
-// 2. LOGO OFFICIEL PIRATE PIPS™ (CUSTOM PAINTER)
+// 2. LOGO OFFICIEL PIRATE PIPS™ (DISQUE NOIR CERCLÉ D'OR & BOUGIES JAPONAISES)
 // ============================================================================
-class PiratePipsLogo extends StatelessWidget {
+class PiratePipsBadgeLogo extends StatelessWidget {
   final double size;
-  const PiratePipsLogo({super.key, this.size = 64});
+  const PiratePipsBadgeLogo({super.key, this.size = 64});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: size,
       height: size,
-      child: CustomPaint(
-        painter: _PiratePipsLogoPainter(),
-      ),
+      child: CustomPaint(painter: _PirateBadgePainter()),
     );
   }
 }
 
-class _PiratePipsLogoPainter extends CustomPainter {
+class _PirateBadgePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
 
-    // Fond circulaire noir profond
+    // Disque noir profond
     final bgPaint = Paint()
-      ..color = PirateTheme.bgPrimary
+      ..color = PiratePalette.bgDeep
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, radius, bgPaint);
 
-    // Halo doré externe
-    final outerGoldRing = Paint()
-      ..color = PirateTheme.goldPrimary
+    // Cercle d'or extérieur
+    final goldRing = Paint()
+      ..color = PiratePalette.goldPrimary
       ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.065;
-    canvas.drawCircle(center, radius * 0.93, outerGoldRing);
+      ..strokeWidth = size.width * 0.07;
+    canvas.drawCircle(center, radius * 0.92, goldRing);
 
-    // Liseré doré interne fin
-    final innerGoldRing = Paint()
-      ..color = PirateTheme.goldSecondary.withOpacity(0.45)
+    // Anneau intérieur ambré
+    final innerRing = Paint()
+      ..color = PiratePalette.goldWarm.withOpacity(0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.02;
-    canvas.drawCircle(center, radius * 0.80, innerGoldRing);
+    canvas.drawCircle(center, radius * 0.79, innerRing);
 
-    // Bougie Haussière Verte (Gauche)
-    final bullPaint = Paint()
-      ..color = PirateTheme.bullGreen
-      ..style = PaintingStyle.fill;
-    final bullWickPaint = Paint()
-      ..color = PirateTheme.bullGreen
+    // Bougie japonaise haussière (Verte - Gauche)
+    final bullPaint = Paint()..color = PiratePalette.bullGreen;
+    final bullWick = Paint()
+      ..color = PiratePalette.bullGreen
       ..strokeWidth = size.width * 0.045
       ..strokeCap = StrokeCap.round;
 
     final leftX = size.width * 0.37;
     canvas.drawLine(
-      Offset(leftX, size.height * 0.23),
-      Offset(leftX, size.height * 0.75),
-      bullWickPaint,
+      Offset(leftX, size.height * 0.22),
+      Offset(leftX, size.height * 0.76),
+      bullWick,
     );
-    final bullRect = RRect.fromRectAndRadius(
-      Rect.fromCenter(
-        center: Offset(leftX, size.height * 0.47),
-        width: size.width * 0.16,
-        height: size.height * 0.30,
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: Offset(leftX, size.height * 0.46),
+          width: size.width * 0.16,
+          height: size.height * 0.30,
+        ),
+        Radius.circular(size.width * 0.03),
       ),
-      Radius.circular(size.width * 0.03),
+      bullPaint,
     );
-    canvas.drawRRect(bullRect, bullPaint);
 
-    // Bougie Baissière Rouge (Droite)
-    final bearPaint = Paint()
-      ..color = PirateTheme.bearRed
-      ..style = PaintingStyle.fill;
-    final bearWickPaint = Paint()
-      ..color = PirateTheme.bearRed
+    // Bougie japonaise baissière (Rouge - Droite)
+    final bearPaint = Paint()..color = PiratePalette.bearRed;
+    final bearWick = Paint()
+      ..color = PiratePalette.bearRed
       ..strokeWidth = size.width * 0.045
       ..strokeCap = StrokeCap.round;
 
     final rightX = size.width * 0.63;
     canvas.drawLine(
-      Offset(rightX, size.height * 0.27),
-      Offset(rightX, size.height * 0.78),
-      bearWickPaint,
+      Offset(rightX, size.height * 0.26),
+      Offset(rightX, size.height * 0.79),
+      bearWick,
     );
-    final bearRect = RRect.fromRectAndRadius(
-      Rect.fromCenter(
-        center: Offset(rightX, size.height * 0.55),
-        width: size.width * 0.16,
-        height: size.height * 0.28,
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: Offset(rightX, size.height * 0.55),
+          width: size.width * 0.16,
+          height: size.height * 0.28,
+        ),
+        Radius.circular(size.width * 0.03),
       ),
-      Radius.circular(size.width * 0.03),
+      bearPaint,
     );
-    canvas.drawRRect(bearRect, bearPaint);
   }
 
   @override
@@ -205,19 +204,132 @@ class _PiratePipsLogoPainter extends CustomPainter {
 }
 
 // ============================================================================
-// 3. MODÈLES DE DONNÉES (DRIVERS, VEHICLES, PLACES, TRIPS, TAX RATES)
+// 3. CATALOGUE FISCAL NORMALISÉ DES VÉHICULES (14 CATÉGORIES OFFICIELLES)
 // ============================================================================
-class Driver {
+class FiscalVehicleCategorySpec {
+  final String label;
+  final String group; // THERMIQUE, ELECTRIQUE, MOTO, SCOOTER
+  final int fiscalHp;
+  final bool isElectric;
+
+  const FiscalVehicleCategorySpec({
+    required this.label,
+    required this.group,
+    required this.fiscalHp,
+    required this.isElectric,
+  });
+}
+
+const List<FiscalVehicleCategorySpec> kOfficialVehicleCatalog = [
+  // Catégories thermiques (Essence / Diesel / Hybride standard)
+  FiscalVehicleCategorySpec(
+    label: 'Voiture (3 CV et moins)',
+    group: 'THERMIQUE',
+    fiscalHp: 3,
+    isElectric: false,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Voiture (4 CV)',
+    group: 'THERMIQUE',
+    fiscalHp: 4,
+    isElectric: false,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Voiture (5 CV)',
+    group: 'THERMIQUE',
+    fiscalHp: 5,
+    isElectric: false,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Voiture (6 CV)',
+    group: 'THERMIQUE',
+    fiscalHp: 6,
+    isElectric: false,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Voiture (7 CV et plus)',
+    group: 'THERMIQUE',
+    fiscalHp: 7,
+    isElectric: false,
+  ),
+  // Catégories 100 % électriques (Majoration fiscale légale +20% intégrée)
+  FiscalVehicleCategorySpec(
+    label: 'Voiture électrique (3 CV et moins)',
+    group: 'ELECTRIQUE',
+    fiscalHp: 3,
+    isElectric: true,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Voiture électrique (4 CV)',
+    group: 'ELECTRIQUE',
+    fiscalHp: 4,
+    isElectric: true,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Voiture électrique (5 CV)',
+    group: 'ELECTRIQUE',
+    fiscalHp: 5,
+    isElectric: true,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Voiture électrique (6 CV)',
+    group: 'ELECTRIQUE',
+    fiscalHp: 6,
+    isElectric: true,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Voiture électrique (7 CV et plus)',
+    group: 'ELECTRIQUE',
+    fiscalHp: 7,
+    isElectric: true,
+  ),
+  // Deux-roues & Mobilités légères
+  FiscalVehicleCategorySpec(
+    label: 'Moto (1-2 CV)',
+    group: 'MOTO',
+    fiscalHp: 2,
+    isElectric: false,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Moto (3-5 CV)',
+    group: 'MOTO',
+    fiscalHp: 4,
+    isElectric: false,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Moto (6 CV et plus)',
+    group: 'MOTO',
+    fiscalHp: 6,
+    isElectric: false,
+  ),
+  FiscalVehicleCategorySpec(
+    label: 'Scooter',
+    group: 'SCOOTER',
+    fiscalHp: 1,
+    isElectric: false,
+  ),
+];
+
+// ============================================================================
+// 4. MODÈLES DE LA BASE DE DONNÉES LOCAL-FIRST
+// ============================================================================
+class DriverProfile {
   final String id;
   String firstName;
   String lastName;
-  String status; // Gérant, Salarié, Indépendant
+  String role; // Gérant, Commercial, Salarié
+  String personalAddress;
+  String companyName;
+  String companyAddress;
 
-  Driver({
+  DriverProfile({
     required this.id,
     required this.firstName,
     required this.lastName,
-    required this.status,
+    required this.role,
+    required this.personalAddress,
+    required this.companyName,
+    required this.companyAddress,
   });
 
   String get fullName => '$firstName $lastName'.trim();
@@ -226,1381 +338,1696 @@ class Driver {
         'id': id,
         'firstName': firstName,
         'lastName': lastName,
-        'status': status,
+        'role': role,
+        'personalAddress': personalAddress,
+        'companyName': companyName,
+        'companyAddress': companyAddress,
       };
 
-  factory Driver.fromJson(Map<String, dynamic> json) => Driver(
+  factory DriverProfile.fromJson(Map<String, dynamic> json) => DriverProfile(
         id: json['id'] ?? '',
         firstName: json['firstName'] ?? '',
         lastName: json['lastName'] ?? '',
-        status: json['status'] ?? 'Gérant',
+        role: json['role'] ?? 'Gérant',
+        personalAddress: json['personalAddress'] ?? '',
+        companyName: json['companyName'] ?? '',
+        companyAddress: json['companyAddress'] ?? '',
       );
 }
 
-class Vehicle {
+class VehicleEntity {
   final String id;
   String name;
-  String plate;
-  String type; // Voiture, Moto, Utilitaire
-  String engine; // Thermique Essence, Thermique Diesel, Hybride, Électrique
-  int fiscalHp; // 3 à 7 (7 = 7 CV et plus)
-  double odometerKm;
+  String licensePlate; // ⚠️ Audité avant export
+  String fiscalCategory; // Libellé parmi les 14 catégories
+  String vehicleGroup; // THERMIQUE, ELECTRIQUE, MOTO, SCOOTER
+  int fiscalHp;
+  bool isElectric;
+  double currentOdometerKm;
+  String bluetoothBeaconName;
 
-  Vehicle({
+  VehicleEntity({
     required this.id,
     required this.name,
-    required this.plate,
-    required this.type,
-    required this.engine,
+    required this.licensePlate,
+    required this.fiscalCategory,
+    required this.vehicleGroup,
     required this.fiscalHp,
-    required this.odometerKm,
+    required this.isElectric,
+    required this.currentOdometerKm,
+    this.bluetoothBeaconName = '',
   });
-
-  bool get isElectric => engine.toLowerCase().contains('lectrique');
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
-        'plate': plate,
-        'type': type,
-        'engine': engine,
+        'licensePlate': licensePlate,
+        'fiscalCategory': fiscalCategory,
+        'vehicleGroup': vehicleGroup,
         'fiscalHp': fiscalHp,
-        'odometerKm': odometerKm,
+        'isElectric': isElectric,
+        'currentOdometerKm': currentOdometerKm,
+        'bluetoothBeaconName': bluetoothBeaconName,
       };
 
-  factory Vehicle.fromJson(Map<String, dynamic> json) => Vehicle(
+  factory VehicleEntity.fromJson(Map<String, dynamic> json) => VehicleEntity(
         id: json['id'] ?? '',
         name: json['name'] ?? '',
-        plate: json['plate'] ?? '',
-        type: json['type'] ?? 'Voiture',
-        engine: json['engine'] ?? 'Thermique Diesel',
-        fiscalHp: (json['fiscalHp'] ?? 5) as int,
-        odometerKm: ((json['odometerKm'] ?? 0) as num).toDouble(),
+        licensePlate: json['licensePlate'] ?? '',
+        fiscalCategory: json['fiscalCategory'] ?? 'Voiture (7 CV et plus)',
+        vehicleGroup: json['vehicleGroup'] ?? 'THERMIQUE',
+        fiscalHp: (json['fiscalHp'] ?? 7) as int,
+        isElectric: (json['isElectric'] ?? false) as bool,
+        currentOdometerKm: ((json['currentOdometerKm'] ?? 0) as num).toDouble(),
+        bluetoothBeaconName: json['bluetoothBeaconName'] ?? '',
       );
 }
 
-class SavedPlace {
+class SavedLocationEntity {
   final String id;
   String label;
-  String address;
-  String category; // Maison, Siège, Dépôt, Client, Magasin Pro
-  double? lat;
-  double? lng;
+  String fullAddress;
+  String locationType; // 'WORKPLACE' (Lieu de travail) ou 'EMPLACEMENT' (Domicile, Dépôt, Client)
 
-  SavedPlace({
+  SavedLocationEntity({
     required this.id,
     required this.label,
-    required this.address,
-    required this.category,
-    this.lat,
-    this.lng,
+    required this.fullAddress,
+    required this.locationType,
   });
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'label': label,
-        'address': address,
-        'category': category,
-        'lat': lat,
-        'lng': lng,
+        'fullAddress': fullAddress,
+        'locationType': locationType,
       };
 
-  factory SavedPlace.fromJson(Map<String, dynamic> json) => SavedPlace(
+  factory SavedLocationEntity.fromJson(Map<String, dynamic> json) =>
+      SavedLocationEntity(
         id: json['id'] ?? '',
         label: json['label'] ?? '',
-        address: json['address'] ?? '',
-        category: json['category'] ?? 'Client',
-        lat: (json['lat'] as num?)?.toDouble(),
-        lng: (json['lng'] as num?)?.toDouble(),
+        fullAddress: json['fullAddress'] ?? '',
+        locationType: json['locationType'] ?? 'EMPLACEMENT',
       );
 }
 
-class WaypointStop {
+class WaypointEntity {
   String label;
   String address;
 
-  WaypointStop({required this.label, required this.address});
+  WaypointEntity({required this.label, required this.address});
 
-  Map<String, dynamic> toJson() => {
-        'label': label,
-        'address': address,
-      };
+  Map<String, dynamic> toJson() => {'label': label, 'address': address};
 
-  factory WaypointStop.fromJson(Map<String, dynamic> json) => WaypointStop(
+  factory WaypointEntity.fromJson(Map<String, dynamic> json) => WaypointEntity(
         label: json['label'] ?? 'Étape',
         address: json['address'] ?? '',
       );
 }
 
-class FrenchBracketRow {
-  double rateUpTo5000;
-  double rate5001To20000;
-  double fixed5001To20000;
-  double rateOver20000;
+class OdometerLogEntity {
+  final String id;
+  final String vehicleId;
+  final DateTime recordedAt;
+  final double odometerValueKm;
+  final String photoEvidenceRef;
+  final String note;
 
-  FrenchBracketRow({
-    required this.rateUpTo5000,
-    required this.rate5001To20000,
-    required this.fixed5001To20000,
-    required this.rateOver20000,
+  OdometerLogEntity({
+    required this.id,
+    required this.vehicleId,
+    required this.recordedAt,
+    required this.odometerValueKm,
+    required this.photoEvidenceRef,
+    required this.note,
   });
 
   Map<String, dynamic> toJson() => {
-        'rateUpTo5000': rateUpTo5000,
-        'rate5001To20000': rate5001To20000,
-        'fixed5001To20000': fixed5001To20000,
-        'rateOver20000': rateOver20000,
+        'id': id,
+        'vehicleId': vehicleId,
+        'recordedAt': recordedAt.toIso8601String(),
+        'odometerValueKm': odometerValueKm,
+        'photoEvidenceRef': photoEvidenceRef,
+        'note': note,
       };
 
-  factory FrenchBracketRow.fromJson(Map<String, dynamic> json) =>
-      FrenchBracketRow(
-        rateUpTo5000: ((json['rateUpTo5000'] ?? 0.5) as num).toDouble(),
-        rate5001To20000: ((json['rate5001To20000'] ?? 0.3) as num).toDouble(),
-        fixed5001To20000:
-            ((json['fixed5001To20000'] ?? 1000.0) as num).toDouble(),
-        rateOver20000: ((json['rateOver20000'] ?? 0.35) as num).toDouble(),
+  factory OdometerLogEntity.fromJson(Map<String, dynamic> json) =>
+      OdometerLogEntity(
+        id: json['id'] ?? '',
+        vehicleId: json['vehicleId'] ?? '',
+        recordedAt:
+            DateTime.tryParse(json['recordedAt'] ?? '') ?? DateTime.now(),
+        odometerValueKm: ((json['odometerValueKm'] ?? 0) as num).toDouble(),
+        photoEvidenceRef: json['photoEvidenceRef'] ?? 'ODO-PHOTO.JPG',
+        note: json['note'] ?? '',
       );
 }
 
-class TaxRatesConfig {
-  Map<int, FrenchBracketRow> frenchBrackets;
+class TripEntity {
+  final String id;
+  DateTime date;
+  String startTime;
+  String endTime;
+  String driverId;
+  String vehicleId;
+  String countryCode; // FR, LU, BE, DE, CH
+  String originAddress;
+  String destinationAddress;
+  List<WaypointEntity> waypoints;
+  bool isRoundTrip;
+  String captureMode; // 'AUTO_GPS', 'IBEACON_BT', 'MANUAL_MAPS'
+  String qualificationStatus; // 'PENDING' (Inbox), 'PRO', 'PERSO'
+  String purpose; // Client, Chantier, Réunion, Administratif, Domicile-Travail
+  String projectTag;
+  double mapsDistanceKm;
+  double detourMarginPercent; // 0% à 15%
+  double finalDistanceKm;
+  double odometerStartKm;
+  double odometerEndKm;
+  double reimbursementAmount;
+  String currency;
+  String appliedRuleLabel;
+  String notes;
+  String? receiptPhotoRef;
+
+  TripEntity({
+    required this.id,
+    required this.date,
+    required this.startTime,
+    required this.endTime,
+    required this.driverId,
+    required this.vehicleId,
+    required this.countryCode,
+    required this.originAddress,
+    required this.destinationAddress,
+    required this.waypoints,
+    required this.isRoundTrip,
+    required this.captureMode,
+    required this.qualificationStatus,
+    required this.purpose,
+    required this.projectTag,
+    required this.mapsDistanceKm,
+    required this.detourMarginPercent,
+    required this.finalDistanceKm,
+    required this.odometerStartKm,
+    required this.odometerEndKm,
+    required this.reimbursementAmount,
+    required this.currency,
+    required this.appliedRuleLabel,
+    required this.notes,
+    this.receiptPhotoRef,
+  });
+
+  bool get isPro => qualificationStatus == 'PRO';
+  bool get isPending => qualificationStatus == 'PENDING';
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'date': date.toIso8601String(),
+        'startTime': startTime,
+        'endTime': endTime,
+        'driverId': driverId,
+        'vehicleId': vehicleId,
+        'countryCode': countryCode,
+        'originAddress': originAddress,
+        'destinationAddress': destinationAddress,
+        'waypoints': waypoints.map((w) => w.toJson()).toList(),
+        'isRoundTrip': isRoundTrip,
+        'captureMode': captureMode,
+        'qualificationStatus': qualificationStatus,
+        'purpose': purpose,
+        'projectTag': projectTag,
+        'mapsDistanceKm': mapsDistanceKm,
+        'detourMarginPercent': detourMarginPercent,
+        'finalDistanceKm': finalDistanceKm,
+        'odometerStartKm': odometerStartKm,
+        'odometerEndKm': odometerEndKm,
+        'reimbursementAmount': reimbursementAmount,
+        'currency': currency,
+        'appliedRuleLabel': appliedRuleLabel,
+        'notes': notes,
+        'receiptPhotoRef': receiptPhotoRef,
+      };
+
+  factory TripEntity.fromJson(Map<String, dynamic> json) => TripEntity(
+        id: json['id'] ?? '',
+        date: DateTime.tryParse(json['date'] ?? '') ?? DateTime.now(),
+        startTime: json['startTime'] ?? '08:15',
+        endTime: json['endTime'] ?? '09:05',
+        driverId: json['driverId'] ?? '',
+        vehicleId: json['vehicleId'] ?? '',
+        countryCode: json['countryCode'] ?? 'FR',
+        originAddress: json['originAddress'] ?? '',
+        destinationAddress: json['destinationAddress'] ?? '',
+        waypoints: ((json['waypoints'] as List?) ?? [])
+            .map((e) => WaypointEntity.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        isRoundTrip: (json['isRoundTrip'] ?? false) as bool,
+        captureMode: json['captureMode'] ?? 'AUTO_GPS',
+        qualificationStatus: json['qualificationStatus'] ?? 'PRO',
+        purpose: json['purpose'] ?? 'Client',
+        projectTag: json['projectTag'] ?? 'Général',
+        mapsDistanceKm: ((json['mapsDistanceKm'] ?? 0) as num).toDouble(),
+        detourMarginPercent:
+            ((json['detourMarginPercent'] ?? 0) as num).toDouble(),
+        finalDistanceKm: ((json['finalDistanceKm'] ?? 0) as num).toDouble(),
+        odometerStartKm: ((json['odometerStartKm'] ?? 0) as num).toDouble(),
+        odometerEndKm: ((json['odometerEndKm'] ?? 0) as num).toDouble(),
+        reimbursementAmount:
+            ((json['reimbursementAmount'] ?? 0) as num).toDouble(),
+        currency: json['currency'] ?? 'EUR',
+        appliedRuleLabel: json['appliedRuleLabel'] ?? '',
+        notes: json['notes'] ?? '',
+        receiptPhotoRef: json['receiptPhotoRef'] as String?,
+      );
+}
+
+// ============================================================================
+// 5. SERVICE MOTEUR FISCAL MULTI-PAYS (`TaxEngineService`)
+// ============================================================================
+class BracketFormula {
+  double t1Limit;
+  double t2Limit;
+  double rate1;
+  double rate2;
+  double fixed2;
+  double rate3;
+
+  BracketFormula({
+    required this.t1Limit,
+    required this.t2Limit,
+    required this.rate1,
+    required this.rate2,
+    required this.fixed2,
+    required this.rate3,
+  });
+
+  Map<String, dynamic> toJson() => {
+        't1Limit': t1Limit,
+        't2Limit': t2Limit,
+        'rate1': rate1,
+        'rate2': rate2,
+        'fixed2': fixed2,
+        'rate3': rate3,
+      };
+
+  factory BracketFormula.fromJson(Map<String, dynamic> json) => BracketFormula(
+        t1Limit: ((json['t1Limit'] ?? 5000.0) as num).toDouble(),
+        t2Limit: ((json['t2Limit'] ?? 20000.0) as num).toDouble(),
+        rate1: ((json['rate1'] ?? 0.5) as num).toDouble(),
+        rate2: ((json['rate2'] ?? 0.3) as num).toDouble(),
+        fixed2: ((json['fixed2'] ?? 1000.0) as num).toDouble(),
+        rate3: ((json['rate3'] ?? 0.35) as num).toDouble(),
+      );
+}
+
+class TaxRulesRepository {
+  Map<int, BracketFormula> frenchCarBrackets;
+  Map<String, BracketFormula> frenchTwoWheelsBrackets;
   double frenchElectricBonusPercent; // +20%
-  double luxembourgRateEur; // 0.40 €/km
-  double belgiumRateEur; // 0.43 €/km
+  double luxembourgFlatEur; // 0.40 €/km
+  double belgiumFlatEur; // 0.43 €/km
   double germanyDienstreisenEur; // 0.30 €/km
   double germanyPendlerFirst20Eur; // 0.30 €/km
   double germanyPendlerAfter20Eur; // 0.38 €/km
-  double switzerlandRateChf; // 0.70 CHF/km
+  double switzerlandFlatChf; // 0.72 CHF/km
 
-  TaxRatesConfig({
-    required this.frenchBrackets,
+  TaxRulesRepository({
+    required this.frenchCarBrackets,
+    required this.frenchTwoWheelsBrackets,
     this.frenchElectricBonusPercent = 20.0,
-    this.luxembourgRateEur = 0.40,
-    this.belgiumRateEur = 0.43,
+    this.luxembourgFlatEur = 0.40,
+    this.belgiumFlatEur = 0.43,
     this.germanyDienstreisenEur = 0.30,
     this.germanyPendlerFirst20Eur = 0.30,
     this.germanyPendlerAfter20Eur = 0.38,
-    this.switzerlandRateChf = 0.70,
+    this.switzerlandFlatChf = 0.72,
   });
 
-  factory TaxRatesConfig.defaults() {
-    return TaxRatesConfig(
-      frenchBrackets: {
-        3: FrenchBracketRow(
-          rateUpTo5000: 0.529,
-          rate5001To20000: 0.316,
-          fixed5001To20000: 1065.0,
-          rateOver20000: 0.370,
+  factory TaxRulesRepository.defaults() {
+    return TaxRulesRepository(
+      frenchCarBrackets: {
+        3: BracketFormula(
+          t1Limit: 5000,
+          t2Limit: 20000,
+          rate1: 0.529,
+          rate2: 0.316,
+          fixed2: 1065,
+          rate3: 0.370,
         ),
-        4: FrenchBracketRow(
-          rateUpTo5000: 0.606,
-          rate5001To20000: 0.340,
-          fixed5001To20000: 1330.0,
-          rateOver20000: 0.407,
+        4: BracketFormula(
+          t1Limit: 5000,
+          t2Limit: 20000,
+          rate1: 0.606,
+          rate2: 0.340,
+          fixed2: 1330,
+          rate3: 0.407,
         ),
-        5: FrenchBracketRow(
-          rateUpTo5000: 0.636,
-          rate5001To20000: 0.357,
-          fixed5001To20000: 1395.0,
-          rateOver20000: 0.427,
+        5: BracketFormula(
+          t1Limit: 5000,
+          t2Limit: 20000,
+          rate1: 0.636,
+          rate2: 0.357,
+          fixed2: 1395,
+          rate3: 0.427,
         ),
-        6: FrenchBracketRow(
-          rateUpTo5000: 0.665,
-          rate5001To20000: 0.374,
-          fixed5001To20000: 1457.0,
-          rateOver20000: 0.447,
+        6: BracketFormula(
+          t1Limit: 5000,
+          t2Limit: 20000,
+          rate1: 0.665,
+          rate2: 0.374,
+          fixed2: 1457,
+          rate3: 0.447,
         ),
-        7: FrenchBracketRow(
-          rateUpTo5000: 0.697,
-          rate5001To20000: 0.394,
-          fixed5001To20000: 1515.0,
-          rateOver20000: 0.470,
+        7: BracketFormula(
+          t1Limit: 5000,
+          t2Limit: 20000,
+          rate1: 0.697,
+          rate2: 0.394,
+          fixed2: 1515,
+          rate3: 0.470,
         ),
       },
-      frenchElectricBonusPercent: 20.0,
-      luxembourgRateEur: 0.40,
-      belgiumRateEur: 0.43,
-      germanyDienstreisenEur: 0.30,
-      germanyPendlerFirst20Eur: 0.30,
-      germanyPendlerAfter20Eur: 0.38,
-      switzerlandRateChf: 0.70,
+      frenchTwoWheelsBrackets: {
+        'SCOOTER': BracketFormula(
+          t1Limit: 3000,
+          t2Limit: 6000,
+          rate1: 0.315,
+          rate2: 0.079,
+          fixed2: 711,
+          rate3: 0.198,
+        ),
+        'MOTO_1_2': BracketFormula(
+          t1Limit: 3000,
+          t2Limit: 6000,
+          rate1: 0.395,
+          rate2: 0.099,
+          fixed2: 891,
+          rate3: 0.248,
+        ),
+        'MOTO_3_5': BracketFormula(
+          t1Limit: 3000,
+          t2Limit: 6000,
+          rate1: 0.468,
+          rate2: 0.082,
+          fixed2: 1158,
+          rate3: 0.275,
+        ),
+        'MOTO_6_PLUS': BracketFormula(
+          t1Limit: 3000,
+          t2Limit: 6000,
+          rate1: 0.606,
+          rate2: 0.079,
+          fixed2: 1583,
+          rate3: 0.343,
+        ),
+      },
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'frenchBrackets': frenchBrackets.map(
+        'frenchCarBrackets': frenchCarBrackets.map(
           (k, v) => MapEntry(k.toString(), v.toJson()),
         ),
         'frenchElectricBonusPercent': frenchElectricBonusPercent,
-        'luxembourgRateEur': luxembourgRateEur,
-        'belgiumRateEur': belgiumRateEur,
+        'luxembourgFlatEur': luxembourgFlatEur,
+        'belgiumFlatEur': belgiumFlatEur,
         'germanyDienstreisenEur': germanyDienstreisenEur,
         'germanyPendlerFirst20Eur': germanyPendlerFirst20Eur,
         'germanyPendlerAfter20Eur': germanyPendlerAfter20Eur,
-        'switzerlandRateChf': switzerlandRateChf,
+        'switzerlandFlatChf': switzerlandFlatChf,
       };
 
-  factory TaxRatesConfig.fromJson(Map<String, dynamic> json) {
-    final defaults = TaxRatesConfig.defaults();
-    final rawMap = json['frenchBrackets'] as Map<String, dynamic>?;
-    final parsedBrackets = <int, FrenchBracketRow>{};
-    if (rawMap != null) {
-      rawMap.forEach((key, value) {
-        final hp = int.tryParse(key) ?? 5;
-        parsedBrackets[hp] =
-            FrenchBracketRow.fromJson(value as Map<String, dynamic>);
-      });
-    } else {
-      parsedBrackets.addAll(defaults.frenchBrackets);
-    }
-    return TaxRatesConfig(
-      frenchBrackets: parsedBrackets,
+  factory TaxRulesRepository.fromJson(Map<String, dynamic> json) {
+    final def = TaxRulesRepository.defaults();
+    return TaxRulesRepository(
+      frenchCarBrackets: def.frenchCarBrackets,
+      frenchTwoWheelsBrackets: def.frenchTwoWheelsBrackets,
       frenchElectricBonusPercent:
           ((json['frenchElectricBonusPercent'] ?? 20.0) as num).toDouble(),
-      luxembourgRateEur:
-          ((json['luxembourgRateEur'] ?? 0.40) as num).toDouble(),
-      belgiumRateEur: ((json['belgiumRateEur'] ?? 0.43) as num).toDouble(),
+      luxembourgFlatEur:
+          ((json['luxembourgFlatEur'] ?? 0.40) as num).toDouble(),
+      belgiumFlatEur: ((json['belgiumFlatEur'] ?? 0.43) as num).toDouble(),
       germanyDienstreisenEur:
           ((json['germanyDienstreisenEur'] ?? 0.30) as num).toDouble(),
       germanyPendlerFirst20Eur:
           ((json['germanyPendlerFirst20Eur'] ?? 0.30) as num).toDouble(),
       germanyPendlerAfter20Eur:
           ((json['germanyPendlerAfter20Eur'] ?? 0.38) as num).toDouble(),
-      switzerlandRateChf:
-          ((json['switzerlandRateChf'] ?? 0.70) as num).toDouble(),
+      switzerlandFlatChf:
+          ((json['switzerlandFlatChf'] ?? 0.72) as num).toDouble(),
     );
   }
 }
 
-class TripRecord {
-  final String id;
-  DateTime date;
-  String timeLabel;
-  String driverId;
-  String vehicleId;
-  String countryCode; // FR, LU, BE, DE, CH
-  String origin;
-  String destination;
-  List<WaypointStop> waypoints;
-  bool isRoundTrip;
-  String purpose; // Client, Chantier, Réunion, Administratif, Domicile-Travail
-  bool isProfessional; // true = Pro (Vert), false = Privé (Rouge)
-  double mapsDistanceKm; // Distance aller ou aller-retour brute Google Maps
-  double detourMarginPercent; // ex: 5%, 10%
-  double totalDistanceKm; // Distance finale retenue
-  double odometerStart;
-  double odometerEnd;
-  double reimbursementAmount;
-  String currency; // EUR ou CHF
-  String formulaApplied;
-  String notes;
-  String? receiptReference;
-
-  TripRecord({
-    required this.id,
-    required this.date,
-    required this.timeLabel,
-    required this.driverId,
-    required this.vehicleId,
-    required this.countryCode,
-    required this.origin,
-    required this.destination,
-    required this.waypoints,
-    required this.isRoundTrip,
-    required this.purpose,
-    required this.isProfessional,
-    required this.mapsDistanceKm,
-    required this.detourMarginPercent,
-    required this.totalDistanceKm,
-    required this.odometerStart,
-    required this.odometerEnd,
-    required this.reimbursementAmount,
-    required this.currency,
-    required this.formulaApplied,
-    required this.notes,
-    this.receiptReference,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'date': date.toIso8601String(),
-        'timeLabel': timeLabel,
-        'driverId': driverId,
-        'vehicleId': vehicleId,
-        'countryCode': countryCode,
-        'origin': origin,
-        'destination': destination,
-        'waypoints': waypoints.map((w) => w.toJson()).toList(),
-        'isRoundTrip': isRoundTrip,
-        'purpose': purpose,
-        'isProfessional': isProfessional,
-        'mapsDistanceKm': mapsDistanceKm,
-        'detourMarginPercent': detourMarginPercent,
-        'totalDistanceKm': totalDistanceKm,
-        'odometerStart': odometerStart,
-        'odometerEnd': odometerEnd,
-        'reimbursementAmount': reimbursementAmount,
-        'currency': currency,
-        'formulaApplied': formulaApplied,
-        'notes': notes,
-        'receiptReference': receiptReference,
-      };
-
-  factory TripRecord.fromJson(Map<String, dynamic> json) => TripRecord(
-        id: json['id'] ?? '',
-        date: DateTime.tryParse(json['date'] ?? '') ?? DateTime.now(),
-        timeLabel: json['timeLabel'] ?? '08:30',
-        driverId: json['driverId'] ?? '',
-        vehicleId: json['vehicleId'] ?? '',
-        countryCode: json['countryCode'] ?? 'FR',
-        origin: json['origin'] ?? '',
-        destination: json['destination'] ?? '',
-        waypoints: ((json['waypoints'] as List?) ?? [])
-            .map((e) => WaypointStop.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        isRoundTrip: (json['isRoundTrip'] ?? false) as bool,
-        purpose: json['purpose'] ?? 'Client',
-        isProfessional: (json['isProfessional'] ?? true) as bool,
-        mapsDistanceKm: ((json['mapsDistanceKm'] ?? 0) as num).toDouble(),
-        detourMarginPercent:
-            ((json['detourMarginPercent'] ?? 0) as num).toDouble(),
-        totalDistanceKm: ((json['totalDistanceKm'] ?? 0) as num).toDouble(),
-        odometerStart: ((json['odometerStart'] ?? 0) as num).toDouble(),
-        odometerEnd: ((json['odometerEnd'] ?? 0) as num).toDouble(),
-        reimbursementAmount:
-            ((json['reimbursementAmount'] ?? 0) as num).toDouble(),
-        currency: json['currency'] ?? 'EUR',
-        formulaApplied: json['formulaApplied'] ?? '',
-        notes: json['notes'] ?? '',
-        receiptReference: json['receiptReference'] as String?,
-      );
-}
-
-// ============================================================================
-// 4. MOTEUR LÉGAL & CALCULATEUR FISCAL MULTIDEVISES / MULTIPAYS
-// ============================================================================
-class TaxCalculationResult {
+class TaxComputationOutput {
   final double amount;
   final String currency;
-  final String formulaSummary;
-  final String bracketLabel;
+  final String ruleSummary;
 
-  TaxCalculationResult({
+  const TaxComputationOutput({
     required this.amount,
     required this.currency,
-    required this.formulaSummary,
-    required this.bracketLabel,
+    required this.ruleSummary,
   });
 }
 
-class FiscalEngine {
-  /// Calcule l'indemnité annuelle cumulée française pour une distance D (en km)
-  static double computeFrenchAnnualAllowance({
-    required double cumulativeKm,
-    required int fiscalHp,
-    required bool isElectric,
-    required TaxRatesConfig config,
-  }) {
-    if (cumulativeKm <= 0) return 0.0;
-    final clampedHp = fiscalHp.clamp(3, 7);
-    final row =
-        config.frenchBrackets[clampedHp] ?? config.frenchBrackets[5]!;
-
-    double baseAllowance;
-    if (cumulativeKm <= 5000.0) {
-      baseAllowance = cumulativeKm * row.rateUpTo5000;
-    } else if (cumulativeKm <= 20000.0) {
-      baseAllowance =
-          (cumulativeKm * row.rate5001To20000) + row.fixed5001To20000;
-    } else {
-      baseAllowance = cumulativeKm * row.rateOver20000;
+class TaxEngineService {
+  /// Sélectionne la formule française selon la catégorie fiscale du véhicule
+  static BracketFormula _resolveFrenchFormula(
+    VehicleEntity vehicle,
+    TaxRulesRepository rules,
+  ) {
+    if (vehicle.vehicleGroup == 'SCOOTER') {
+      return rules.frenchTwoWheelsBrackets['SCOOTER']!;
     }
-
-    if (isElectric) {
-      baseAllowance *= (1.0 + (config.frenchElectricBonusPercent / 100.0));
+    if (vehicle.vehicleGroup == 'MOTO') {
+      if (vehicle.fiscalHp <= 2) {
+        return rules.frenchTwoWheelsBrackets['MOTO_1_2']!;
+      } else if (vehicle.fiscalHp <= 5) {
+        return rules.frenchTwoWheelsBrackets['MOTO_3_5']!;
+      } else {
+        return rules.frenchTwoWheelsBrackets['MOTO_6_PLUS']!;
+      }
     }
-    return baseAllowance;
+    final clampedHp = vehicle.fiscalHp.clamp(3, 7);
+    return rules.frenchCarBrackets[clampedHp] ?? rules.frenchCarBrackets[5]!;
   }
 
-  /// Calcule l'indemnité exacte d'un trajet selon le pays, le véhicule et le cumul annuel
-  static TaxCalculationResult calculateTripAllowance({
-    required String countryCode,
-    required double tripDistanceKm,
-    required double priorAnnualKmForVehicleFR,
-    required Vehicle vehicle,
-    required String purpose,
-    required bool isProfessional,
-    required TaxRatesConfig config,
+  /// Calcule l'indemnité annuelle cumulée en France pour une distance D
+  static double computeFrenchCumulativeAllowance({
+    required double cumulativeDistanceKm,
+    required VehicleEntity vehicle,
+    required TaxRulesRepository rules,
   }) {
-    if (!isProfessional || tripDistanceKm <= 0) {
-      final curr = countryCode == 'CH' ? 'CHF' : 'EUR';
-      return TaxCalculationResult(
+    if (cumulativeDistanceKm <= 0) return 0.0;
+    final f = _resolveFrenchFormula(vehicle, rules);
+    double total;
+    if (cumulativeDistanceKm <= f.t1Limit) {
+      total = cumulativeDistanceKm * f.rate1;
+    } else if (cumulativeDistanceKm <= f.t2Limit) {
+      total = (cumulativeDistanceKm * f.rate2) + f.fixed2;
+    } else {
+      total = cumulativeDistanceKm * f.rate3;
+    }
+
+    if (vehicle.isElectric) {
+      total *= (1.0 + (rules.frenchElectricBonusPercent / 100.0));
+    }
+    return total;
+  }
+
+  /// Calcule l'indemnité exacte d'un trajet (différentiel par tranches cumulées en FR,
+  /// ou barèmes nationaux LU / BE / DE / CH).
+  static TaxComputationOutput evaluateTrip({
+    required String countryCode,
+    required double distanceKm,
+    required double priorAnnualFrenchKm,
+    required VehicleEntity vehicle,
+    required String purpose,
+    required String qualificationStatus,
+    required TaxRulesRepository rules,
+  }) {
+    final defaultCurr = countryCode == 'CH' ? 'CHF' : 'EUR';
+    if (qualificationStatus == 'PERSO' || distanceKm <= 0) {
+      return TaxComputationOutput(
         amount: 0.0,
-        currency: curr,
-        formulaSummary: 'Trajet privé (Non déductible)',
-        bracketLabel: 'Privé - 0,00 $curr',
+        currency: defaultCurr,
+        ruleSummary: 'Trajet Personnel (Non déductible)',
       );
     }
 
     switch (countryCode) {
       case 'FR':
-        final clampedHp = vehicle.fiscalHp.clamp(3, 7);
-        final row =
-            config.frenchBrackets[clampedHp] ?? config.frenchBrackets[5]!;
-        final beforeAllowance = computeFrenchAnnualAllowance(
-          cumulativeKm: priorAnnualKmForVehicleFR,
-          fiscalHp: clampedHp,
-          isElectric: vehicle.isElectric,
-          config: config,
+        final f = _resolveFrenchFormula(vehicle, rules);
+        final before = computeFrenchCumulativeAllowance(
+          cumulativeDistanceKm: priorAnnualFrenchKm,
+          vehicle: vehicle,
+          rules: rules,
         );
-        final newCumulativeKm = priorAnnualKmForVehicleFR + tripDistanceKm;
-        final afterAllowance = computeFrenchAnnualAllowance(
-          cumulativeKm: newCumulativeKm,
-          fiscalHp: clampedHp,
-          isElectric: vehicle.isElectric,
-          config: config,
+        final newTotalKm = priorAnnualFrenchKm + distanceKm;
+        final after = computeFrenchCumulativeAllowance(
+          cumulativeDistanceKm: newTotalKm,
+          vehicle: vehicle,
+          rules: rules,
         );
-        final marginalAmount = math.max(0.0, afterAllowance - beforeAllowance);
-
-        String bracketName;
-        String formulaText;
-        final elecSuffix = vehicle.isElectric
-            ? ' (+${config.frenchElectricBonusPercent.toStringAsFixed(0)}% Élec)'
+        final delta = math.max(0.0, after - before);
+        final evTag = vehicle.isElectric
+            ? ' (+${rules.frenchElectricBonusPercent.toInt()}% Élec)'
             : '';
 
-        if (newCumulativeKm <= 5000) {
-          bracketName = 'Tranche 1 (≤ 5 000 km)';
-          formulaText =
-              'FR ${clampedHp}CV : d × ${row.rateUpTo5000.toStringAsFixed(3)}€$elecSuffix';
-        } else if (newCumulativeKm <= 20000) {
-          bracketName = 'Tranche 2 (5 001 à 20 000 km)';
-          formulaText =
-              'FR ${clampedHp}CV : (d × ${row.rate5001To20000.toStringAsFixed(3)}€) + ${row.fixed5001To20000.toStringAsFixed(0)}€$elecSuffix';
+        String trancheDesc;
+        if (newTotalKm <= f.t1Limit) {
+          trancheDesc =
+              'FR ${vehicle.fiscalCategory} • Tranche 1 (d × ${f.rate1}$evTag)';
+        } else if (newTotalKm <= f.t2Limit) {
+          trancheDesc =
+              'FR ${vehicle.fiscalCategory} • Tranche 2 ((d × ${f.rate2}) + ${f.fixed2.toInt()}€$evTag)';
         } else {
-          bracketName = 'Tranche 3 (> 20 000 km)';
-          formulaText =
-              'FR ${clampedHp}CV : d × ${row.rateOver20000.toStringAsFixed(3)}€$elecSuffix';
+          trancheDesc =
+              'FR ${vehicle.fiscalCategory} • Tranche 3 (d × ${f.rate3}$evTag)';
         }
 
-        return TaxCalculationResult(
-          amount: marginalAmount,
+        return TaxComputationOutput(
+          amount: delta,
           currency: 'EUR',
-          formulaSummary: formulaText,
-          bracketLabel: bracketName,
+          ruleSummary: trancheDesc,
         );
 
       case 'LU':
-        final amount = tripDistanceKm * config.luxembourgRateEur;
-        return TaxCalculationResult(
-          amount: amount,
+        return TaxComputationOutput(
+          amount: distanceKm * rules.luxembourgFlatEur,
           currency: 'EUR',
-          formulaSummary:
-              'Barème Grand-Ducal LU : ${config.luxembourgRateEur.toStringAsFixed(2)} €/km',
-          bracketLabel: 'Forfait légal Luxembourg',
+          ruleSummary:
+              'Luxembourg Forfait Grand-Ducal (${rules.luxembourgFlatEur.toStringAsFixed(2)} €/km)',
         );
 
       case 'BE':
-        final amount = tripDistanceKm * config.belgiumRateEur;
-        return TaxCalculationResult(
-          amount: amount,
+        return TaxComputationOutput(
+          amount: distanceKm * rules.belgiumFlatEur,
           currency: 'EUR',
-          formulaSummary:
-              'Forfait Fédéral BE : ${config.belgiumRateEur.toStringAsFixed(2)} €/km',
-          bracketLabel: 'Forfait fédéral Belgique',
+          ruleSummary:
+              'Belgique Indemnité Fédérale (${rules.belgiumFlatEur.toStringAsFixed(2)} €/km)',
         );
 
       case 'DE':
         final isPendler = purpose.toLowerCase().contains('domicile') ||
             purpose.toLowerCase().contains('pendler');
         if (isPendler) {
-          final first20 = math.min(tripDistanceKm, 20.0);
-          final beyond20 = math.max(0.0, tripDistanceKm - 20.0);
-          final amount = (first20 * config.germanyPendlerFirst20Eur) +
-              (beyond20 * config.germanyPendlerAfter20Eur);
-          return TaxCalculationResult(
-            amount: amount,
+          final km1To20 = math.min(distanceKm, 20.0);
+          final kmOver20 = math.max(0.0, distanceKm - 20.0);
+          final val = (km1To20 * rules.germanyPendlerFirst20Eur) +
+              (kmOver20 * rules.germanyPendlerAfter20Eur);
+          return TaxComputationOutput(
+            amount: val,
             currency: 'EUR',
-            formulaSummary:
-                'DE Pendlerpauschale : 20km × ${config.germanyPendlerFirst20Eur.toStringAsFixed(2)}€ + >20km × ${config.germanyPendlerAfter20Eur.toStringAsFixed(2)}€',
-            bracketLabel: 'Pendlerpauschale (DE)',
-          );
-        } else {
-          final amount = tripDistanceKm * config.germanyDienstreisenEur;
-          return TaxCalculationResult(
-            amount: amount,
-            currency: 'EUR',
-            formulaSummary:
-                'DE Dienstreisen : ${config.germanyDienstreisenEur.toStringAsFixed(2)} €/km',
-            bracketLabel: 'Dienstreisen Pro (DE)',
+            ruleSummary:
+                'Allemagne Pendlerpauschale (${rules.germanyPendlerFirst20Eur.toStringAsFixed(2)}€ ≤20km / ${rules.germanyPendlerAfter20Eur.toStringAsFixed(2)}€ >20km)',
           );
         }
+        return TaxComputationOutput(
+          amount: distanceKm * rules.germanyDienstreisenEur,
+          currency: 'EUR',
+          ruleSummary:
+              'Allemagne Dienstreisen (${rules.germanyDienstreisenEur.toStringAsFixed(2)} €/km)',
+        );
 
       case 'CH':
-        final amount = tripDistanceKm * config.switzerlandRateChf;
-        return TaxCalculationResult(
-          amount: amount,
+        return TaxComputationOutput(
+          amount: distanceKm * rules.switzerlandFlatChf,
           currency: 'CHF',
-          formulaSummary:
-              'Barème TCS / Fiscal CH : ${config.switzerlandRateChf.toStringAsFixed(2)} CHF/km',
-          bracketLabel: 'Forfait Suisse (CHF)',
+          ruleSummary:
+              'Suisse Barème TCS / Cantonal (${rules.switzerlandFlatChf.toStringAsFixed(2)} CHF/km)',
         );
 
       default:
-        final amount = tripDistanceKm * 0.40;
-        return TaxCalculationResult(
-          amount: amount,
+        return TaxComputationOutput(
+          amount: distanceKm * 0.40,
           currency: 'EUR',
-          formulaSummary: 'Standard : 0.40 €/km',
-          bracketLabel: 'Standard',
+          ruleSummary: 'Forfait Standard (0.40 €/km)',
         );
     }
   }
 }
 
 // ============================================================================
-// 5. SERVICE GOOGLE MAPS API + FALLBACK ROUTIER INTELLIGENT (OSRM/NOMINATIM)
+// 6. SERVICE GOOGLE MAPS PLATFORM (AUTOCOMPLETE CACHE LOCAL + DIRECTIONS API)
 // ============================================================================
-class RouteCalculationResult {
-  final double distanceKm;
-  final String durationText;
-  final String sourceLabel;
+class GoogleMapsRoutingEngine {
+  static final Map<String, List<String>> _localAutocompleteCache = {};
 
-  RouteCalculationResult({
-    required this.distanceKm,
-    required this.durationText,
-    required this.sourceLabel,
-  });
-}
+  static String cleanAddress(String input) {
+    if (input.contains(' — ')) {
+      return input.split(' — ').last.trim();
+    }
+    return input.trim();
+  }
 
-class MapsRoutingService {
-  /// Autocomplétion d'adresses : utilise Google Places Autocomplete si clé fournie,
-  /// sinon combine les Favoris enregistrés + Nominatim OpenStreetMap.
-  static Future<List<String>> autocompletePlaces({
+  static Future<List<String>> searchPlacesWithCache({
     required String query,
     required String googleApiKey,
-    required List<SavedPlace> savedPlaces,
+    required List<SavedLocationEntity> savedLocations,
   }) async {
-    final trimmed = query.trim();
-    if (trimmed.length < 2) return [];
+    final q = query.trim();
+    if (q.length < 2) return [];
 
-    final results = <String>[];
-
-    // 1. Recherche instantanée dans les adresses favorites
-    for (final fav in savedPlaces) {
-      if (fav.label.toLowerCase().contains(trimmed.toLowerCase()) ||
-          fav.address.toLowerCase().contains(trimmed.toLowerCase())) {
-        results.add('${fav.label} — ${fav.address}');
+    final matches = <String>[];
+    // 1. Lieux de travail & Emplacements favoris en priorité
+    for (final loc in savedLocations) {
+      if (loc.label.toLowerCase().contains(q.toLowerCase()) ||
+          loc.fullAddress.toLowerCase().contains(q.toLowerCase())) {
+        matches.add('${loc.label} — ${loc.fullAddress}');
       }
     }
 
-    // 2. Appel Google Places Autocomplete API si clé configurée
+    // 2. Cache local
+    if (_localAutocompleteCache.containsKey(q.toLowerCase())) {
+      for (final cached in _localAutocompleteCache[q.toLowerCase()]!) {
+        if (!matches.contains(cached)) matches.add(cached);
+      }
+      return matches;
+    }
+
+    // 3. Google Places Autocomplete API si clé configurée
     if (googleApiKey.trim().isNotEmpty) {
       try {
         final uri = Uri.https(
           'maps.googleapis.com',
           '/maps/api/place/autocomplete/json',
-          {
-            'input': trimmed,
-            'language': 'fr',
-            'key': googleApiKey.trim(),
-          },
+          {'input': q, 'language': 'fr', 'key': googleApiKey.trim()},
         );
-        final response =
-            await http.get(uri).timeout(const Duration(seconds: 4));
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body) as Map<String, dynamic>;
-          final predictions = (data['predictions'] as List?) ?? [];
-          for (final p in predictions.take(5)) {
-            final desc = p['description']?.toString() ?? '';
-            if (desc.isNotEmpty && !results.contains(desc)) {
-              results.add(desc);
+        final res = await http.get(uri).timeout(const Duration(seconds: 4));
+        if (res.statusCode == 200) {
+          final body = jsonDecode(res.body) as Map<String, dynamic>;
+          final preds = (body['predictions'] as List?) ?? [];
+          final fetched = <String>[];
+          for (final p in preds.take(5)) {
+            final d = p['description']?.toString() ?? '';
+            if (d.isNotEmpty) {
+              fetched.add(d);
+              if (!matches.contains(d)) matches.add(d);
             }
           }
-          if (results.isNotEmpty) return results;
+          if (fetched.isNotEmpty) {
+            _localAutocompleteCache[q.toLowerCase()] = fetched;
+            return matches;
+          }
         }
-      } catch (_) {
-        // Bascule transparente vers le géocodeur de secours
-      }
+      } catch (_) {}
     }
 
-    // 3. Fallback Nominatim OpenStreetMap (sans clé requise)
+    // 4. Fallback Nominatim OpenStreetMap
     try {
       final uri = Uri.https(
         'nominatim.openstreetmap.org',
         '/search',
         {
-          'q': trimmed,
+          'q': q,
           'format': 'json',
-          'addressdetails': '1',
           'limit': '5',
           'accept-language': 'fr',
         },
       );
-      final response = await http.get(
+      final res = await http.get(
         uri,
-        headers: {'User-Agent': 'PiratePipsKiloTracker/1.0'},
+        headers: {'User-Agent': 'PiratePipsKiloTrackerPro/2.0'},
       ).timeout(const Duration(seconds: 4));
-      if (response.statusCode == 200) {
-        final list = jsonDecode(response.body) as List;
+      if (res.statusCode == 200) {
+        final list = jsonDecode(res.body) as List;
+        final fetched = <String>[];
         for (final item in list) {
-          final display = item['display_name']?.toString() ?? '';
-          if (display.isNotEmpty && !results.contains(display)) {
-            results.add(display);
+          final disp = item['display_name']?.toString() ?? '';
+          if (disp.isNotEmpty) {
+            fetched.add(disp);
+            if (!matches.contains(disp)) matches.add(disp);
           }
+        }
+        if (fetched.isNotEmpty) {
+          _localAutocompleteCache[q.toLowerCase()] = fetched;
         }
       }
     } catch (_) {}
 
-    return results;
+    return matches;
   }
 
-  /// Nettoie un libellé de favori ("Maison — 12 Rue...") pour ne garder que l'adresse postale
-  static String extractPureAddress(String raw) {
-    if (raw.contains(' — ')) {
-      return raw.split(' — ').last.trim();
-    }
-    return raw.trim();
-  }
-
-  /// Calcul d'itinéraire multi-étapes (Départ -> Arrêts -> Arrivée)
-  static Future<RouteCalculationResult> computeRouteDistance({
+  static Future<Map<String, dynamic>> calculateRoute({
     required String origin,
     required String destination,
-    required List<WaypointStop> waypoints,
+    required List<WaypointEntity> waypoints,
     required String googleApiKey,
   }) async {
-    final cleanOrigin = extractPureAddress(origin);
-    final cleanDest = extractPureAddress(destination);
-    final cleanWaypoints = waypoints
-        .map((w) => extractPureAddress(w.address))
+    final orig = cleanAddress(origin);
+    final dest = cleanAddress(destination);
+    final stops = waypoints
+        .map((w) => cleanAddress(w.address))
         .where((s) => s.isNotEmpty)
         .toList();
 
-    // 1. Google Maps Directions API si clé renseignée
+    // 1. Google Directions API
     if (googleApiKey.trim().isNotEmpty) {
       try {
         final params = <String, String>{
-          'origin': cleanOrigin,
-          'destination': cleanDest,
+          'origin': orig,
+          'destination': dest,
           'mode': 'driving',
           'language': 'fr',
           'key': googleApiKey.trim(),
         };
-        if (cleanWaypoints.isNotEmpty) {
-          params['waypoints'] = cleanWaypoints.join('|');
+        if (stops.isNotEmpty) {
+          params['waypoints'] = stops.join('|');
         }
         final uri = Uri.https(
           'maps.googleapis.com',
           '/maps/api/directions/json',
           params,
         );
-        final response =
-            await http.get(uri).timeout(const Duration(seconds: 6));
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final res = await http.get(uri).timeout(const Duration(seconds: 5));
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body) as Map<String, dynamic>;
           final routes = (data['routes'] as List?) ?? [];
           if (routes.isNotEmpty) {
             final legs = (routes.first['legs'] as List?) ?? [];
-            double totalMeters = 0;
-            int totalSeconds = 0;
+            double meters = 0;
+            int secs = 0;
             for (final leg in legs) {
-              totalMeters +=
-                  ((leg['distance']?['value'] ?? 0) as num).toDouble();
-              totalSeconds += ((leg['duration']?['value'] ?? 0) as num).toInt();
+              meters += ((leg['distance']?['value'] ?? 0) as num).toDouble();
+              secs += ((leg['duration']?['value'] ?? 0) as num).toInt();
             }
-            final km = totalMeters / 1000.0;
-            final mins = (totalSeconds / 60).round();
-            return RouteCalculationResult(
-              distanceKm: double.parse(km.toStringAsFixed(1)),
-              durationText: '$mins min',
-              sourceLabel: 'Google Maps Directions API',
-            );
+            return {
+              'km': double.parse((meters / 1000.0).toStringAsFixed(1)),
+              'duration': '${(secs / 60).round()} min',
+              'provider': 'Google Maps Directions API',
+            };
           }
         }
       } catch (_) {}
     }
 
-    // 2. Routage routier réel OSRM + Nominatim (sans clé API)
+    // 2. Fallback OSRM / Nominatim
     try {
-      final allPoints = <String>[cleanOrigin, ...cleanWaypoints, cleanDest];
-      final coords = <List<double>>[];
-
-      for (final address in allPoints) {
-        final geoUri = Uri.https(
+      final pts = <String>[orig, ...stops, dest];
+      final coords = <String>[];
+      for (final p in pts) {
+        final u = Uri.https(
           'nominatim.openstreetmap.org',
           '/search',
-          {'q': address, 'format': 'json', 'limit': '1'},
+          {'q': p, 'format': 'json', 'limit': '1'},
         );
-        final geoRes = await http.get(
-          geoUri,
-          headers: {'User-Agent': 'PiratePipsKiloTracker/1.0'},
+        final r = await http.get(
+          u,
+          headers: {'User-Agent': 'PiratePipsKiloTrackerPro/2.0'},
         ).timeout(const Duration(seconds: 4));
-
-        if (geoRes.statusCode == 200) {
-          final list = jsonDecode(geoRes.body) as List;
-          if (list.isNotEmpty) {
-            final lat = double.tryParse(list.first['lat'].toString());
-            final lon = double.tryParse(list.first['lon'].toString());
-            if (lat != null && lon != null) {
-              coords.add([lon, lat]);
-            }
+        if (r.statusCode == 200) {
+          final l = jsonDecode(r.body) as List;
+          if (l.isNotEmpty) {
+            coords.add('${l.first['lon']},${l.first['lat']}');
           }
         }
       }
-
-      if (coords.length == allPoints.length && coords.length >= 2) {
-        final coordPath = coords.map((c) => '${c[0]},${c[1]}').join(';');
-        final osrmUri = Uri.parse(
-          'https://router.project-osrm.org/route/v1/driving/$coordPath?overview=false',
+      if (coords.length == pts.length && coords.length >= 2) {
+        final osrm = Uri.parse(
+          'https://router.project-osrm.org/route/v1/driving/${coords.join(";")}?overview=false',
         );
-        final osrmRes =
-            await http.get(osrmUri).timeout(const Duration(seconds: 5));
-        if (osrmRes.statusCode == 200) {
-          final data = jsonDecode(osrmRes.body) as Map<String, dynamic>;
-          final routes = (data['routes'] as List?) ?? [];
+        final r = await http.get(osrm).timeout(const Duration(seconds: 4));
+        if (r.statusCode == 200) {
+          final d = jsonDecode(r.body) as Map<String, dynamic>;
+          final routes = (d['routes'] as List?) ?? [];
           if (routes.isNotEmpty) {
-            final meters =
-                ((routes.first['distance'] ?? 0) as num).toDouble();
-            final seconds =
-                ((routes.first['duration'] ?? 0) as num).toDouble();
-            final km = meters / 1000.0;
-            final mins = (seconds / 60).round();
-            return RouteCalculationResult(
-              distanceKm: double.parse(km.toStringAsFixed(1)),
-              durationText: '$mins min',
-              sourceLabel: 'Calculateur Routier GPS (OSRM)',
-            );
+            final m = ((routes.first['distance'] ?? 0) as num).toDouble();
+            final s = ((routes.first['duration'] ?? 0) as num).toDouble();
+            return {
+              'km': double.parse((m / 1000.0).toStringAsFixed(1)),
+              'duration': '${(s / 60).round()} min',
+              'provider': 'Routage GPS OSRM',
+            };
           }
         }
       }
     } catch (_) {}
 
-    // 3. Estimation déterministe hors-ligne si absence de réseau
-    final seed =
-        cleanOrigin.length * 7 + cleanDest.length * 11 + cleanWaypoints.length * 19;
-    final estimatedKm = 14.5 + (seed % 42) + (cleanWaypoints.length * 8.4);
-    final mins = (estimatedKm * 1.15).round();
-    return RouteCalculationResult(
-      distanceKm: double.parse(estimatedKm.toStringAsFixed(1)),
-      durationText: '$mins min',
-      sourceLabel: 'Estimateur Hors-Ligne Pirate Pips™',
-    );
+    // 3. Calculateur vectoriel hors-ligne
+    final hash = orig.length * 9 + dest.length * 13 + stops.length * 21;
+    final km = 16.0 + (hash % 45) + (stops.length * 7.5);
+    return {
+      'km': double.parse(km.toStringAsFixed(1)),
+      'duration': '${(km * 1.1).round()} min',
+      'provider': 'Moteur Hors-Ligne Pirate Pips™',
+    };
   }
 }
 
 // ============================================================================
-// 6. APPLICATION PRINCIPALE & SPLASH SCREEN PIRATE PIPS™
+// 7. APPLICATION ROOT & SPLASH SCREEN ANIMÉ PIRATE PIPS™
 // ============================================================================
-class PiratePipsKiloApp extends StatelessWidget {
-  const PiratePipsKiloApp({super.key});
+class PiratePipsDriversApp extends StatelessWidget {
+  const PiratePipsDriversApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pirate Pips™ KiloTracker',
+      title: 'Pirate Pips™ KiloTracker Pro',
       debugShowCheckedModeBanner: false,
-      theme: PirateTheme.darkTheme,
-      home: const SplashScreenWrapper(),
+      theme: PiratePalette.theme,
+      home: const PirateSplashGateway(),
     );
   }
 }
 
-class SplashScreenWrapper extends StatefulWidget {
-  const SplashScreenWrapper({super.key});
+class PirateSplashGateway extends StatefulWidget {
+  const PirateSplashGateway({super.key});
 
   @override
-  State<SplashScreenWrapper> createState() => _SplashScreenWrapperState();
+  State<PirateSplashGateway> createState() => _PirateSplashGatewayState();
 }
 
-class _SplashScreenWrapperState extends State<SplashScreenWrapper>
+class _PirateSplashGatewayState extends State<PirateSplashGateway>
     with SingleTickerProviderStateMixin {
-  bool _showSplash = true;
-  late AnimationController _animController;
-  late Animation<double> _scaleAnim;
+  bool _inSplash = true;
+  late AnimationController _controller;
+  late Animation<double> _pulse;
 
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(
+    _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1100),
+      duration: const Duration(milliseconds: 1200),
     );
-    _scaleAnim = CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeOutBack,
-    );
-    _animController.forward();
-
+    _pulse = CurvedAnimation(parent: _controller, curve: Curves.easeOutBack);
+    _controller.forward();
     Timer(const Duration(milliseconds: 2200), () {
-      if (mounted) {
-        setState(() => _showSplash = false);
-      }
+      if (mounted) setState(() => _inSplash = false);
     });
   }
 
   @override
   void dispose() {
-    _animController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_showSplash) {
-      return Scaffold(
-        backgroundColor: PirateTheme.bgPrimary,
-        body: Center(
-          child: ScaleTransition(
-            scale: _scaleAnim,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: PirateTheme.goldPrimary.withOpacity(0.28),
-                        blurRadius: 36,
-                        spreadRadius: 6,
-                      ),
-                    ],
-                  ),
-                  child: const PiratePipsLogo(size: 118),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'PIRATE PIPS™',
-                  style: TextStyle(
-                    color: PirateTheme.textWhite,
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 2.5,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: PirateTheme.goldPrimary.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: PirateTheme.goldPrimary.withOpacity(0.5),
+    if (!_inSplash) return const MainNavigationWorkspace();
+
+    return Scaffold(
+      backgroundColor: PiratePalette.bgDeep,
+      body: Center(
+        child: ScaleTransition(
+          scale: _pulse,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: PiratePalette.goldPrimary.withOpacity(0.30),
+                      blurRadius: 40,
+                      spreadRadius: 8,
                     ),
-                  ),
-                  child: const Text(
-                    'KILOTRACKER PRO • INDEMNITÉS KILOMÉTRIQUES',
-                    style: TextStyle(
-                      color: PirateTheme.goldPrimary,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.1,
-                    ),
+                  ],
+                ),
+                child: const PiratePipsBadgeLogo(size: 122),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'PIRATE PIPS™',
+                style: TextStyle(
+                  color: PiratePalette.textPure,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 2.8,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                decoration: BoxDecoration(
+                  color: PiratePalette.goldPrimary.withOpacity(0.14),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: PiratePalette.goldPrimary.withOpacity(0.55),
                   ),
                 ),
-                const SizedBox(height: 36),
-                const SizedBox(
-                  width: 28,
-                  height: 28,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.5,
-                    color: PirateTheme.goldPrimary,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Développé par Pirate Pips™',
+                child: const Text(
+                  'AUTO-TRACKING GPS • AUDIT & FISCALITÉ CERTIFIÉE',
                   style: TextStyle(
-                    color: PirateTheme.textMuted,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
+                    color: PiratePalette.goldPrimary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.1,
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 32),
+              const SizedBox(
+                width: 26,
+                height: 26,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.4,
+                  color: PiratePalette.goldPrimary,
+                ),
+              ),
+              const SizedBox(height: 22),
+              const Text(
+                'Développé par Pirate Pips™',
+                style: TextStyle(
+                  color: PiratePalette.textSteel,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
         ),
-      );
-    }
-    return const MainShellScreen();
+      ),
+    );
   }
 }
 
 // ============================================================================
-// 7. SHELL PRINCIPAL & GESTION D'ÉTAT LOCAL-FIRST
+// 8. SHELL DE NAVIGATION À 5 ENTRÉES (AVEC FAB CENTRAL SURÉLEVÉ `+`)
 // ============================================================================
-class MainShellScreen extends StatefulWidget {
-  const MainShellScreen({super.key});
+class MainNavigationWorkspace extends StatefulWidget {
+  const MainNavigationWorkspace({super.key});
 
   @override
-  State<MainShellScreen> createState() => _MainShellScreenState();
+  State<MainNavigationWorkspace> createState() =>
+      _MainNavigationWorkspaceState();
 }
 
-class _MainShellScreenState extends State<MainShellScreen> {
-  int _selectedIndex = 0;
-  bool _isLoading = true;
+class _MainNavigationWorkspaceState extends State<MainNavigationWorkspace> {
+  int _activeTab = 0; // 0: Accueil, 1: Tous les trajets, 2: Rapports, 3: Paramètres
+  bool _loading = true;
 
-  List<Driver> _drivers = [];
-  List<Vehicle> _vehicles = [];
-  List<SavedPlace> _savedPlaces = [];
-  List<TripRecord> _trips = [];
-  TaxRatesConfig _taxConfig = TaxRatesConfig.defaults();
+  // État Auto-Tracking & Onboarding Permissions (5 étapes Driversnote/Kilonote)
+  bool _autoTrackingEnabled = true;
+  bool _permMotionActivity = true;
+  bool _permLocationAlways = false;
+  bool _permNotifications = false;
+  bool _permBatteryUnrestricted = false;
+  bool _permBluetoothBeacon = false;
+
+  // Données principales
+  List<DriverProfile> _drivers = [];
+  List<VehicleEntity> _vehicles = [];
+  List<SavedLocationEntity> _locations = [];
+  List<TripEntity> _trips = [];
+  List<OdometerLogEntity> _odometerLogs = [];
+  TaxRulesRepository _taxRules = TaxRulesRepository.defaults();
 
   String _defaultCountry = 'FR';
   double _defaultDetourMargin = 5.0;
   String _googleMapsApiKey = '';
-  String _cloudSyncEndpoint = '';
-  String? _lastCloudSyncStatus;
+
+  int get _completedOnboardingSteps {
+    int count = 0;
+    if (_permMotionActivity) count++;
+    if (_permLocationAlways) count++;
+    if (_permNotifications) count++;
+    if (_permBatteryUnrestricted) count++;
+    if (_permBluetoothBeacon) count++;
+    return count;
+  }
 
   @override
   void initState() {
     super.initState();
-    _loadAllData();
+    _bootstrapLocalStore();
   }
 
-  Future<void> _loadAllData() async {
+  Future<void> _bootstrapLocalStore() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Conducteurs
-    final rawDrivers = prefs.getString('pp_drivers_v1');
+    _autoTrackingEnabled = prefs.getBool('pp2_auto_tracking') ?? true;
+    _permMotionActivity = prefs.getBool('pp2_perm_motion') ?? true;
+    _permLocationAlways = prefs.getBool('pp2_perm_loc') ?? false;
+    _permNotifications = prefs.getBool('pp2_perm_notif') ?? false;
+    _permBatteryUnrestricted = prefs.getBool('pp2_perm_batt') ?? false;
+    _permBluetoothBeacon = prefs.getBool('pp2_perm_bt') ?? false;
+
+    _defaultCountry = prefs.getString('pp2_country') ?? 'FR';
+    _defaultDetourMargin = prefs.getDouble('pp2_margin') ?? 5.0;
+    _googleMapsApiKey = prefs.getString('pp2_gmaps_key') ?? '';
+
+    final rawDrivers = prefs.getString('pp2_drivers');
     if (rawDrivers != null) {
-      final list = jsonDecode(rawDrivers) as List;
-      _drivers = list
-          .map((e) => Driver.fromJson(e as Map<String, dynamic>))
+      _drivers = (jsonDecode(rawDrivers) as List)
+          .map((e) => DriverProfile.fromJson(e as Map<String, dynamic>))
           .toList();
     } else {
       _drivers = [
-        Driver(
-          id: 'drv_1',
+        DriverProfile(
+          id: 'drv_main',
           firstName: 'Antoine',
           lastName: 'Flory',
-          status: 'Gérant',
+          role: 'Gérant',
+          personalAddress: 'Uffheim, 68510, France',
+          companyName: 'A&CSA INVEST / Pirate Pips™',
+          companyAddress: '', // Volontairement vide par défaut pour illustrer l'alerte d'audit fiscal ⚠️
         ),
-        Driver(
-          id: 'drv_2',
-          firstName: 'Collaborateur',
-          lastName: 'Commercial',
-          status: 'Salarié',
+        DriverProfile(
+          id: 'drv_team_1',
+          firstName: 'Marc',
+          lastName: 'Ingénieur Commercial',
+          role: 'Salarié',
+          personalAddress: 'Mulhouse, 68100, France',
+          companyName: 'A&CSA INVEST / Pirate Pips™',
+          companyAddress: 'Boulevard Royal, L-2449 Luxembourg',
         ),
       ];
     }
 
-    // Véhicules
-    final rawVehicles = prefs.getString('pp_vehicles_v1');
+    final rawVehicles = prefs.getString('pp2_vehicles');
     if (rawVehicles != null) {
-      final list = jsonDecode(rawVehicles) as List;
-      _vehicles = list
-          .map((e) => Vehicle.fromJson(e as Map<String, dynamic>))
+      _vehicles = (jsonDecode(rawVehicles) as List)
+          .map((e) => VehicleEntity.fromJson(e as Map<String, dynamic>))
           .toList();
     } else {
       _vehicles = [
-        Vehicle(
-          id: 'veh_1',
+        VehicleEntity(
+          id: 'veh_glc',
           name: 'Mercedes-Benz GLC AMG',
-          plate: 'PP-888-LU',
-          type: 'Voiture',
-          engine: 'Thermique Essence',
+          licensePlate: '', // Volontairement vide par défaut pour démontrer l'alerte bloquante ⚠️ Plaque d'immatriculation
+          fiscalCategory: 'Voiture (7 CV et plus)',
+          vehicleGroup: 'THERMIQUE',
           fiscalHp: 7,
-          odometerKm: 42500.0,
+          isElectric: false,
+          currentOdometerKm: 44820.0,
+          bluetoothBeaconName: 'MB-GLC-BT-BEACON',
         ),
-        Vehicle(
-          id: 'veh_2',
+        VehicleEntity(
+          id: 'veh_ranger',
           name: 'Ford Ranger Pick-up',
-          plate: 'PP-404-FR',
-          type: 'Utilitaire',
-          engine: 'Thermique Diesel',
+          licensePlate: 'PP-550-FR',
+          fiscalCategory: 'Voiture (7 CV et plus)',
+          vehicleGroup: 'THERMIQUE',
           fiscalHp: 7,
-          odometerKm: 68200.0,
+          isElectric: false,
+          currentOdometerKm: 71300.0,
+          bluetoothBeaconName: 'FORD-SYNC-BT',
         ),
-        Vehicle(
-          id: 'veh_3',
-          name: 'Berline Pro Électrique',
-          plate: 'EV-2026-CH',
-          type: 'Voiture',
-          engine: 'Électrique',
+        VehicleEntity(
+          id: 'veh_ev',
+          name: 'Berline Électrique Flotte',
+          licensePlate: 'EV-900-LU',
+          fiscalCategory: 'Voiture électrique (5 CV)',
+          vehicleGroup: 'ELECTRIQUE',
           fiscalHp: 5,
-          odometerKm: 15400.0,
+          isElectric: true,
+          currentOdometerKm: 18250.0,
+          bluetoothBeaconName: 'IBEACON-PIRATE-01',
         ),
       ];
     }
 
-    // Adresses Favorites
-    final rawPlaces = prefs.getString('pp_places_v1');
-    if (rawPlaces != null) {
-      final list = jsonDecode(rawPlaces) as List;
-      _savedPlaces = list
-          .map((e) => SavedPlace.fromJson(e as Map<String, dynamic>))
+    final rawLocs = prefs.getString('pp2_locations');
+    if (rawLocs != null) {
+      _locations = (jsonDecode(rawLocs) as List)
+          .map((e) => SavedLocationEntity.fromJson(e as Map<String, dynamic>))
           .toList();
     } else {
-      _savedPlaces = [
-        SavedPlace(
-          id: 'plc_1',
-          label: 'Maison (Domicile)',
-          address: 'Uffheim, 68510, France',
-          category: 'Maison',
-        ),
-        SavedPlace(
-          id: 'plc_2',
+      _locations = [
+        SavedLocationEntity(
+          id: 'loc_1',
           label: 'Siège Social Luxembourg',
-          address: 'Boulevard Royal, L-2449 Luxembourg',
-          category: 'Siège',
+          fullAddress: 'Boulevard Royal, L-2449 Luxembourg',
+          locationType: 'WORKPLACE',
         ),
-        SavedPlace(
-          id: 'plc_3',
-          label: 'Dépôt Logistique Grand Est',
-          address: 'Avenue de Colmar, 68100 Mulhouse, France',
-          category: 'Dépôt',
+        SavedLocationEntity(
+          id: 'loc_2',
+          label: 'Bureau Régional Grand Est',
+          fullAddress: 'Avenue de Colmar, 68100 Mulhouse, France',
+          locationType: 'WORKPLACE',
         ),
-        SavedPlace(
-          id: 'plc_4',
-          label: 'Client Bâle / Suisse',
-          address: 'Aeschenplatz, 4052 Basel, Suisse',
-          category: 'Client',
+        SavedLocationEntity(
+          id: 'loc_3',
+          label: 'Domicile Uffheim',
+          fullAddress: 'Uffheim, 68510, France',
+          locationType: 'EMPLACEMENT',
+        ),
+        SavedLocationEntity(
+          id: 'loc_4',
+          label: 'Chantier Bâle Centre',
+          fullAddress: 'Aeschenplatz, 4052 Basel, Suisse',
+          locationType: 'EMPLACEMENT',
         ),
       ];
     }
 
-    // Barèmes fiscaux
-    final rawTax = prefs.getString('pp_tax_config_v1');
-    if (rawTax != null) {
-      _taxConfig =
-          TaxRatesConfig.fromJson(jsonDecode(rawTax) as Map<String, dynamic>);
-    }
-
-    // Paramètres généraux
-    _defaultCountry = prefs.getString('pp_default_country') ?? 'FR';
-    _defaultDetourMargin = prefs.getDouble('pp_default_margin') ?? 5.0;
-    _googleMapsApiKey = prefs.getString('pp_gmaps_key') ?? '';
-    _cloudSyncEndpoint = prefs.getString('pp_cloud_url') ?? '';
-
-    // Trajets
-    final rawTrips = prefs.getString('pp_trips_v1');
-    if (rawTrips != null) {
-      final list = jsonDecode(rawTrips) as List;
-      _trips = list
-          .map((e) => TripRecord.fromJson(e as Map<String, dynamic>))
+    final rawOdo = prefs.getString('pp2_odometer_logs');
+    if (rawOdo != null) {
+      _odometerLogs = (jsonDecode(rawOdo) as List)
+          .map((e) => OdometerLogEntity.fromJson(e as Map<String, dynamic>))
           .toList();
     } else {
-      // Exemples initiaux réalistes
+      _odometerLogs = [
+        OdometerLogEntity(
+          id: 'odo_1',
+          vehicleId: 'veh_glc',
+          recordedAt: DateTime.now().subtract(const Duration(days: 5)),
+          odometerValueKm: 44700.0,
+          photoEvidenceRef: 'COMPTEUR-GLC-OCT.JPG',
+          note: 'Relevé mensuel certifié début de période',
+        ),
+      ];
+    }
+
+    final rawTax = prefs.getString('pp2_tax_rules');
+    if (rawTax != null) {
+      _taxRules = TaxRulesRepository.fromJson(
+        jsonDecode(rawTax) as Map<String, dynamic>,
+      );
+    }
+
+    final rawTrips = prefs.getString('pp2_trips');
+    if (rawTrips != null) {
+      _trips = (jsonDecode(rawTrips) as List)
+          .map((e) => TripEntity.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
       _trips = [
-        TripRecord(
-          id: 'trp_demo_1',
-          date: DateTime.now().subtract(const Duration(days: 2)),
-          timeLabel: '08:15',
-          driverId: _drivers.first.id,
-          vehicleId: _vehicles.first.id,
+        // 1. Trajet en attente dans l'Inbox (capturé en Auto-Tracking GPS / iBeacon)
+        TripEntity(
+          id: 'trp_inbox_1',
+          date: DateTime.now(),
+          startTime: '08:10',
+          endTime: '08:52',
+          driverId: 'drv_main',
+          vehicleId: 'veh_glc',
           countryCode: 'FR',
-          origin: 'Uffheim, 68510, France',
-          destination: 'Avenue de Colmar, 68100 Mulhouse, France',
+          originAddress: 'Uffheim, 68510, France',
+          destinationAddress: 'Avenue de Colmar, 68100 Mulhouse, France',
           waypoints: [
-            WaypointStop(
-              label: 'Arrêt Magasin Pro',
+            WaypointEntity(
+              label: 'Magasin Pro Outillage',
               address: 'Sierentz, 68510, France',
             ),
           ],
-          isRoundTrip: true,
+          isRoundTrip: false,
+          captureMode: 'IBEACON_BT',
+          qualificationStatus: 'PENDING',
           purpose: 'Chantier',
-          isProfessional: true,
-          mapsDistanceKm: 48.0,
+          projectTag: 'Grand Est BTP',
+          mapsDistanceKm: 28.0,
           detourMarginPercent: 5.0,
-          totalDistanceKm: 50.4,
-          odometerStart: 42449.6,
-          odometerEnd: 42500.0,
-          reimbursementAmount: 35.13,
+          finalDistanceKm: 29.4,
+          odometerStartKm: 44790.6,
+          odometerEndKm: 44820.0,
+          reimbursementAmount: 20.49,
           currency: 'EUR',
-          formulaApplied: 'FR 7CV : d × 0.697€',
-          notes: 'Visite technique chantier + retrait matériel pro',
-          receiptReference: 'TICKET-PARKING-01',
+          appliedRuleLabel: 'FR Voiture (7 CV et plus) • Tranche 1 (d × 0.697)',
+          notes: 'Détecté automatiquement via Bluetooth MB-GLC-BT-BEACON',
+          receiptPhotoRef: null,
         ),
-        TripRecord(
-          id: 'trp_demo_2',
-          date: DateTime.now().subtract(const Duration(days: 1)),
-          timeLabel: '14:00',
-          driverId: _drivers.first.id,
-          vehicleId: _vehicles.first.id,
-          countryCode: 'LU',
-          origin: 'Boulevard Royal, L-2449 Luxembourg',
-          destination: 'Kirchberg, Luxembourg',
+        // 2. Trajet en attente dans l'Inbox
+        TripEntity(
+          id: 'trp_inbox_2',
+          date: DateTime.now().subtract(const Duration(hours: 5)),
+          startTime: '11:30',
+          endTime: '12:15',
+          driverId: 'drv_main',
+          vehicleId: 'veh_glc',
+          countryCode: 'CH',
+          originAddress: 'Uffheim, 68510, France',
+          destinationAddress: 'Aeschenplatz, 4052 Basel, Suisse',
           waypoints: [],
           isRoundTrip: true,
-          purpose: 'Administratif',
-          isProfessional: true,
-          mapsDistanceKm: 18.0,
+          captureMode: 'AUTO_GPS',
+          qualificationStatus: 'PENDING',
+          purpose: 'Client',
+          projectTag: 'Client Suisse',
+          mapsDistanceKm: 44.0,
           detourMarginPercent: 5.0,
-          totalDistanceKm: 18.9,
-          odometerStart: 42500.0,
-          odometerEnd: 42518.9,
-          reimbursementAmount: 7.56,
+          finalDistanceKm: 46.2,
+          odometerStartKm: 44744.4,
+          odometerEndKm: 44790.6,
+          reimbursementAmount: 33.26,
+          currency: 'CHF',
+          appliedRuleLabel: 'Suisse Barème TCS / Cantonal (0.72 CHF/km)',
+          notes: 'Auto-tracking Motion API',
+          receiptPhotoRef: 'PARKING-BASEL.JPG',
+        ),
+        // 3. Trajet déjà validé Professionnel
+        TripEntity(
+          id: 'trp_valid_1',
+          date: DateTime.now().subtract(const Duration(days: 2)),
+          startTime: '09:00',
+          endTime: '11:40',
+          driverId: 'drv_main',
+          vehicleId: 'veh_ev',
+          countryCode: 'LU',
+          originAddress: 'Boulevard Royal, L-2449 Luxembourg',
+          destinationAddress: 'Esch-sur-Alzette, Luxembourg',
+          waypoints: [],
+          isRoundTrip: true,
+          captureMode: 'MANUAL_MAPS',
+          qualificationStatus: 'PRO',
+          purpose: 'Administratif',
+          projectTag: 'Holding LU',
+          mapsDistanceKm: 42.0,
+          detourMarginPercent: 5.0,
+          finalDistanceKm: 44.1,
+          odometerStartKm: 18205.9,
+          odometerEndKm: 18250.0,
+          reimbursementAmount: 17.64,
           currency: 'EUR',
-          formulaApplied: 'Barème Grand-Ducal LU : 0.40 €/km',
-          notes: 'Rendez-vous banque & fiduciaire',
-          receiptReference: null,
+          appliedRuleLabel: 'Luxembourg Forfait Grand-Ducal (0.40 €/km)',
+          notes: 'Signature actes & fiduciaire',
+          receiptPhotoRef: null,
         ),
       ];
     }
 
-    if (mounted) {
-      setState(() => _isLoading = false);
-    }
+    if (mounted) setState(() => _loading = false);
   }
 
-  Future<void> _persistAll() async {
+  Future<void> _saveStateToDisk() async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('pp2_auto_tracking', _autoTrackingEnabled);
+    await prefs.setBool('pp2_perm_motion', _permMotionActivity);
+    await prefs.setBool('pp2_perm_loc', _permLocationAlways);
+    await prefs.setBool('pp2_perm_notif', _permNotifications);
+    await prefs.setBool('pp2_perm_batt', _permBatteryUnrestricted);
+    await prefs.setBool('pp2_perm_bt', _permBluetoothBeacon);
+
+    await prefs.setString('pp2_country', _defaultCountry);
+    await prefs.setDouble('pp2_margin', _defaultDetourMargin);
+    await prefs.setString('pp2_gmaps_key', _googleMapsApiKey);
+
     await prefs.setString(
-      'pp_drivers_v1',
-      jsonEncode(_drivers.map((d) => d.toJson()).toList()),
+      'pp2_drivers',
+      jsonEncode(_drivers.map((e) => e.toJson()).toList()),
     );
     await prefs.setString(
-      'pp_vehicles_v1',
-      jsonEncode(_vehicles.map((v) => v.toJson()).toList()),
+      'pp2_vehicles',
+      jsonEncode(_vehicles.map((e) => e.toJson()).toList()),
     );
     await prefs.setString(
-      'pp_places_v1',
-      jsonEncode(_savedPlaces.map((p) => p.toJson()).toList()),
+      'pp2_locations',
+      jsonEncode(_locations.map((e) => e.toJson()).toList()),
     );
     await prefs.setString(
-      'pp_trips_v1',
-      jsonEncode(_trips.map((t) => t.toJson()).toList()),
+      'pp2_odometer_logs',
+      jsonEncode(_odometerLogs.map((e) => e.toJson()).toList()),
     );
+    await prefs.setString('pp2_tax_rules', jsonEncode(_taxRules.toJson()));
     await prefs.setString(
-      'pp_tax_config_v1',
-      jsonEncode(_taxConfig.toJson()),
+      'pp2_trips',
+      jsonEncode(_trips.map((e) => e.toJson()).toList()),
     );
-    await prefs.setString('pp_default_country', _defaultCountry);
-    await prefs.setDouble('pp_default_margin', _defaultDetourMargin);
-    await prefs.setString('pp_gmaps_key', _googleMapsApiKey);
-    await prefs.setString('pp_cloud_url', _cloudSyncEndpoint);
   }
 
-  /// Cumul annuel des kilomètres professionnels en France pour un véhicule donné
-  double _getAnnualFrenchProKmForVehicle(String vehicleId, int year) {
+  double _getCumulativeAnnualFrenchKm(String vehicleId, int year) {
     return _trips
         .where((t) =>
             t.vehicleId == vehicleId &&
             t.countryCode == 'FR' &&
-            t.isProfessional &&
+            t.qualificationStatus == 'PRO' &&
             t.date.year == year)
-        .fold(0.0, (sum, t) => sum + t.totalDistanceKm);
+        .fold(0.0, (s, t) => s + t.finalDistanceKm);
   }
 
-  void _addTripAndIncrementOdometer(TripRecord newTrip) {
+  void _qualifyTripStatus(TripEntity trip, String newStatus) {
     setState(() {
-      _trips.insert(0, newTrip);
-      final vIndex = _vehicles.indexWhere((v) => v.id == newTrip.vehicleId);
-      if (vIndex != -1) {
-        if (newTrip.odometerEnd > _vehicles[vIndex].odometerKm) {
-          _vehicles[vIndex].odometerKm = newTrip.odometerEnd;
+      trip.qualificationStatus = newStatus;
+      final v = _vehicles.firstWhere(
+        (veh) => veh.id == trip.vehicleId,
+        orElse: () => _vehicles.first,
+      );
+      final priorKm = _getCumulativeAnnualFrenchKm(v.id, trip.date.year);
+      final eval = TaxEngineService.evaluateTrip(
+        countryCode: trip.countryCode,
+        distanceKm: trip.finalDistanceKm,
+        priorAnnualFrenchKm: priorKm,
+        vehicle: v,
+        purpose: trip.purpose,
+        qualificationStatus: newStatus,
+        rules: _taxRules,
+      );
+      trip.reimbursementAmount = eval.amount;
+      trip.currency = eval.currency;
+      trip.appliedRuleLabel = eval.ruleSummary;
+    });
+    _saveStateToDisk();
+  }
+
+  void _insertNewTrip(TripEntity trip) {
+    setState(() {
+      _trips.insert(0, trip);
+      final idx = _vehicles.indexWhere((v) => v.id == trip.vehicleId);
+      if (idx != -1) {
+        if (trip.odometerEndKm > _vehicles[idx].currentOdometerKm) {
+          _vehicles[idx].currentOdometerKm = trip.odometerEndKm;
         } else {
-          _vehicles[vIndex].odometerKm += newTrip.totalDistanceKm;
+          _vehicles[idx].currentOdometerKm += trip.finalDistanceKm;
         }
       }
-      _selectedIndex = 0; // Retour au Dashboard avec confirmation
     });
-    _persistAll();
+    _saveStateToDisk();
   }
 
-  void _deleteTrip(String tripId) {
-    setState(() {
-      _trips.removeWhere((t) => t.id == tripId);
-    });
-    _persistAll();
-  }
-
-  Future<void> _triggerCloudSync() async {
-    if (_cloudSyncEndpoint.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: PirateTheme.bearRed,
-          content: Text(
-            'Veuillez renseigner une URL Webhook/Cloud dans les Paramètres.',
-          ),
+  /// Ouvre le calculateur rapide de trajet (Action du bouton central `+` FAB surélevé)
+  void _openQuickAddTripModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: PiratePalette.bgDeep,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+      ),
+      builder: (ctx) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.93,
+        maxChildSize: 0.97,
+        builder: (_, scrollCtrl) => ManualTripCreatorSheet(
+          scrollController: scrollCtrl,
+          drivers: _drivers,
+          vehicles: _vehicles,
+          locations: _locations,
+          taxRules: _taxRules,
+          defaultCountry: _defaultCountry,
+          defaultMargin: _defaultDetourMargin,
+          googleMapsApiKey: _googleMapsApiKey,
+          getPriorAnnualFrenchKm: _getCumulativeAnnualFrenchKm,
+          onTripCreated: (newTrip) {
+            Navigator.pop(ctx);
+            _insertNewTrip(newTrip);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: PiratePalette.bullGreen,
+                content: Text(
+                  'Trajet enregistré : +${newTrip.finalDistanceKm.toStringAsFixed(1)} km (${newTrip.reimbursementAmount.toStringAsFixed(2)} ${newTrip.currency})',
+                ),
+              ),
+            );
+          },
         ),
-      );
-      return;
-    }
+      ),
+    );
+  }
 
-    try {
-      final payload = {
-        'brand': 'Pirate Pips™ KiloTracker',
-        'exportedAt': DateTime.now().toIso8601String(),
-        'drivers': _drivers.map((e) => e.toJson()).toList(),
-        'vehicles': _vehicles.map((e) => e.toJson()).toList(),
-        'trips': _trips.map((e) => e.toJson()).toList(),
-      };
-      final res = await http
-          .post(
-            Uri.parse(_cloudSyncEndpoint.trim()),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode(payload),
-          )
-          .timeout(const Duration(seconds: 6));
+  /// Ouvre le configurateur interactif des 5 étapes d'autorisations d'auto-tracking
+  void _openPermissionsConfiguratorModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: PiratePalette.bgSurface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) {
+          void togglePerm(void Function() updater) {
+            setState(updater);
+            setSheetState(() {});
+            _saveStateToDisk();
+          }
 
-      setState(() {
-        _lastCloudSyncStatus =
-            'Synchro Cloud réussie (HTTP ${res.statusCode}) à ${TimeOfDay.now().format(context)}';
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: PirateTheme.bullGreen,
-            content: Text(_lastCloudSyncStatus!),
-          ),
-        );
-      }
-    } catch (e) {
-      setState(() {
-        _lastCloudSyncStatus = 'Mode Local-First actif (Cloud hors-ligne)';
-      });
-    }
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(18, 18, 18, 28),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'CONFIGURATION DU SUIVI AUTOMATIQUE (5 ÉTAPES)',
+                        style: TextStyle(
+                          color: PiratePalette.goldPrimary,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 13,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(ctx),
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                  const Text(
+                    'Activez les autorisations système pour capturer 100 % de vos trajets professionnels en arrière-plan sans vider la batterie.',
+                    style: TextStyle(
+                      color: PiratePalette.textSteel,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  _PermissionStepTile(
+                    stepNumber: 1,
+                    title: 'Activité physique (Motion API)',
+                    subtitle:
+                        'Détecte automatiquement les transitions marche vs véhicule en mouvement.',
+                    icon: Icons.directions_run,
+                    enabled: _permMotionActivity,
+                    onChanged: (v) =>
+                        togglePerm(() => _permMotionActivity = v),
+                  ),
+                  _PermissionStepTile(
+                    stepNumber: 2,
+                    title: 'Emplacement (Toujours autoriser / Background GPS)',
+                    subtitle:
+                        'Géolocalisation précise des points de départ, d\'arrêts et d\'arrivée.',
+                    icon: Icons.location_on,
+                    enabled: _permLocationAlways,
+                    onChanged: (v) =>
+                        togglePerm(() => _permLocationAlways = v),
+                  ),
+                  _PermissionStepTile(
+                    stepNumber: 3,
+                    title: 'Notifications intelligentes de fin de trajet',
+                    subtitle:
+                        'Vous alerte dès qu\'un trajet est terminé pour le classer Pro ou Perso.',
+                    icon: Icons.notifications_active,
+                    enabled: _permNotifications,
+                    onChanged: (v) => togglePerm(() => _permNotifications = v),
+                  ),
+                  _PermissionStepTile(
+                    stepNumber: 4,
+                    title: 'Exemption d\'optimisation batterie (Android / iOS)',
+                    subtitle:
+                        'Empêche le système de mettre l\'auto-tracking en veille prolongée.',
+                    icon: Icons.battery_charging_full,
+                    enabled: _permBatteryUnrestricted,
+                    onChanged: (v) =>
+                        togglePerm(() => _permBatteryUnrestricted = v),
+                  ),
+                  _PermissionStepTile(
+                    stepNumber: 5,
+                    title: 'Filtre matériel iBeacon / Bluetooth Véhicule',
+                    subtitle:
+                        'Déclenche l\'enregistrement uniquement au signal Bluetooth du véhicule (élimine train/bus).',
+                    icon: Icons.bluetooth,
+                    enabled: _permBluetoothBeacon,
+                    onChanged: (v) =>
+                        togglePerm(() => _permBluetoothBeacon = v),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        togglePerm(() {
+                          _permMotionActivity = true;
+                          _permLocationAlways = true;
+                          _permNotifications = true;
+                          _permBatteryUnrestricted = true;
+                          _permBluetoothBeacon = true;
+                        });
+                        Navigator.pop(ctx);
+                      },
+                      icon: const Icon(Icons.verified_user, size: 18),
+                      label: const Text(
+                        'ACTIVER TOUTES LES AUTORISATIONS (5/5)',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
+    if (_loading) {
       return const Scaffold(
-        backgroundColor: PirateTheme.bgPrimary,
+        backgroundColor: PiratePalette.bgDeep,
         body: Center(
-          child: CircularProgressIndicator(color: PirateTheme.goldPrimary),
+          child: CircularProgressIndicator(color: PiratePalette.goldPrimary),
         ),
       );
     }
 
-    final pages = [
-      DashboardTab(
+    final screens = [
+      // 1. Accueil (Inbox / Validation)
+      HomeInboxValidationScreen(
+        autoTrackingEnabled: _autoTrackingEnabled,
+        completedSteps: _completedOnboardingSteps,
         trips: _trips,
         drivers: _drivers,
         vehicles: _vehicles,
-        taxConfig: _taxConfig,
-        onNewTripTap: () => setState(() => _selectedIndex = 1),
-        onOpenExportsTap: () => setState(() => _selectedIndex = 2),
-      ),
-      NewTripTab(
-        drivers: _drivers,
-        vehicles: _vehicles,
-        savedPlaces: _savedPlaces,
-        taxConfig: _taxConfig,
-        defaultCountry: _defaultCountry,
-        defaultMarginPercent: _defaultDetourMargin,
-        googleMapsApiKey: _googleMapsApiKey,
-        getPriorAnnualKmFR: _getAnnualFrenchProKmForVehicle,
-        onSaveTrip: _addTripAndIncrementOdometer,
-        onAddSavedPlace: (place) {
-          setState(() => _savedPlaces.add(place));
-          _persistAll();
+        onToggleAutoTracking: (val) {
+          setState(() => _autoTrackingEnabled = val);
+          _saveStateToDisk();
+        },
+        onOpenOnboardingConfig: _openPermissionsConfiguratorModal,
+        onQualifyTrip: _qualifyTripStatus,
+        onSimulateAutoCapturedTrip: () {
+          final v = _vehicles.first;
+          final d = _drivers.first;
+          final simKm = 22.4;
+          final simTrip = TripEntity(
+            id: 'trp_auto_${DateTime.now().millisecondsSinceEpoch}',
+            date: DateTime.now(),
+            startTime: TimeOfDay.now().format(context),
+            endTime: TimeOfDay.now().format(context),
+            driverId: d.id,
+            vehicleId: v.id,
+            countryCode: _defaultCountry,
+            originAddress: 'Uffheim, 68510, France',
+            destinationAddress: 'Boulevard Royal, L-2449 Luxembourg',
+            waypoints: [],
+            isRoundTrip: false,
+            captureMode: _permBluetoothBeacon ? 'IBEACON_BT' : 'AUTO_GPS',
+            qualificationStatus: 'PENDING',
+            purpose: 'Client',
+            projectTag: 'Auto-Tracking',
+            mapsDistanceKm: 21.3,
+            detourMarginPercent: 5.0,
+            finalDistanceKm: simKm,
+            odometerStartKm: v.currentOdometerKm,
+            odometerEndKm: v.currentOdometerKm + simKm,
+            reimbursementAmount: 15.61,
+            currency: 'EUR',
+            appliedRuleLabel: 'Auto-Tracking en attente de qualification',
+            notes: 'Capturé automatiquement en arrière-plan',
+          );
+          _insertNewTrip(simTrip);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: PiratePalette.goldPrimary,
+              content: Text(
+                'Nouveau trajet automatique détecté et ajouté dans votre Inbox !',
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+            ),
+          );
         },
       ),
-      HistoryAndExportsTab(
+      // 2. Tous les trajets (Journal de bord)
+      AllTripsLogbookScreen(
         trips: _trips,
         drivers: _drivers,
         vehicles: _vehicles,
-        onDeleteTrip: _deleteTrip,
-        onDuplicateReturnTrip: (trip) {
+        onQualifyTrip: _qualifyTripStatus,
+        onDeleteTrip: (id) {
+          setState(() => _trips.removeWhere((t) => t.id == id));
+          _saveStateToDisk();
+        },
+        onCreateReturnTrip: (origTrip) {
           final v = _vehicles.firstWhere(
-            (veh) => veh.id == trip.vehicleId,
+            (veh) => veh.id == origTrip.vehicleId,
             orElse: () => _vehicles.first,
           );
-          final priorKm = _getAnnualFrenchProKmForVehicle(v.id, DateTime.now().year);
-          final calc = FiscalEngine.calculateTripAllowance(
-            countryCode: trip.countryCode,
-            tripDistanceKm: trip.totalDistanceKm,
-            priorAnnualKmForVehicleFR: priorKm,
+          final priorKm = _getCumulativeAnnualFrenchKm(v.id, DateTime.now().year);
+          final eval = TaxEngineService.evaluateTrip(
+            countryCode: origTrip.countryCode,
+            distanceKm: origTrip.finalDistanceKm,
+            priorAnnualFrenchKm: priorKm,
             vehicle: v,
-            purpose: trip.purpose,
-            isProfessional: trip.isProfessional,
-            config: _taxConfig,
+            purpose: origTrip.purpose,
+            qualificationStatus: origTrip.qualificationStatus,
+            rules: _taxRules,
           );
-          final duplicated = TripRecord(
-            id: 'trp_${DateTime.now().millisecondsSinceEpoch}',
+          final retTrip = TripEntity(
+            id: 'trp_ret_${DateTime.now().millisecondsSinceEpoch}',
             date: DateTime.now(),
-            timeLabel: TimeOfDay.now().format(context),
-            driverId: trip.driverId,
-            vehicleId: trip.vehicleId,
-            countryCode: trip.countryCode,
-            origin: trip.destination,
-            destination: trip.origin,
-            waypoints: trip.waypoints.reversed.toList(),
+            startTime: TimeOfDay.now().format(context),
+            endTime: TimeOfDay.now().format(context),
+            driverId: origTrip.driverId,
+            vehicleId: origTrip.vehicleId,
+            countryCode: origTrip.countryCode,
+            originAddress: origTrip.destinationAddress,
+            destinationAddress: origTrip.originAddress,
+            waypoints: origTrip.waypoints.reversed.toList(),
             isRoundTrip: false,
-            purpose: trip.purpose,
-            isProfessional: trip.isProfessional,
-            mapsDistanceKm: trip.mapsDistanceKm,
-            detourMarginPercent: trip.detourMarginPercent,
-            totalDistanceKm: trip.totalDistanceKm,
-            odometerStart: v.odometerKm,
-            odometerEnd: v.odometerKm + trip.totalDistanceKm,
-            reimbursementAmount: calc.amount,
-            currency: calc.currency,
-            formulaApplied: calc.formulaSummary,
-            notes: 'Trajet retour généré automatiquement (${trip.notes})',
-            receiptReference: trip.receiptReference,
+            captureMode: 'MANUAL_MAPS',
+            qualificationStatus: origTrip.qualificationStatus,
+            purpose: origTrip.purpose,
+            projectTag: origTrip.projectTag,
+            mapsDistanceKm: origTrip.mapsDistanceKm,
+            detourMarginPercent: origTrip.detourMarginPercent,
+            finalDistanceKm: origTrip.finalDistanceKm,
+            odometerStartKm: v.currentOdometerKm,
+            odometerEndKm: v.currentOdometerKm + origTrip.finalDistanceKm,
+            reimbursementAmount: eval.amount,
+            currency: eval.currency,
+            appliedRuleLabel: eval.ruleSummary,
+            notes: 'Trajet retour identique (${origTrip.notes})',
           );
-          _addTripAndIncrementOdometer(duplicated);
+          _insertNewTrip(retTrip);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: PiratePalette.bullGreen,
+              content: Text('Trajet retour identique créé avec succès.'),
+            ),
+          );
         },
       ),
-      GarageAndProfilesTab(
+      // 3. Rapports (Déclaration, Audit Pré-Export & Équipe)
+      ReportsAndComplianceAuditScreen(
+        trips: _trips,
         drivers: _drivers,
         vehicles: _vehicles,
-        savedPlaces: _savedPlaces,
-        onChanged: () {
+        odometerLogs: _odometerLogs,
+        onDataUpdated: () {
           setState(() {});
-          _persistAll();
+          _saveStateToDisk();
         },
       ),
-      FiscalSettingsAndAboutTab(
-        taxConfig: _taxConfig,
+      // 4. Paramètres (Sous-modules complets)
+      SettingsMasterScreen(
+        drivers: _drivers,
+        vehicles: _vehicles,
+        locations: _locations,
+        odometerLogs: _odometerLogs,
+        taxRules: _taxRules,
         defaultCountry: _defaultCountry,
         defaultMargin: _defaultDetourMargin,
         googleMapsApiKey: _googleMapsApiKey,
-        cloudSyncEndpoint: _cloudSyncEndpoint,
-        lastCloudSyncStatus: _lastCloudSyncStatus,
-        onUpdateSettings: ({
-          required String country,
-          required double margin,
-          required String gmapsKey,
-          required String cloudUrl,
-        }) {
+        completedOnboardingSteps: _completedOnboardingSteps,
+        onOpenPermissionsModal: _openPermissionsConfiguratorModal,
+        onStateMutated: ({String? country, double? margin, String? gmapsKey}) {
           setState(() {
-            _defaultCountry = country;
-            _defaultDetourMargin = margin;
-            _googleMapsApiKey = gmapsKey;
-            _cloudSyncEndpoint = cloudUrl;
+            if (country != null) _defaultCountry = country;
+            if (margin != null) _defaultDetourMargin = margin;
+            if (gmapsKey != null) _googleMapsApiKey = gmapsKey;
           });
-          _persistAll();
+          _saveStateToDisk();
         },
-        onTaxConfigChanged: () {
-          setState(() {});
-          _persistAll();
-        },
-        onTriggerCloudSync: _triggerCloudSync,
       ),
     ];
 
+    final pendingCount = _trips.where((t) => t.isPending).length;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: PirateTheme.bgSecondary,
+        backgroundColor: PiratePalette.bgSurface,
         title: Row(
           children: [
-            const PiratePipsLogo(size: 34),
+            const PiratePipsBadgeLogo(size: 34),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'PIRATE PIPS™ KILOTRACKER',
+                    'PIRATE PIPS™ KILOTRACKER PRO',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 14,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.1,
-                      color: PirateTheme.textWhite,
+                      color: PiratePalette.textPure,
                     ),
                   ),
                   Text(
-                    'Développé par Pirate Pips™ • Barèmes FR / LU / BE / DE / CH',
+                    'Développé par Pirate Pips™ • Auto-Tracking & Fiscalité Certifiée',
                     style: TextStyle(
                       fontSize: 10,
-                      color: PirateTheme.goldPrimary.withOpacity(0.9),
+                      color: PiratePalette.goldPrimary.withOpacity(0.95),
                     ),
                   ),
                 ],
@@ -1612,51 +2039,77 @@ class _MainShellScreenState extends State<MainShellScreen> {
           preferredSize: const Size.fromHeight(1),
           child: Container(
             height: 1,
-            color: PirateTheme.goldPrimary.withOpacity(0.35),
+            color: PiratePalette.goldPrimary.withOpacity(0.35),
           ),
         ),
       ),
-      body: pages[_selectedIndex],
-      bottomNavigationBar: Container(
+      body: screens[_activeTab],
+
+      // Bouton central d'action rapide (FAB surélevé `+` Or Pirate Pips™)
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Container(
+        height: 62,
+        width: 62,
         decoration: BoxDecoration(
-          color: PirateTheme.bgSecondary,
-          border: Border(
-            top: BorderSide(
-              color: PirateTheme.goldPrimary.withOpacity(0.35),
-              width: 1,
-            ),
+          shape: BoxShape.circle,
+          gradient: const LinearGradient(
+            colors: [PiratePalette.goldPrimary, PiratePalette.goldWarm],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: PiratePalette.goldPrimary.withOpacity(0.45),
+              blurRadius: 16,
+              spreadRadius: 2,
+            ),
+          ],
         ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: (idx) => setState(() => _selectedIndex = idx),
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: PirateTheme.bgSecondary,
-          selectedItemColor: PirateTheme.goldPrimary,
-          unselectedItemColor: PirateTheme.textMuted,
-          selectedLabelStyle:
-              const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
-          unselectedLabelStyle: const TextStyle(fontSize: 11),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard),
-              label: 'Dashboard',
+        child: FloatingActionButton(
+          onPressed: _openQuickAddTripModal,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          shape: const CircleBorder(),
+          tooltip: 'Saisie rapide d\'un trajet (Google Maps)',
+          child: const Icon(Icons.add, color: Colors.black, size: 32),
+        ),
+      ),
+
+      // Bottom Bar à 5 entrées (Accueil, Tous les trajets, [+], Rapports, Paramètres)
+      bottomNavigationBar: BottomAppBar(
+        color: PiratePalette.bgSurface,
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8,
+        padding: EdgeInsets.zero,
+        height: 66,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _BottomNavButton(
+              icon: Icons.inbox,
+              label: 'Accueil',
+              badgeCount: pendingCount,
+              selected: _activeTab == 0,
+              onTap: () => setState(() => _activeTab = 0),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_road),
-              label: 'Nouveau Trajet',
+            _BottomNavButton(
+              icon: Icons.route,
+              label: 'Tous les trajets',
+              selected: _activeTab == 1,
+              onTap: () => setState(() => _activeTab = 1),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.receipt_long),
-              label: 'Journal & PDF',
+            const SizedBox(width: 56), // Espace réservé au FAB central `+`
+            _BottomNavButton(
+              icon: Icons.fact_check,
+              label: 'Rapports',
+              selected: _activeTab == 2,
+              onTap: () => setState(() => _activeTab = 2),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.garage),
-              label: 'Garage & Profils',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.tune),
-              label: 'Fisc & Infos',
+            _BottomNavButton(
+              icon: Icons.settings,
+              label: 'Paramètres',
+              selected: _activeTab == 3,
+              onTap: () => setState(() => _activeTab = 3),
             ),
           ],
         ),
@@ -1665,270 +2118,308 @@ class _MainShellScreenState extends State<MainShellScreen> {
   }
 }
 
-// ============================================================================
-// 8. ONGLET 1 : TABLEAU DE BORD & STATISTIQUES PIRATE PIPS™
-// ============================================================================
-class DashboardTab extends StatefulWidget {
-  final List<TripRecord> trips;
-  final List<Driver> drivers;
-  final List<Vehicle> vehicles;
-  final TaxRatesConfig taxConfig;
-  final VoidCallback onNewTripTap;
-  final VoidCallback onOpenExportsTap;
+class _BottomNavButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final int badgeCount;
+  final VoidCallback onTap;
 
-  const DashboardTab({
-    super.key,
-    required this.trips,
-    required this.drivers,
-    required this.vehicles,
-    required this.taxConfig,
-    required this.onNewTripTap,
-    required this.onOpenExportsTap,
+  const _BottomNavButton({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    this.badgeCount = 0,
   });
 
   @override
-  State<DashboardTab> createState() => _DashboardTabState();
+  Widget build(BuildContext context) {
+    final color =
+        selected ? PiratePalette.goldPrimary : PiratePalette.textSteel;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(icon, color: color, size: 22),
+                if (badgeCount > 0)
+                  Positioned(
+                    right: -8,
+                    top: -4,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 1,
+                      ),
+                      decoration: BoxDecoration(
+                        color: PiratePalette.goldPrimary,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        '$badgeCount',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 3),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontSize: 10,
+                fontWeight: selected ? FontWeight.w800 : FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-class _DashboardTabState extends State<DashboardTab> {
-  String _periodFilter = 'YEAR'; // MONTH, YEAR, ALL
+class _PermissionStepTile extends StatelessWidget {
+  final int stepNumber;
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final bool enabled;
+  final ValueChanged<bool> onChanged;
 
-  List<TripRecord> get _filteredTrips {
-    final now = DateTime.now();
-    return widget.trips.where((t) {
-      if (_periodFilter == 'MONTH') {
-        return t.date.year == now.year && t.date.month == now.month;
-      } else if (_periodFilter == 'YEAR') {
-        return t.date.year == now.year;
-      }
-      return true;
-    }).toList();
-  }
+  const _PermissionStepTile({
+    required this.stepNumber,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.enabled,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final filtered = _filteredTrips;
-    final proTrips = filtered.where((t) => t.isProfessional).toList();
-    final privateTrips = filtered.where((t) => !t.isProfessional).toList();
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: PiratePalette.bgElevated,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: enabled ? PiratePalette.bullGreen : PiratePalette.borderSubtle,
+        ),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 16,
+            backgroundColor: enabled
+                ? PiratePalette.bullGreen.withOpacity(0.2)
+                : PiratePalette.bgSurface,
+            child: Icon(
+              icon,
+              size: 17,
+              color: enabled
+                  ? PiratePalette.bullGreen
+                  : PiratePalette.goldPrimary,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$stepNumber. $title',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: PiratePalette.textSteel,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Switch(
+            value: enabled,
+            activeColor: PiratePalette.bullGreen,
+            onChanged: onChanged,
+          ),
+        ],
+      ),
+    );
+  }
+}
 
+// ============================================================================
+// 9. ONGLET 1 : ACCUEIL (INBOX / VALIDATION & ONBOARDING AUTO-TRACKING)
+// ============================================================================
+class HomeInboxValidationScreen extends StatelessWidget {
+  final bool autoTrackingEnabled;
+  final int completedSteps;
+  final List<TripEntity> trips;
+  final List<DriverProfile> drivers;
+  final List<VehicleEntity> vehicles;
+  final ValueChanged<bool> onToggleAutoTracking;
+  final VoidCallback onOpenOnboardingConfig;
+  final void Function(TripEntity trip, String status) onQualifyTrip;
+  final VoidCallback onSimulateAutoCapturedTrip;
+
+  const HomeInboxValidationScreen({
+    super.key,
+    required this.autoTrackingEnabled,
+    required this.completedSteps,
+    required this.trips,
+    required this.drivers,
+    required this.vehicles,
+    required this.onToggleAutoTracking,
+    required this.onOpenOnboardingConfig,
+    required this.onQualifyTrip,
+    required this.onSimulateAutoCapturedTrip,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final pendingTrips = trips.where((t) => t.isPending).toList();
+    final validatedProTrips = trips.where((t) => t.isPro).toList();
     final totalProKm =
-        proTrips.fold<double>(0.0, (s, t) => s + t.totalDistanceKm);
-    final totalPrivateKm =
-        privateTrips.fold<double>(0.0, (s, t) => s + t.totalDistanceKm);
-
-    final totalEur = proTrips
+        validatedProTrips.fold<double>(0.0, (s, t) => s + t.finalDistanceKm);
+    final totalEur = validatedProTrips
         .where((t) => t.currency == 'EUR')
         .fold<double>(0.0, (s, t) => s + t.reimbursementAmount);
-    final totalChf = proTrips
+    final totalChf = validatedProTrips
         .where((t) => t.currency == 'CHF')
         .fold<double>(0.0, (s, t) => s + t.reimbursementAmount);
 
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        // Bandeau d'action rapide + Filtre temporel
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'TABLEAU DE BORD',
-              style: TextStyle(
-                color: PirateTheme.goldPrimary,
-                fontWeight: FontWeight.w900,
-                fontSize: 13,
-                letterSpacing: 1.2,
-              ),
-            ),
-            SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'MONTH', label: Text('Mois')),
-                ButtonSegment(value: 'YEAR', label: Text('Année')),
-                ButtonSegment(value: 'ALL', label: Text('Tout')),
-              ],
-              selected: {_periodFilter},
-              onSelectionChanged: (s) =>
-                  setState(() => _periodFilter = s.first),
-              style: ButtonStyle(
-                visualDensity: VisualDensity.compact,
-                textStyle: WidgetStateProperty.all(
-                  const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 14),
-
-        // Cartes KPI principales cerclées d'Or
+        // 1. SÉLECTEUR RAPIDE EN TÊTE D'ÉCRAN : SWITCH ENREGISTREMENT AUTO + CONFIGURER
         Container(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF1A160B), Color(0xFF121212)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+            color: PiratePalette.bgSurface,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: autoTrackingEnabled
+                  ? PiratePalette.bullGreen
+                  : PiratePalette.bearRed,
+              width: 1.3,
             ),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: PirateTheme.goldPrimary, width: 1.4),
-            boxShadow: [
-              BoxShadow(
-                color: PirateTheme.goldPrimary.withOpacity(0.12),
-                blurRadius: 18,
-                offset: const Offset(0, 6),
-              ),
-            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: PirateTheme.bullGreen.withOpacity(0.18),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(
-                      Icons.trending_up,
-                      color: PirateTheme.bullGreen,
-                      size: 22,
-                    ),
+                  Icon(
+                    autoTrackingEnabled
+                        ? Icons.sensors
+                        : Icons.sensors_off,
+                    color: autoTrackingEnabled
+                        ? PiratePalette.bullGreen
+                        : PiratePalette.bearRed,
                   ),
                   const SizedBox(width: 10),
                   const Expanded(
                     child: Text(
-                      'SOLDE D\'INDEMNITÉS À REMBOURSER / DÉDUIRE',
+                      'Enregistrement auto',
                       style: TextStyle(
-                        color: PirateTheme.textMuted,
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.8,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 15,
                       ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '${totalEur.toStringAsFixed(2)} €',
-                    style: const TextStyle(
-                      color: PirateTheme.bullGreen,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w900,
+                  TextButton(
+                    onPressed: onOpenOnboardingConfig,
+                    child: const Text(
+                      'Configurer',
+                      style: TextStyle(
+                        color: PiratePalette.goldPrimary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
-                  if (totalChf > 0) ...[
-                    const SizedBox(width: 14),
-                    Text(
-                      '+ ${totalChf.toStringAsFixed(2)} CHF',
-                      style: const TextStyle(
-                        color: PirateTheme.goldPrimary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                  Switch(
+                    value: autoTrackingEnabled,
+                    activeColor: PiratePalette.bullGreen,
+                    onChanged: onToggleAutoTracking,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              // Carte de statut dynamique
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: autoTrackingEnabled
+                      ? PiratePalette.bullGreen.withOpacity(0.12)
+                      : PiratePalette.bearRed.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      autoTrackingEnabled
+                          ? Icons.check_circle
+                          : Icons.warning_amber_rounded,
+                      size: 17,
+                      color: autoTrackingEnabled
+                          ? PiratePalette.bullGreen
+                          : PiratePalette.bearRed,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        autoTrackingEnabled
+                            ? 'L\'enregistrement automatique est activé. Vous pouvez démarrer.'
+                            : 'L\'enregistrement automatique est désactivé. Activez-le pour capturer vos trajets.',
+                        style: TextStyle(
+                          color: autoTrackingEnabled
+                              ? PiratePalette.bullGreen
+                              : PiratePalette.bearRed,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],
-                ],
-              ),
-              const SizedBox(height: 12),
-              const Divider(color: PirateTheme.borderDark),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _MiniStatBadge(
-                    label: 'KM PRO DÉDUCTIBLES',
-                    value: '${totalProKm.toStringAsFixed(1)} km',
-                    color: PirateTheme.goldPrimary,
-                  ),
-                  _MiniStatBadge(
-                    label: 'TRAJETS PROS',
-                    value: '${proTrips.length} trajets',
-                    color: PirateTheme.bullGreen,
-                  ),
-                  _MiniStatBadge(
-                    label: 'KM PRIVÉS (NON DÉD.)',
-                    value: '${totalPrivateKm.toStringAsFixed(1)} km',
-                    color: PirateTheme.bearRed,
-                  ),
-                ],
+                ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
 
-        // Boutons d'action rapides CTA Or
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed: widget.onNewTripTap,
-                icon: const Icon(Icons.add_road, size: 18),
-                label: const Text('ENREGISTRER UN TRAJET'),
-              ),
-            ),
-            const SizedBox(width: 10),
-            OutlinedButton.icon(
-              onPressed: widget.onOpenExportsTap,
-              style: OutlinedButton.styleFrom(
-                foregroundColor: PirateTheme.goldPrimary,
-                side: const BorderSide(color: PirateTheme.goldPrimary),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              icon: const Icon(Icons.picture_as_pdf, size: 18),
-              label: const Text('EXPORT PDF / CSV'),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-
-        // Répartition par Véhicule & Jauge Tranche Fiscale Française
-        _buildSectionHeader(
-          'RÉPARTITION PAR VÉHICULE & TRANCHES FISCALES',
-          Icons.directions_car,
-        ),
-        const SizedBox(height: 10),
-        ...widget.vehicles.map((v) {
-          final vTrips =
-              proTrips.where((t) => t.vehicleId == v.id).toList();
-          final vKm =
-              vTrips.fold<double>(0.0, (s, t) => s + t.totalDistanceKm);
-          final vEur = vTrips
-              .where((t) => t.currency == 'EUR')
-              .fold<double>(0.0, (s, t) => s + t.reimbursementAmount);
-          final vChf = vTrips
-              .where((t) => t.currency == 'CHF')
-              .fold<double>(0.0, (s, t) => s + t.reimbursementAmount);
-
-          final progressTo20k = (vKm / 20000.0).clamp(0.0, 1.0);
-          String frBracketStatus;
-          if (vKm <= 5000) {
-            frBracketStatus = 'Tranche 1 (0 - 5 000 km)';
-          } else if (vKm <= 20000) {
-            frBracketStatus = 'Tranche 2 (5 001 - 20 000 km)';
-          } else {
-            frBracketStatus = 'Tranche 3 (> 20 000 km)';
-          }
-
-          return Container(
-            margin: const EdgeInsets.only(bottom: 10),
+        // 2. WIDGET D'ONBOARDING PROGRESSIF (« Configurez le suivi : X/5 étapes complétées »)
+        InkWell(
+          onTap: onOpenOnboardingConfig,
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: PirateTheme.bgSecondary,
-              borderRadius: BorderRadius.circular(12),
+              color: PiratePalette.bgSurface,
+              borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: vKm > 0
-                    ? PirateTheme.goldPrimary.withOpacity(0.45)
-                    : PirateTheme.borderDark,
+                color: PiratePalette.goldPrimary.withOpacity(0.65),
               ),
             ),
             child: Column(
@@ -1937,68 +2428,17 @@ class _DashboardTabState extends State<DashboardTab> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Icon(
-                            v.type == 'Moto'
-                                ? Icons.two_wheeler
-                                : v.type == 'Utilitaire'
-                                    ? Icons.local_shipping
-                                    : Icons.directions_car,
-                            color: PirateTheme.goldPrimary,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              '${v.name} (${v.plate})',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        color: PirateTheme.bgElevated,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        '${v.fiscalHp} CV • ${v.engine}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: PirateTheme.goldSecondary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
                     Text(
-                      'Odomètre : ${v.odometerKm.toStringAsFixed(0)} km',
+                      'Configurez le suivi : $completedSteps/5 étapes complétées',
                       style: const TextStyle(
-                        color: PirateTheme.textMuted,
-                        fontSize: 12,
+                        color: PiratePalette.goldPrimary,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13,
                       ),
                     ),
-                    Text(
-                      'Pro : ${vKm.toStringAsFixed(1)} km  |  ${vEur.toStringAsFixed(2)} €${vChf > 0 ? " + ${vChf.toStringAsFixed(2)} CHF" : ""}',
-                      style: const TextStyle(
-                        color: PirateTheme.bullGreen,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: PiratePalette.goldPrimary,
                     ),
                   ],
                 ),
@@ -2006,1240 +2446,23 @@ class _DashboardTabState extends State<DashboardTab> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: LinearProgressIndicator(
-                    value: progressTo20k,
-                    minHeight: 7,
-                    backgroundColor: PirateTheme.bgElevated,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      PirateTheme.goldPrimary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      frBracketStatus,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: PirateTheme.textMuted,
-                      ),
-                    ),
-                    const Text(
-                      'Seuils FR : 5 000 km / 20 000 km',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: PirateTheme.textMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        }),
-
-        const SizedBox(height: 12),
-        // Répartition par Conducteur
-        _buildSectionHeader(
-          'RÉPARTITION PAR CONDUCTEUR',
-          Icons.people,
-        ),
-        const SizedBox(height: 10),
-        ...widget.drivers.map((d) {
-          final dTrips =
-              proTrips.where((t) => t.driverId == d.id).toList();
-          final dKm =
-              dTrips.fold<double>(0.0, (s, t) => s + t.totalDistanceKm);
-          final dEur = dTrips
-              .where((t) => t.currency == 'EUR')
-              .fold<double>(0.0, (s, t) => s + t.reimbursementAmount);
-
-          return Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            decoration: BoxDecoration(
-              color: PirateTheme.bgSecondary,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: PirateTheme.borderDark),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 16,
-                      backgroundColor:
-                          PirateTheme.goldPrimary.withOpacity(0.2),
-                      child: const Icon(
-                        Icons.person,
-                        color: PirateTheme.goldPrimary,
-                        size: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          d.fullName,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
-                        Text(
-                          'Statut : ${d.status}',
-                          style: const TextStyle(
-                            color: PirateTheme.textMuted,
-                            fontSize: 11,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      '${dEur.toStringAsFixed(2)} €',
-                      style: const TextStyle(
-                        color: PirateTheme.bullGreen,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Text(
-                      '${dKm.toStringAsFixed(1)} km (${dTrips.length} trajets)',
-                      style: const TextStyle(
-                        color: PirateTheme.textMuted,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        }),
-      ],
-    );
-  }
-
-  Widget _buildSectionHeader(String title, IconData icon) {
-    return Row(
-      children: [
-        Icon(icon, color: PirateTheme.goldPrimary, size: 17),
-        const SizedBox(width: 8),
-        Text(
-          title,
-          style: const TextStyle(
-            color: PirateTheme.textWhite,
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0.9,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _MiniStatBadge extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-
-  const _MiniStatBadge({
-    required this.label,
-    required this.value,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: PirateTheme.textMuted,
-            fontSize: 9,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 3),
-        Text(
-          value,
-          style: TextStyle(
-            color: color,
-            fontSize: 13,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ============================================================================
-// 9. ONGLET 2 : SAISIE DE TRAJET, GOOGLE MAPS, ÉTAPES & MARGE DE PRÉCISION
-// ============================================================================
-class NewTripTab extends StatefulWidget {
-  final List<Driver> drivers;
-  final List<Vehicle> vehicles;
-  final List<SavedPlace> savedPlaces;
-  final TaxRatesConfig taxConfig;
-  final String defaultCountry;
-  final double defaultMarginPercent;
-  final String googleMapsApiKey;
-  final double Function(String vehicleId, int year) getPriorAnnualKmFR;
-  final void Function(TripRecord trip) onSaveTrip;
-  final void Function(SavedPlace place) onAddSavedPlace;
-
-  const NewTripTab({
-    super.key,
-    required this.drivers,
-    required this.vehicles,
-    required this.savedPlaces,
-    required this.taxConfig,
-    required this.defaultCountry,
-    required this.defaultMarginPercent,
-    required this.googleMapsApiKey,
-    required this.getPriorAnnualKmFR,
-    required this.onSaveTrip,
-    required this.onAddSavedPlace,
-  });
-
-  @override
-  State<NewTripTab> createState() => _NewTripTabState();
-}
-
-class _NewTripTabState extends State<NewTripTab> {
-  late String _selectedDriverId;
-  late String _selectedVehicleId;
-  late String _selectedCountry; // FR, LU, BE, DE, CH
-  DateTime _selectedDate = DateTime.now();
-  String _timeLabel = '08:30';
-
-  final TextEditingController _originCtrl = TextEditingController();
-  final TextEditingController _destCtrl = TextEditingController();
-  final TextEditingController _mapsKmCtrl =
-      TextEditingController(text: '25.0');
-  final TextEditingController _odoStartCtrl = TextEditingController();
-  final TextEditingController _odoEndCtrl = TextEditingController();
-  final TextEditingController _notesCtrl = TextEditingController();
-
-  final List<WaypointStop> _waypoints = [];
-  List<String> _originSuggestions = [];
-  List<String> _destSuggestions = [];
-
-  bool _isRoundTrip = false;
-  bool _isProfessional = true; // Vert = Pro, Rouge = Privé
-  String _purpose = 'Client';
-  late double _detourMarginPercent;
-  bool _isCalculatingRoute = false;
-  String _routeSourceInfo = 'Saisie directe ou calcul GPS Google Maps';
-  String? _receiptAttachmentTag;
-
-  static const List<Map<String, String>> _countries = [
-    {'code': 'FR', 'name': 'France (Tranches CV)'},
-    {'code': 'LU', 'name': 'Luxembourg (Forfait)'},
-    {'code': 'BE', 'name': 'Belgique (Forfait)'},
-    {'code': 'DE', 'name': 'Allemagne (Dienstreisen / Pendler)'},
-    {'code': 'CH', 'name': 'Suisse (CHF / TCS)'},
-  ];
-
-  static const List<String> _purposes = [
-    'Client',
-    'Chantier',
-    'Réunion',
-    'Administratif',
-    'Domicile-Travail (Pendler)',
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedDriverId =
-        widget.drivers.isNotEmpty ? widget.drivers.first.id : '';
-    _selectedVehicleId =
-        widget.vehicles.isNotEmpty ? widget.vehicles.first.id : '';
-    _selectedCountry = widget.defaultCountry;
-    _detourMarginPercent = widget.defaultMarginPercent;
-
-    if (widget.savedPlaces.length >= 2) {
-      _originCtrl.text = widget.savedPlaces[0].address;
-      _destCtrl.text = widget.savedPlaces[1].address;
-    }
-    _syncOdometerFromVehicle();
-  }
-
-  @override
-  void dispose() {
-    _originCtrl.dispose();
-    _destCtrl.dispose();
-    _mapsKmCtrl.dispose();
-    _odoStartCtrl.dispose();
-    _odoEndCtrl.dispose();
-    _notesCtrl.dispose();
-    super.dispose();
-  }
-
-  Vehicle get _activeVehicle {
-    return widget.vehicles.firstWhere(
-      (v) => v.id == _selectedVehicleId,
-      orElse: () => widget.vehicles.first,
-    );
-  }
-
-  void _syncOdometerFromVehicle() {
-    final v = _activeVehicle;
-    _odoStartCtrl.text = v.odometerKm.toStringAsFixed(1);
-    _recomputeTotalAndOdoEnd();
-  }
-
-  double get _baseMapsKm {
-    final raw =
-        double.tryParse(_mapsKmCtrl.text.replaceAll(',', '.')) ?? 0.0;
-    return _isRoundTrip ? raw * 2.0 : raw;
-  }
-
-  double get _finalTotalKm {
-    final base = _baseMapsKm;
-    final withMargin = base * (1.0 + (_detourMarginPercent / 100.0));
-    return double.parse(withMargin.toStringAsFixed(1));
-  }
-
-  void _recomputeTotalAndOdoEnd() {
-    final start =
-        double.tryParse(_odoStartCtrl.text.replaceAll(',', '.')) ?? 0.0;
-    final end = start + _finalTotalKm;
-    _odoEndCtrl.text = end.toStringAsFixed(1);
-    setState(() {});
-  }
-
-  void _onManualOdoEndChanged(String val) {
-    final start =
-        double.tryParse(_odoStartCtrl.text.replaceAll(',', '.')) ?? 0.0;
-    final end = double.tryParse(val.replaceAll(',', '.')) ?? start;
-    if (end >= start) {
-      final diff = end - start;
-      final divisor = (1.0 + (_detourMarginPercent / 100.0)) *
-          (_isRoundTrip ? 2.0 : 1.0);
-      if (divisor > 0) {
-        _mapsKmCtrl.text = (diff / divisor).toStringAsFixed(1);
-      }
-      setState(() {});
-    }
-  }
-
-  Future<void> _runGoogleMapsRouteCalculation() async {
-    if (_originCtrl.text.trim().isEmpty || _destCtrl.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: PirateTheme.bearRed,
-          content: Text('Veuillez renseigner une adresse de départ et d\'arrivée.'),
-        ),
-      );
-      return;
-    }
-
-    setState(() => _isCalculatingRoute = true);
-    final res = await MapsRoutingService.computeRouteDistance(
-      origin: _originCtrl.text,
-      destination: _destCtrl.text,
-      waypoints: _waypoints,
-      googleApiKey: widget.googleMapsApiKey,
-    );
-    if (!mounted) return;
-    setState(() {
-      _isCalculatingRoute = false;
-      _mapsKmCtrl.text = res.distanceKm.toStringAsFixed(1);
-      _routeSourceInfo =
-          '${res.sourceLabel} • Durée estimée : ${res.durationText}';
-      _recomputeTotalAndOdoEnd();
-    });
-  }
-
-  void _invertOriginAndDestination() {
-    setState(() {
-      final tmp = _originCtrl.text;
-      _originCtrl.text = _destCtrl.text;
-      _destCtrl.text = tmp;
-      if (_waypoints.length > 1) {
-        final reversed = _waypoints.reversed.toList();
-        _waypoints
-          ..clear()
-          ..addAll(reversed);
-      }
-    });
-  }
-
-  void _showAddWaypointDialog() {
-    final labelCtrl = TextEditingController(text: 'Arrêt Pro / Magasin');
-    final addrCtrl = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: PirateTheme.bgSecondary,
-        title: const Text('Ajouter une étape intermédiaire'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: labelCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Nom de l\'arrêt (ex: Fournisseur, Supermarché)',
-                ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: addrCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Adresse ou ville de l\'étape',
-                ),
-              ),
-              const SizedBox(height: 12),
-              if (widget.savedPlaces.isNotEmpty) ...[
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Ou choisir un favori :',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: PirateTheme.goldPrimary,
+                    value: completedSteps / 5.0,
+                    minHeight: 8,
+                    backgroundColor: PiratePalette.bgElevated,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      completedSteps == 5
+                          ? PiratePalette.bullGreen
+                          : PiratePalette.goldPrimary,
                     ),
                   ),
                 ),
                 const SizedBox(height: 6),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: widget.savedPlaces.map((p) {
-                    return ActionChip(
-                      label: Text(
-                        p.label,
-                        style: const TextStyle(fontSize: 11),
-                      ),
-                      onPressed: () {
-                        labelCtrl.text = p.label;
-                        addrCtrl.text = p.address;
-                      },
-                    );
-                  }).toList(),
-                ),
-              ],
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Annuler'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (addrCtrl.text.trim().isNotEmpty) {
-                setState(() {
-                  _waypoints.add(
-                    WaypointStop(
-                      label: labelCtrl.text.trim().isEmpty
-                          ? 'Étape'
-                          : labelCtrl.text.trim(),
-                      address: addrCtrl.text.trim(),
-                    ),
-                  );
-                });
-                Navigator.pop(ctx);
-                _runGoogleMapsRouteCalculation();
-              }
-            },
-            child: const Text('Ajouter l\'étape'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final vehicle = _activeVehicle;
-    final priorAnnualKmFR =
-        widget.getPriorAnnualKmFR(vehicle.id, _selectedDate.year);
-
-    final previewCalc = FiscalEngine.calculateTripAllowance(
-      countryCode: _selectedCountry,
-      tripDistanceKm: _finalTotalKm,
-      priorAnnualKmForVehicleFR: priorAnnualKmFR,
-      vehicle: vehicle,
-      purpose: _purpose,
-      isProfessional: _isProfessional,
-      config: widget.taxConfig,
-    );
-
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        // 1. SÉLECTEUR RAPIDE : STATUT PRO / PRIVÉ (BOUGIE VERTE VS ROUGE)
-        Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () => setState(() => _isProfessional = true),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: _isProfessional
-                        ? PirateTheme.bullGreen.withOpacity(0.2)
-                        : PirateTheme.bgSecondary,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: _isProfessional
-                          ? PirateTheme.bullGreen
-                          : PirateTheme.borderDark,
-                      width: 1.5,
-                    ),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.trending_up,
-                        color: PirateTheme.bullGreen,
-                        size: 18,
-                      ),
-                      SizedBox(width: 6),
-                      Text(
-                        'PROFESSIONNEL (DÉDUCTIBLE)',
-                        style: TextStyle(
-                          color: PirateTheme.bullGreen,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: GestureDetector(
-                onTap: () => setState(() => _isProfessional = false),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: !_isProfessional
-                        ? PirateTheme.bearRed.withOpacity(0.2)
-                        : PirateTheme.bgSecondary,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: !_isProfessional
-                          ? PirateTheme.bearRed
-                          : PirateTheme.borderDark,
-                      width: 1.5,
-                    ),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.trending_down,
-                        color: PirateTheme.bearRed,
-                        size: 18,
-                      ),
-                      SizedBox(width: 6),
-                      Text(
-                        'PRIVÉ (NON DÉDUCTIBLE)',
-                        style: TextStyle(
-                          color: PirateTheme.bearRed,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 14),
-
-        // 2. CONDUCTEUR, VÉHICULE & PAYS FISCAL
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
                 const Text(
-                  'PROFIL CONDUCTEUR, VÉHICULE & JURIDICTION FISCALE',
+                  'Motion API • GPS Toujours • Notifications • Batterie • iBeacon Bluetooth',
                   style: TextStyle(
-                    color: PirateTheme.goldPrimary,
+                    color: PiratePalette.textSteel,
                     fontSize: 11,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedDriverId,
-                        decoration: const InputDecoration(
-                          labelText: 'Conducteur actif',
-                          prefixIcon: Icon(Icons.person, size: 18),
-                        ),
-                        items: widget.drivers.map((d) {
-                          return DropdownMenuItem(
-                            value: d.id,
-                            child: Text(
-                              '${d.fullName} (${d.status})',
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (val) {
-                          if (val != null) {
-                            setState(() => _selectedDriverId = val);
-                          }
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: _selectedCountry,
-                        decoration: const InputDecoration(
-                          labelText: 'Barème Pays',
-                          prefixIcon: Icon(Icons.flag, size: 18),
-                        ),
-                        items: _countries.map((c) {
-                          return DropdownMenuItem(
-                            value: c['code'],
-                            child: Text(
-                              '${c['code']} - ${c['name']!.split(' ').first}',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (val) {
-                          if (val != null) {
-                            setState(() => _selectedCountry = val);
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  value: _selectedVehicleId,
-                  decoration: const InputDecoration(
-                    labelText: 'Véhicule utilisé',
-                    prefixIcon: Icon(Icons.directions_car, size: 18),
-                  ),
-                  items: widget.vehicles.map((v) {
-                    return DropdownMenuItem(
-                      value: v.id,
-                      child: Text(
-                        '${v.name} • ${v.fiscalHp} CV • ${v.engine}',
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (val) {
-                    if (val != null) {
-                      setState(() {
-                        _selectedVehicleId = val;
-                        _syncOdometerFromVehicle();
-                      });
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-
-        // 3. ITINÉRAIRE GOOGLE MAPS, FAVORIS & MULTI-ÉTAPES
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'ITINÉRAIRE GOOGLE MAPS & ADRESSES FAVORITES',
-                      style: TextStyle(
-                        color: PirateTheme.goldPrimary,
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: _invertOriginAndDestination,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: PirateTheme.goldPrimary.withOpacity(0.15),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.swap_vert,
-                              size: 15,
-                              color: PirateTheme.goldPrimary,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              'Inverser A ↔ B',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: PirateTheme.goldPrimary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-
-                // Sélection rapide d'un favori pour Départ
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: widget.savedPlaces.map((fav) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 6),
-                        child: ActionChip(
-                          visualDensity: VisualDensity.compact,
-                          avatar: const Icon(
-                            Icons.star,
-                            size: 14,
-                            color: PirateTheme.goldPrimary,
-                          ),
-                          label: Text(
-                            'A: ${fav.label}',
-                            style: const TextStyle(fontSize: 11),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _originCtrl.text = fav.address;
-                              _originSuggestions.clear();
-                            });
-                          },
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 8),
-
-                // Champ Point A (Départ) avec Autocomplétion
-                TextField(
-                  controller: _originCtrl,
-                  decoration: InputDecoration(
-                    labelText: 'Point A — Adresse de départ',
-                    prefixIcon: const Icon(
-                      Icons.my_location,
-                      color: PirateTheme.bullGreen,
-                      size: 18,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close, size: 16),
-                      onPressed: () => setState(() {
-                        _originCtrl.clear();
-                        _originSuggestions.clear();
-                      }),
-                    ),
-                  ),
-                  onChanged: (val) async {
-                    final list = await MapsRoutingService.autocompletePlaces(
-                      query: val,
-                      googleApiKey: widget.googleMapsApiKey,
-                      savedPlaces: widget.savedPlaces,
-                    );
-                    if (mounted) {
-                      setState(() => _originSuggestions = list);
-                    }
-                  },
-                ),
-                if (_originSuggestions.isNotEmpty)
-                  _buildAutocompleteDropdown(
-                    suggestions: _originSuggestions,
-                    onSelect: (selected) {
-                      setState(() {
-                        _originCtrl.text =
-                            MapsRoutingService.extractPureAddress(selected);
-                        _originSuggestions.clear();
-                      });
-                    },
-                  ),
-
-                // Liste des étapes intermédiaires (Waypoints)
-                if (_waypoints.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  ..._waypoints.asMap().entries.map((entry) {
-                    final idx = entry.key;
-                    final stop = entry.value;
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 6),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: PirateTheme.bgElevated,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: PirateTheme.goldSecondary.withOpacity(0.4),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.route,
-                            color: PirateTheme.goldPrimary,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'Arrêt ${idx + 1} (${stop.label}) : ${stop.address}',
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.delete_outline,
-                              color: PirateTheme.bearRed,
-                              size: 18,
-                            ),
-                            visualDensity: VisualDensity.compact,
-                            onPressed: () {
-                              setState(() => _waypoints.removeAt(idx));
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-                ],
-
-                const SizedBox(height: 8),
-                // Bouton Ajouter une étape intermédiaire
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton.icon(
-                    onPressed: _showAddWaypointDialog,
-                    icon: const Icon(
-                      Icons.add,
-                      size: 16,
-                      color: PirateTheme.goldPrimary,
-                    ),
-                    label: const Text(
-                      'Ajouter un arrêt intermédiaire (Magasin pro, Client, Chantier)',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: PirateTheme.goldPrimary,
-                      ),
-                    ),
-                  ),
-                ),
-
-                // Sélection rapide d'un favori pour Arrivée
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: widget.savedPlaces.map((fav) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 6),
-                        child: ActionChip(
-                          visualDensity: VisualDensity.compact,
-                          avatar: const Icon(
-                            Icons.place,
-                            size: 14,
-                            color: PirateTheme.goldSecondary,
-                          ),
-                          label: Text(
-                            'B: ${fav.label}',
-                            style: const TextStyle(fontSize: 11),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _destCtrl.text = fav.address;
-                              _destSuggestions.clear();
-                            });
-                          },
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 8),
-
-                // Champ Point B (Arrivée) avec Autocomplétion
-                TextField(
-                  controller: _destCtrl,
-                  decoration: InputDecoration(
-                    labelText: 'Point B — Adresse d\'arrivée',
-                    prefixIcon: const Icon(
-                      Icons.place,
-                      color: PirateTheme.bearRed,
-                      size: 18,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close, size: 16),
-                      onPressed: () => setState(() {
-                        _destCtrl.clear();
-                        _destSuggestions.clear();
-                      }),
-                    ),
-                  ),
-                  onChanged: (val) async {
-                    final list = await MapsRoutingService.autocompletePlaces(
-                      query: val,
-                      googleApiKey: widget.googleMapsApiKey,
-                      savedPlaces: widget.savedPlaces,
-                    );
-                    if (mounted) {
-                      setState(() => _destSuggestions = list);
-                    }
-                  },
-                ),
-                if (_destSuggestions.isNotEmpty)
-                  _buildAutocompleteDropdown(
-                    suggestions: _destSuggestions,
-                    onSelect: (selected) {
-                      setState(() {
-                        _destCtrl.text =
-                            MapsRoutingService.extractPureAddress(selected);
-                        _destSuggestions.clear();
-                      });
-                    },
-                  ),
-
-                const SizedBox(height: 12),
-
-                // Bouton Calculer l'itinéraire Google Maps + Toggle Aller-Retour
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: _isCalculatingRoute
-                            ? null
-                            : _runGoogleMapsRouteCalculation,
-                        icon: _isCalculatingRoute
-                            ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.black,
-                                ),
-                              )
-                            : const Icon(Icons.calculate, size: 18),
-                        label: Text(
-                          _isCalculatingRoute
-                              ? 'CALCUL GPS...'
-                              : 'CALCULER KM GOOGLE MAPS',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  _routeSourceInfo,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: PirateTheme.textMuted,
-                  ),
-                ),
-                const SizedBox(height: 8),
-
-                // Switch Trajet Retour Identique (Aller-Retour x2)
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  activeColor: PirateTheme.goldPrimary,
-                  title: const Text(
-                    'Trajet retour identique (Aller-Retour ×2)',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: const Text(
-                    'Double automatiquement la distance du tracé aller',
-                    style: TextStyle(fontSize: 11, color: PirateTheme.textMuted),
-                  ),
-                  value: _isRoundTrip,
-                  onChanged: (val) {
-                    setState(() {
-                      _isRoundTrip = val;
-                      _recomputeTotalAndOdoEnd();
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-
-        // 4. MARGE DE PRÉCISION / DÉTOURS & ODOMÈTRE
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'MARGE DE PRÉCISION / DÉTOURS & ODOMÈTRE',
-                      style: TextStyle(
-                        color: PirateTheme.goldPrimary,
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        color: PirateTheme.goldPrimary.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        '+${_detourMarginPercent.toStringAsFixed(0)} % détours',
-                        style: const TextStyle(
-                          color: PirateTheme.goldPrimary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Slider(
-                  value: _detourMarginPercent,
-                  min: 0.0,
-                  max: 25.0,
-                  divisions: 25,
-                  activeColor: PirateTheme.goldPrimary,
-                  label: '+${_detourMarginPercent.toStringAsFixed(0)}%',
-                  onChanged: (val) {
-                    setState(() {
-                      _detourMarginPercent = val;
-                      _recomputeTotalAndOdoEnd();
-                    });
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [0.0, 5.0, 10.0, 15.0].map((preset) {
-                    final active =
-                        (_detourMarginPercent - preset).abs() < 0.1;
-                    return ChoiceChip(
-                      label: Text('+${preset.toInt()}%'),
-                      selected: active,
-                      selectedColor: PirateTheme.goldPrimary,
-                      labelStyle: TextStyle(
-                        color: active ? Colors.black : PirateTheme.textWhite,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 11,
-                      ),
-                      onSelected: (_) {
-                        setState(() {
-                          _detourMarginPercent = preset;
-                          _recomputeTotalAndOdoEnd();
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _mapsKmCtrl,
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        decoration: const InputDecoration(
-                          labelText: 'Km Maps (Aller)',
-                          suffixText: 'km',
-                        ),
-                        onChanged: (_) => _recomputeTotalAndOdoEnd(),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        controller: _odoStartCtrl,
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        decoration: const InputDecoration(
-                          labelText: 'Odomètre Départ',
-                          suffixText: 'km',
-                        ),
-                        onChanged: (_) => _recomputeTotalAndOdoEnd(),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        controller: _odoEndCtrl,
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        decoration: const InputDecoration(
-                          labelText: 'Odomètre Arrivée',
-                          suffixText: 'km',
-                        ),
-                        onChanged: _onManualOdoEndChanged,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-
-        // 5. QUALIFICATION DU TRAJET (DATE, OBJET, NOTE & PHOTO JUSTIFICATIF)
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'QUALIFICATION FISCALE & JUSTIFICATIF',
-                  style: TextStyle(
-                    color: PirateTheme.goldPrimary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () async {
-                          final picked = await showDatePicker(
-                            context: context,
-                            initialDate: _selectedDate,
-                            firstDate: DateTime(2020),
-                            lastDate: DateTime(2035),
-                          );
-                          if (picked != null) {
-                            setState(() => _selectedDate = picked);
-                          }
-                        },
-                        child: InputDecorator(
-                          decoration: const InputDecoration(
-                            labelText: 'Date du trajet',
-                            prefixIcon: Icon(Icons.calendar_today, size: 17),
-                          ),
-                          child: Text(
-                            '${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}',
-                            style: const TextStyle(fontSize: 13),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        value: _purpose,
-                        decoration: const InputDecoration(
-                          labelText: 'Motif / Objet',
-                        ),
-                        items: _purposes.map((p) {
-                          return DropdownMenuItem(
-                            value: p,
-                            child: Text(p, style: const TextStyle(fontSize: 12)),
-                          );
-                        }).toList(),
-                        onChanged: (v) {
-                          if (v != null) setState(() => _purpose = v);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: _notesCtrl,
-                  decoration: const InputDecoration(
-                    labelText:
-                        'Notes (Nom du client, dossier, chantier, référence)',
-                    prefixIcon: Icon(Icons.edit, size: 18),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    OutlinedButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          _receiptAttachmentTag =
-                              'JUSTIF-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}.JPG';
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: PirateTheme.bullGreen,
-                            content: Text(
-                              'Justificatif photo attaché : $_receiptAttachmentTag',
-                            ),
-                          ),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.camera_alt,
-                        size: 16,
-                        color: PirateTheme.goldPrimary,
-                      ),
-                      label: Text(
-                        _receiptAttachmentTag == null
-                            ? 'Joindre Photo Justificatif (Péage/Parking)'
-                            : 'Photo : $_receiptAttachmentTag',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: PirateTheme.goldPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),
@@ -3247,487 +2470,154 @@ class _NewTripTabState extends State<NewTripTab> {
         ),
         const SizedBox(height: 14),
 
-        // 6. APERÇU DYNAMIQUE DE L'INDEMNITÉ & VALIDATION
+        // 3. SYNTHÈSE FINANCIÈRE CUMULÉE PIRATE PIPS™
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: PirateTheme.bgSecondary,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: _isProfessional
-                  ? PirateTheme.bullGreen
-                  : PirateTheme.bearRed,
-              width: 1.5,
+            gradient: const LinearGradient(
+              colors: [Color(0xFF1C170A), Color(0xFF131313)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: PiratePalette.goldPrimary, width: 1.2),
           ),
-          child: Column(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'TOTAL RETENU : ${_finalTotalKm.toStringAsFixed(1)} KM',
-                        style: const TextStyle(
-                          color: PirateTheme.goldPrimary,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 15,
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        previewCalc.formulaSummary,
-                        style: const TextStyle(
-                          color: PirateTheme.textMuted,
-                          fontSize: 11,
-                        ),
-                      ),
-                      Text(
-                        previewCalc.bracketLabel,
-                        style: const TextStyle(
-                          color: PirateTheme.goldSecondary,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
+                  const Text(
+                    'CUMUL VALIDÉ À REMBOURSER',
+                    style: TextStyle(
+                      color: PiratePalette.textSteel,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${totalEur.toStringAsFixed(2)} €${totalChf > 0 ? " + ${totalChf.toStringAsFixed(2)} CHF" : ""}',
+                    style: const TextStyle(
+                      color: PiratePalette.bullGreen,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                   Text(
-                    '${previewCalc.amount.toStringAsFixed(2)} ${previewCalc.currency}',
-                    style: TextStyle(
-                      color: _isProfessional
-                          ? PirateTheme.bullGreen
-                          : PirateTheme.bearRed,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 24,
+                    '${totalProKm.toStringAsFixed(1)} km professionnels certifiés',
+                    style: const TextStyle(
+                      color: PiratePalette.goldPrimary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 14),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    final odoStart = double.tryParse(
-                            _odoStartCtrl.text.replaceAll(',', '.')) ??
-                        vehicle.odometerKm;
-                    final odoEnd = double.tryParse(
-                            _odoEndCtrl.text.replaceAll(',', '.')) ??
-                        (odoStart + _finalTotalKm);
-
-                    final record = TripRecord(
-                      id: 'trp_${DateTime.now().millisecondsSinceEpoch}',
-                      date: _selectedDate,
-                      timeLabel: _timeLabel,
-                      driverId: _selectedDriverId,
-                      vehicleId: _selectedVehicleId,
-                      countryCode: _selectedCountry,
-                      origin: _originCtrl.text.trim(),
-                      destination: _destCtrl.text.trim(),
-                      waypoints: List<WaypointStop>.from(_waypoints),
-                      isRoundTrip: _isRoundTrip,
-                      purpose: _purpose,
-                      isProfessional: _isProfessional,
-                      mapsDistanceKm: _baseMapsKm,
-                      detourMarginPercent: _detourMarginPercent,
-                      totalDistanceKm: _finalTotalKm,
-                      odometerStart: odoStart,
-                      odometerEnd: odoEnd,
-                      reimbursementAmount: previewCalc.amount,
-                      currency: previewCalc.currency,
-                      formulaApplied: previewCalc.formulaSummary,
-                      notes: _notesCtrl.text.trim(),
-                      receiptReference: _receiptAttachmentTag,
-                    );
-
-                    widget.onSaveTrip(record);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: PirateTheme.bullGreen,
-                        content: Text(
-                          'Trajet enregistré (+${_finalTotalKm.toStringAsFixed(1)} km • ${previewCalc.amount.toStringAsFixed(2)} ${previewCalc.currency}). Odomètre mis à jour.',
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.check_circle),
-                  label: const Text('VALIDER ET ENREGISTRER LE TRAJET'),
+              OutlinedButton.icon(
+                onPressed: onSimulateAutoCapturedTrip,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: PiratePalette.goldPrimary,
+                  side: const BorderSide(color: PiratePalette.goldPrimary),
                 ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 24),
-      ],
-    );
-  }
-
-  Widget _buildAutocompleteDropdown({
-    required List<String> suggestions,
-    required void Function(String) onSelect,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(top: 4, bottom: 8),
-      decoration: BoxDecoration(
-        color: PirateTheme.bgElevated,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: PirateTheme.goldPrimary.withOpacity(0.5)),
-      ),
-      child: Column(
-        children: suggestions.map((s) {
-          return ListTile(
-            dense: true,
-            leading: const Icon(
-              Icons.place,
-              color: PirateTheme.goldPrimary,
-              size: 16,
-            ),
-            title: Text(s, style: const TextStyle(fontSize: 12)),
-            onTap: () => onSelect(s),
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
-
-// ============================================================================
-// 10. ONGLET 3 : JOURNAL DES TRAJETS & EXPORTS COMPTABLES (PDF & CSV/XLSX)
-// ============================================================================
-class HistoryAndExportsTab extends StatelessWidget {
-  final List<TripRecord> trips;
-  final List<Driver> drivers;
-  final List<Vehicle> vehicles;
-  final void Function(String tripId) onDeleteTrip;
-  final void Function(TripRecord trip) onDuplicateReturnTrip;
-
-  const HistoryAndExportsTab({
-    super.key,
-    required this.trips,
-    required this.drivers,
-    required this.vehicles,
-    required this.onDeleteTrip,
-    required this.onDuplicateReturnTrip,
-  });
-
-  String _driverName(String id) {
-    final d = drivers.where((e) => e.id == id).firstOrNull;
-    return d?.fullName ?? 'Conducteur';
-  }
-
-  Vehicle? _vehicleObj(String id) {
-    return vehicles.where((e) => e.id == id).firstOrNull;
-  }
-
-  String _generateCsvContent() {
-    final sb = StringBuffer();
-    sb.writeln(
-      'Date;Conducteur;Vehicule;CV;Pays;Depart;Etapes;Arrivee;Motif;Statut;Km_Google_Maps;Marge_Pourcent;Total_Km;Montant_Indemnise;Devise;Odo_Depart;Odo_Arrivee;Notes',
-    );
-    for (final t in trips) {
-      final v = _vehicleObj(t.vehicleId);
-      final dateStr =
-          '${t.date.day.toString().padLeft(2, '0')}/${t.date.month.toString().padLeft(2, '0')}/${t.date.year}';
-      final steps = t.waypoints.map((w) => w.address).join(' -> ');
-      sb.writeln(
-        '$dateStr;${_driverName(t.driverId)};${v?.name ?? "Véhicule"};${v?.fiscalHp ?? 5};${t.countryCode};"${t.origin}";"$steps";"${t.destination}";${t.purpose};${t.isProfessional ? "PRO" : "PRIVE"};${t.mapsDistanceKm.toStringAsFixed(1)};+${t.detourMarginPercent.toStringAsFixed(0)}%;${t.totalDistanceKm.toStringAsFixed(1)};${t.reimbursementAmount.toStringAsFixed(2)};${t.currency};${t.odometerStart.toStringAsFixed(1)};${t.odometerEnd.toStringAsFixed(1)};"${t.notes}"',
-      );
-    }
-    return sb.toString();
-  }
-
-  void _showAccountingPdfReportModal(BuildContext context) {
-    final totalKm = trips
-        .where((t) => t.isProfessional)
-        .fold<double>(0.0, (s, t) => s + t.totalDistanceKm);
-    final totalEur = trips
-        .where((t) => t.isProfessional && t.currency == 'EUR')
-        .fold<double>(0.0, (s, t) => s + t.reimbursementAmount);
-    final totalChf = trips
-        .where((t) => t.isProfessional && t.currency == 'CHF')
-        .fold<double>(0.0, (s, t) => s + t.reimbursementAmount);
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: PirateTheme.bgPrimary,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) => DraggableScrollableSheet(
-        expand: false,
-        initialChildSize: 0.88,
-        maxChildSize: 0.96,
-        builder: (_, scrollController) => Padding(
-          padding: const EdgeInsets.all(16),
-          child: ListView(
-            controller: scrollController,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Row(
-                    children: [
-                      PiratePipsLogo(size: 32),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'RAPPORT D\'INDEMNITÉS KILOMÉTRIQUES (FORMAT PDF)',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 13,
-                              color: PirateTheme.goldPrimary,
-                            ),
-                          ),
-                          Text(
-                            'Document justificatif conforme Expert-Comptable & Administration Fiscale',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: PirateTheme.textMuted,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(ctx),
-                    icon: const Icon(Icons.close),
-                  ),
-                ],
-              ),
-              const Divider(color: PirateTheme.goldPrimary),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: PirateTheme.bgSecondary,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: PirateTheme.borderDark),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Total Km Pro : ${totalKm.toStringAsFixed(1)} km',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                    Text(
-                      'Total EUR : ${totalEur.toStringAsFixed(2)} €',
-                      style: const TextStyle(
-                        color: PirateTheme.bullGreen,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                    Text(
-                      'Total CHF : ${totalChf.toStringAsFixed(2)} CHF',
-                      style: const TextStyle(
-                        color: PirateTheme.goldPrimary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  headingRowColor:
-                      WidgetStateProperty.all(PirateTheme.bgElevated),
-                  columns: const [
-                    DataColumn(label: Text('Date')),
-                    DataColumn(label: Text('Conducteur')),
-                    DataColumn(label: Text('Véhicule')),
-                    DataColumn(label: Text('CV')),
-                    DataColumn(label: Text('Départ')),
-                    DataColumn(label: Text('Arrivée')),
-                    DataColumn(label: Text('Motif')),
-                    DataColumn(label: Text('Km Maps')),
-                    DataColumn(label: Text('Marge')),
-                    DataColumn(label: Text('Total km')),
-                    DataColumn(label: Text('Montant indemnisé')),
-                  ],
-                  rows: trips.map((t) {
-                    final v = _vehicleObj(t.vehicleId);
-                    final dateStr =
-                        '${t.date.day.toString().padLeft(2, '0')}/${t.date.month.toString().padLeft(2, '0')}/${t.date.year}';
-                    return DataRow(
-                      cells: [
-                        DataCell(Text(dateStr)),
-                        DataCell(Text(_driverName(t.driverId))),
-                        DataCell(Text(v?.name ?? '-')),
-                        DataCell(Text('${v?.fiscalHp ?? 5} CV')),
-                        DataCell(Text(t.origin)),
-                        DataCell(Text(t.destination)),
-                        DataCell(Text('${t.purpose} (${t.countryCode})')),
-                        DataCell(Text('${t.mapsDistanceKm.toStringAsFixed(1)} km')),
-                        DataCell(
-                            Text('+${t.detourMarginPercent.toStringAsFixed(0)}%')),
-                        DataCell(Text(
-                          '${t.totalDistanceKm.toStringAsFixed(1)} km',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        )),
-                        DataCell(Text(
-                          '${t.reimbursementAmount.toStringAsFixed(2)} ${t.currency}',
-                          style: TextStyle(
-                            color: t.isProfessional
-                                ? PirateTheme.bullGreen
-                                : PirateTheme.bearRed,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
-                      ],
-                    );
-                  }).toList(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(text: _generateCsvContent()));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      backgroundColor: PirateTheme.bullGreen,
-                      content: Text(
-                        'Rapport comptable copié dans le presse-papiers (prêt pour Excel / PDF).',
-                      ),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.copy),
+                icon: const Icon(Icons.bolt, size: 16),
                 label: const Text(
-                  'COPIER LE TABLEAU COMPTABLE COMPLET',
+                  'Simuler Trajet Auto',
+                  style: TextStyle(fontSize: 11),
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
+        const SizedBox(height: 18),
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        // Bandeau Exports Comptables PDF & CSV/XLSX
-        Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: PirateTheme.bgSecondary,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: PirateTheme.goldPrimary),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'EXPORTS COMPTABLES & FISCAUX CONFORMES',
-                style: TextStyle(
-                  color: PirateTheme.goldPrimary,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w900,
+        // 4. FLUX INBOX DES TRAJETS EN ATTENTE DE VALIDATION (PRO / PERSO)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'TRAJETS À QUALIFIER (${pendingTrips.length})',
+              style: const TextStyle(
+                color: PiratePalette.textPure,
+                fontWeight: FontWeight.w900,
+                fontSize: 13,
+                letterSpacing: 0.8,
+              ),
+            ),
+            if (pendingTrips.isNotEmpty)
+              TextButton.icon(
+                onPressed: () {
+                  for (final t in pendingTrips) {
+                    onQualifyTrip(t, 'PRO');
+                  }
+                },
+                icon: const Icon(
+                  Icons.done_all,
+                  size: 16,
+                  color: PiratePalette.bullGreen,
+                ),
+                label: const Text(
+                  'Tout valider en Pro',
+                  style: TextStyle(
+                    color: PiratePalette.bullGreen,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              const SizedBox(height: 4),
-              const Text(
-                'Colonnes officielles : Date, Conducteur, Véhicule, CV, Départ, Arrivée, Motif, Km Google Maps, Marge, Total km, Montant indemnisé.',
-                style: TextStyle(color: PirateTheme.textMuted, fontSize: 11),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => _showAccountingPdfReportModal(context),
-                      icon: const Icon(Icons.picture_as_pdf, size: 17),
-                      label: const Text(
-                        'ÉTAT PDF COMPTABLE',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        final csv = _generateCsvContent();
-                        Clipboard.setData(ClipboardData(text: csv));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            backgroundColor: PirateTheme.bullGreen,
-                            content: Text(
-                              'Export CSV / XLSX copié dans le presse-papiers !',
-                            ),
-                          ),
-                        );
-                      },
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: PirateTheme.goldPrimary,
-                        side: const BorderSide(color: PirateTheme.goldPrimary),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      icon: const Icon(Icons.table_chart, size: 17),
-                      label: const Text(
-                        'EXPORT CSV / XLSX',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+          ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
 
-        const Text(
-          'HISTORIQUE DÉTAILLÉ DES TRAJETS',
-          style: TextStyle(
-            color: PirateTheme.textWhite,
-            fontWeight: FontWeight.w800,
-            fontSize: 12,
-          ),
-        ),
-        const SizedBox(height: 10),
-
-        if (trips.isEmpty)
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.all(32),
-              child: Text(
-                'Aucun trajet enregistré.',
-                style: TextStyle(color: PirateTheme.textMuted),
-              ),
+        if (pendingTrips.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: PiratePalette.bgSurface,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: PiratePalette.borderSubtle),
+            ),
+            child: const Column(
+              children: [
+                Icon(
+                  Icons.verified,
+                  color: PiratePalette.bullGreen,
+                  size: 38,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Tous vos trajets récents sont qualifiés !',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'Démarrez votre véhicule ou appuyez sur le bouton + central pour ajouter un trajet.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: PiratePalette.textSteel,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ),
 
-        ...trips.map((t) {
-          final v = _vehicleObj(t.vehicleId);
+        ...pendingTrips.map((trip) {
+          final vehicle = vehicles.firstWhere(
+            (v) => v.id == trip.vehicleId,
+            orElse: () => vehicles.first,
+          );
           final dateStr =
-              '${t.date.day.toString().padLeft(2, '0')}/${t.date.month.toString().padLeft(2, '0')}/${t.date.year}';
+              '${trip.date.day.toString().padLeft(2, '0')}/${trip.date.month.toString().padLeft(2, '0')}/${trip.date.year}';
+
           return Container(
-            margin: const EdgeInsets.only(bottom: 10),
+            margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: PirateTheme.bgSecondary,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: t.isProfessional
-                    ? PirateTheme.bullGreen.withOpacity(0.45)
-                    : PirateTheme.bearRed.withOpacity(0.45),
-              ),
+              color: PiratePalette.bgSurface,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: PiratePalette.goldPrimary, width: 1.2),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -3743,17 +2633,15 @@ class HistoryAndExportsTab extends StatelessWidget {
                             vertical: 3,
                           ),
                           decoration: BoxDecoration(
-                            color: t.isProfessional
-                                ? PirateTheme.bullGreen.withOpacity(0.18)
-                                : PirateTheme.bearRed.withOpacity(0.18),
+                            color: PiratePalette.goldPrimary.withOpacity(0.18),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
-                            t.isProfessional ? 'PRO • ${t.purpose}' : 'PRIVÉ',
-                            style: TextStyle(
-                              color: t.isProfessional
-                                  ? PirateTheme.bullGreen
-                                  : PirateTheme.bearRed,
+                            trip.captureMode == 'IBEACON_BT'
+                                ? 'iBeacon Bluetooth'
+                                : 'Auto-Tracking GPS',
+                            style: const TextStyle(
+                              color: PiratePalette.goldPrimary,
                               fontWeight: FontWeight.bold,
                               fontSize: 10,
                             ),
@@ -3761,10 +2649,338 @@ class HistoryAndExportsTab extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '$dateStr • ${t.countryCode}',
+                          '$dateStr • ${trip.startTime}',
                           style: const TextStyle(
-                            color: PirateTheme.textMuted,
-                            fontSize: 12,
+                            color: PiratePalette.textSteel,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '${trip.finalDistanceKm.toStringAsFixed(1)} km (${trip.reimbursementAmount.toStringAsFixed(2)} ${trip.currency})',
+                      style: const TextStyle(
+                        color: PiratePalette.goldPrimary,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.my_location,
+                      size: 15,
+                      color: PiratePalette.bullGreen,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        trip.originAddress,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+                if (trip.waypoints.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 21, top: 3, bottom: 3),
+                    child: Text(
+                      '↳ Étape : ${trip.waypoints.map((w) => "${w.label} (${w.address})").join(" -> ")}',
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: PiratePalette.goldWarm,
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.place,
+                      size: 15,
+                      color: PiratePalette.bearRed,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        '${trip.destinationAddress}${trip.isRoundTrip ? " (Aller-Retour)" : ""}',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '${vehicle.name} • ${vehicle.fiscalCategory} • Motif : ${trip.purpose}',
+                  style: const TextStyle(
+                    color: PiratePalette.textSteel,
+                    fontSize: 11,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () => onQualifyTrip(trip, 'PRO'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: PiratePalette.bullGreen,
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                        ),
+                        icon: const Icon(Icons.business_center, size: 16),
+                        label: const Text('PROFESSIONNEL (PRO)'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () => onQualifyTrip(trip, 'PERSO'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: PiratePalette.bearRed,
+                          side: const BorderSide(color: PiratePalette.bearRed),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                        ),
+                        icon: const Icon(Icons.person_outline, size: 16),
+                        label: const Text('PERSONNEL (PERSO)'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }),
+
+        const SizedBox(height: 18),
+        const Center(
+          child: Text(
+            'Développé par Pirate Pips™',
+            style: TextStyle(color: PiratePalette.textSteel, fontSize: 11),
+          ),
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+}
+
+// ============================================================================
+// 10. ONGLET 2 : TOUS LES TRAJETS (JOURNAL DE BORD MULTIFILTRES)
+// ============================================================================
+class AllTripsLogbookScreen extends StatefulWidget {
+  final List<TripEntity> trips;
+  final List<DriverProfile> drivers;
+  final List<VehicleEntity> vehicles;
+  final void Function(TripEntity trip, String status) onQualifyTrip;
+  final void Function(String tripId) onDeleteTrip;
+  final void Function(TripEntity trip) onCreateReturnTrip;
+
+  const AllTripsLogbookScreen({
+    super.key,
+    required this.trips,
+    required this.drivers,
+    required this.vehicles,
+    required this.onQualifyTrip,
+    required this.onDeleteTrip,
+    required this.onCreateReturnTrip,
+  });
+
+  @override
+  State<AllTripsLogbookScreen> createState() => _AllTripsLogbookScreenState();
+}
+
+class _AllTripsLogbookScreenState extends State<AllTripsLogbookScreen> {
+  String _statusFilter = 'ALL'; // ALL, PRO, PERSO, PENDING
+  String _vehicleFilter = 'ALL';
+  String _driverFilter = 'ALL';
+  String _searchQuery = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final filtered = widget.trips.where((t) {
+      if (_statusFilter != 'ALL' && t.qualificationStatus != _statusFilter) {
+        return false;
+      }
+      if (_vehicleFilter != 'ALL' && t.vehicleId != _vehicleFilter) {
+        return false;
+      }
+      if (_driverFilter != 'ALL' && t.driverId != _driverFilter) {
+        return false;
+      }
+      if (_searchQuery.trim().isNotEmpty) {
+        final q = _searchQuery.toLowerCase();
+        final match = t.originAddress.toLowerCase().contains(q) ||
+            t.destinationAddress.toLowerCase().contains(q) ||
+            t.projectTag.toLowerCase().contains(q) ||
+            t.purpose.toLowerCase().contains(q) ||
+            t.notes.toLowerCase().contains(q);
+        if (!match) return false;
+      }
+      return true;
+    }).toList();
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        // Recherche par client, projet, adresse ou étiquette
+        TextField(
+          decoration: const InputDecoration(
+            labelText: 'Filtrer par client, projet, adresse ou motif...',
+            prefixIcon: Icon(Icons.search, size: 18),
+          ),
+          onChanged: (v) => setState(() => _searchQuery = v),
+        ),
+        const SizedBox(height: 10),
+
+        // Filtres rapides par statut
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              _FilterChipPill(
+                label: 'Tous (${widget.trips.length})',
+                selected: _statusFilter == 'ALL',
+                onTap: () => setState(() => _statusFilter = 'ALL'),
+              ),
+              _FilterChipPill(
+                label: 'Professionnels',
+                selected: _statusFilter == 'PRO',
+                color: PiratePalette.bullGreen,
+                onTap: () => setState(() => _statusFilter = 'PRO'),
+              ),
+              _FilterChipPill(
+                label: 'Personnels',
+                selected: _statusFilter == 'PERSO',
+                color: PiratePalette.bearRed,
+                onTap: () => setState(() => _statusFilter = 'PERSO'),
+              ),
+              _FilterChipPill(
+                label: 'En attente Inbox',
+                selected: _statusFilter == 'PENDING',
+                color: PiratePalette.goldPrimary,
+                onTap: () => setState(() => _statusFilter = 'PENDING'),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        // Filtres par Véhicule et Conducteur
+        Row(
+          children: [
+            Expanded(
+              child: DropdownButtonFormField<String>(
+                value: _vehicleFilter,
+                decoration: const InputDecoration(labelText: 'Véhicule'),
+                items: [
+                  const DropdownMenuItem(
+                    value: 'ALL',
+                    child: Text('Tous les véhicules', style: TextStyle(fontSize: 12)),
+                  ),
+                  ...widget.vehicles.map(
+                    (v) => DropdownMenuItem(
+                      value: v.id,
+                      child: Text(
+                        v.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ),
+                ],
+                onChanged: (v) => setState(() => _vehicleFilter = v ?? 'ALL'),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: DropdownButtonFormField<String>(
+                value: _driverFilter,
+                decoration: const InputDecoration(labelText: 'Conducteur'),
+                items: [
+                  const DropdownMenuItem(
+                    value: 'ALL',
+                    child: Text('Tous les conducteurs', style: TextStyle(fontSize: 12)),
+                  ),
+                  ...widget.drivers.map(
+                    (d) => DropdownMenuItem(
+                      value: d.id,
+                      child: Text(
+                        d.fullName,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ),
+                ],
+                onChanged: (v) => setState(() => _driverFilter = v ?? 'ALL'),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+
+        ...filtered.map((t) {
+          final v = widget.vehicles.firstWhere(
+            (veh) => veh.id == t.vehicleId,
+            orElse: () => widget.vehicles.first,
+          );
+          final d = widget.drivers.firstWhere(
+            (drv) => drv.id == t.driverId,
+            orElse: () => widget.drivers.first,
+          );
+          final dateStr =
+              '${t.date.day.toString().padLeft(2, '0')}/${t.date.month.toString().padLeft(2, '0')}/${t.date.year}';
+
+          final badgeColor = t.isPro
+              ? PiratePalette.bullGreen
+              : t.isPending
+                  ? PiratePalette.goldPrimary
+                  : PiratePalette.bearRed;
+
+          return Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: PiratePalette.bgSurface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: badgeColor.withOpacity(0.5)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: badgeColor.withOpacity(0.16),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            '${t.qualificationStatus} • ${t.purpose}',
+                            style: TextStyle(
+                              color: badgeColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '$dateStr (${t.countryCode})',
+                          style: const TextStyle(
+                            color: PiratePalette.textSteel,
+                            fontSize: 11,
                           ),
                         ),
                       ],
@@ -3772,9 +2988,7 @@ class HistoryAndExportsTab extends StatelessWidget {
                     Text(
                       '${t.reimbursementAmount.toStringAsFixed(2)} ${t.currency}',
                       style: TextStyle(
-                        color: t.isProfessional
-                            ? PirateTheme.bullGreen
-                            : PirateTheme.bearRed,
+                        color: badgeColor,
                         fontWeight: FontWeight.w900,
                         fontSize: 16,
                       ),
@@ -3783,67 +2997,67 @@ class HistoryAndExportsTab extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'A: ${t.origin}',
+                  'Départ : ${t.originAddress}',
                   style: const TextStyle(fontSize: 12),
                 ),
                 if (t.waypoints.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: Text(
-                      'Étapes (${t.waypoints.length}) : ${t.waypoints.map((w) => w.label).join(", ")}',
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: PirateTheme.goldSecondary,
-                      ),
-                    ),
-                  ),
-                Text(
-                  'B: ${t.destination}${t.isRoundTrip ? " (Aller-Retour ×2)" : ""}',
-                  style: const TextStyle(fontSize: 12),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '${_driverName(t.driverId)} • ${v?.name ?? "Véhicule"} (${v?.fiscalHp ?? 5} CV) • Maps: ${t.mapsDistanceKm.toStringAsFixed(1)} km (+${t.detourMarginPercent.toStringAsFixed(0)}%) = ${t.totalDistanceKm.toStringAsFixed(1)} km',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: PirateTheme.textMuted,
-                  ),
-                ),
-                if (t.notes.isNotEmpty) ...[
-                  const SizedBox(height: 4),
                   Text(
-                    'Note : ${t.notes}',
+                    'Étapes : ${t.waypoints.map((w) => w.label).join(" → ")}',
                     style: const TextStyle(
                       fontSize: 11,
-                      fontStyle: FontStyle.italic,
-                      color: PirateTheme.textMuted,
+                      color: PiratePalette.goldWarm,
                     ),
                   ),
-                ],
-                const SizedBox(height: 8),
+                Text(
+                  'Arrivée : ${t.destinationAddress}',
+                  style: const TextStyle(fontSize: 12),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  '${d.fullName} • ${v.name} (${v.fiscalCategory}) • Maps: ${t.mapsDistanceKm.toStringAsFixed(1)} km (+${t.detourMarginPercent.toInt()}%) = ${t.finalDistanceKm.toStringAsFixed(1)} km',
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: PiratePalette.textSteel,
+                  ),
+                ),
+                const SizedBox(height: 6),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextButton.icon(
-                      onPressed: () => onDuplicateReturnTrip(t),
-                      icon: const Icon(
-                        Icons.repeat,
-                        size: 15,
-                        color: PirateTheme.goldPrimary,
-                      ),
-                      label: const Text(
-                        'Générer Trajet Retour',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: PirateTheme.goldPrimary,
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: () => widget.onQualifyTrip(
+                            t,
+                            t.isPro ? 'PERSO' : 'PRO',
+                          ),
+                          child: Text(
+                            t.isPro ? 'Basculer Perso' : 'Basculer Pro',
+                            style: const TextStyle(fontSize: 11),
+                          ),
                         ),
-                      ),
+                        TextButton.icon(
+                          onPressed: () => widget.onCreateReturnTrip(t),
+                          icon: const Icon(
+                            Icons.repeat,
+                            size: 14,
+                            color: PiratePalette.goldPrimary,
+                          ),
+                          label: const Text(
+                            'Trajet retour identique',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: PiratePalette.goldPrimary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     IconButton(
-                      onPressed: () => onDeleteTrip(t.id),
+                      onPressed: () => widget.onDeleteTrip(t.id),
                       icon: const Icon(
                         Icons.delete_outline,
-                        color: PirateTheme.bearRed,
+                        color: PiratePalette.bearRed,
                         size: 18,
                       ),
                     ),
@@ -3853,555 +3067,1880 @@ class HistoryAndExportsTab extends StatelessWidget {
             ),
           );
         }),
+        const SizedBox(height: 30),
       ],
     );
   }
 }
 
-// ============================================================================
-// 11. ONGLET 4 : GARAGE (VÉHICULES), CONDUCTEURS & ADRESSES FAVORITES
-// ============================================================================
-class GarageAndProfilesTab extends StatefulWidget {
-  final List<Driver> drivers;
-  final List<Vehicle> vehicles;
-  final List<SavedPlace> savedPlaces;
-  final VoidCallback onChanged;
+class _FilterChipPill extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final Color color;
+  final VoidCallback onTap;
 
-  const GarageAndProfilesTab({
-    super.key,
-    required this.drivers,
-    required this.vehicles,
-    required this.savedPlaces,
-    required this.onChanged,
+  const _FilterChipPill({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    this.color = PiratePalette.goldPrimary,
   });
-
-  @override
-  State<GarageAndProfilesTab> createState() => _GarageAndProfilesTabState();
-}
-
-class _GarageAndProfilesTabState extends State<GarageAndProfilesTab> {
-  void _showAddVehicleDialog() {
-    final nameCtrl = TextEditingController();
-    final plateCtrl = TextEditingController();
-    final odoCtrl = TextEditingController(text: '10000');
-    String type = 'Voiture';
-    String engine = 'Thermique Diesel';
-    int fiscalHp = 5;
-
-    showDialog(
-      context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setModalState) => AlertDialog(
-          backgroundColor: PirateTheme.bgSecondary,
-          title: const Text('Ajouter un véhicule au Garage'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameCtrl,
-                  decoration:
-                      const InputDecoration(labelText: 'Nom / Modèle'),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: plateCtrl,
-                  decoration:
-                      const InputDecoration(labelText: 'Immatriculation'),
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  value: type,
-                  decoration: const InputDecoration(labelText: 'Type'),
-                  items: ['Voiture', 'Moto', 'Utilitaire']
-                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                      .toList(),
-                  onChanged: (v) => setModalState(() => type = v!),
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  value: engine,
-                  decoration: const InputDecoration(labelText: 'Motorisation'),
-                  items: [
-                    'Thermique Essence',
-                    'Thermique Diesel',
-                    'Hybride',
-                    'Électrique',
-                  ]
-                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                      .toList(),
-                  onChanged: (v) => setModalState(() => engine = v!),
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<int>(
-                  value: fiscalHp,
-                  decoration:
-                      const InputDecoration(labelText: 'Puissance fiscale (CV)'),
-                  items: [3, 4, 5, 6, 7]
-                      .map(
-                        (cv) => DropdownMenuItem(
-                          value: cv,
-                          child: Text(cv == 7 ? '7 CV et plus' : '$cv CV'),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (v) => setModalState(() => fiscalHp = v!),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: odoCtrl,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Compteur kilométrique initial (Odomètre)',
-                    suffixText: 'km',
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Annuler'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (nameCtrl.text.trim().isNotEmpty) {
-                  widget.vehicles.add(
-                    Vehicle(
-                      id: 'veh_${DateTime.now().millisecondsSinceEpoch}',
-                      name: nameCtrl.text.trim(),
-                      plate: plateCtrl.text.trim().isEmpty
-                          ? 'AA-000-AA'
-                          : plateCtrl.text.trim(),
-                      type: type,
-                      engine: engine,
-                      fiscalHp: fiscalHp,
-                      odometerKm: double.tryParse(odoCtrl.text) ?? 0.0,
-                    ),
-                  );
-                  widget.onChanged();
-                  Navigator.pop(ctx);
-                }
-              },
-              child: const Text('Enregistrer'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showAddDriverDialog() {
-    final firstCtrl = TextEditingController();
-    final lastCtrl = TextEditingController();
-    String status = 'Gérant';
-
-    showDialog(
-      context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setModalState) => AlertDialog(
-          backgroundColor: PirateTheme.bgSecondary,
-          title: const Text('Nouveau Profil Conducteur'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: firstCtrl,
-                decoration: const InputDecoration(labelText: 'Prénom'),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: lastCtrl,
-                decoration: const InputDecoration(labelText: 'Nom'),
-              ),
-              const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: status,
-                decoration: const InputDecoration(labelText: 'Statut'),
-                items: ['Gérant', 'Salarié', 'Indépendant']
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (v) => setModalState(() => status = v!),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Annuler'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (firstCtrl.text.trim().isNotEmpty) {
-                  widget.drivers.add(
-                    Driver(
-                      id: 'drv_${DateTime.now().millisecondsSinceEpoch}',
-                      firstName: firstCtrl.text.trim(),
-                      lastName: lastCtrl.text.trim(),
-                      status: status,
-                    ),
-                  );
-                  widget.onChanged();
-                  Navigator.pop(ctx);
-                }
-              },
-              child: const Text('Ajouter'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showAddPlaceDialog() {
-    final labelCtrl = TextEditingController();
-    final addrCtrl = TextEditingController();
-    String category = 'Client';
-
-    showDialog(
-      context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setModalState) => AlertDialog(
-          backgroundColor: PirateTheme.bgSecondary,
-          title: const Text('Nouvelle Adresse Favorite'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: labelCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Nom du favori (ex: Siège, Maison, Client X)',
-                ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: addrCtrl,
-                decoration:
-                    const InputDecoration(labelText: 'Adresse postale complète'),
-              ),
-              const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: category,
-                decoration: const InputDecoration(labelText: 'Catégorie'),
-                items: ['Maison', 'Siège', 'Dépôt', 'Client', 'Magasin Pro']
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (v) => setModalState(() => category = v!),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Annuler'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (labelCtrl.text.trim().isNotEmpty &&
-                    addrCtrl.text.trim().isNotEmpty) {
-                  widget.savedPlaces.add(
-                    SavedPlace(
-                      id: 'plc_${DateTime.now().millisecondsSinceEpoch}',
-                      label: labelCtrl.text.trim(),
-                      address: addrCtrl.text.trim(),
-                      category: category,
-                    ),
-                  );
-                  widget.onChanged();
-                  Navigator.pop(ctx);
-                }
-              },
-              child: const Text('Ajouter'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        // Section Véhicules
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'GARAGE MULTI-VÉHICULES',
-              style: TextStyle(
-                color: PirateTheme.goldPrimary,
-                fontWeight: FontWeight.w900,
-                fontSize: 13,
-              ),
-            ),
-            ElevatedButton.icon(
-              onPressed: _showAddVehicleDialog,
-              icon: const Icon(Icons.add, size: 16),
-              label: const Text('Véhicule', style: TextStyle(fontSize: 12)),
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: ChoiceChip(
+        label: Text(label),
+        selected: selected,
+        selectedColor: color,
+        labelStyle: TextStyle(
+          color: selected ? Colors.black : PiratePalette.textPure,
+          fontWeight: FontWeight.bold,
+          fontSize: 11,
         ),
-        const SizedBox(height: 10),
-        ...widget.vehicles.map((v) {
-          return Card(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: PirateTheme.goldPrimary.withOpacity(0.18),
-                child: Icon(
-                  v.isElectric ? Icons.bolt : Icons.directions_car,
-                  color: PirateTheme.goldPrimary,
-                ),
-              ),
-              title: Text(
-                '${v.name} (${v.plate})',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(
-                '${v.type} • ${v.engine} • ${v.fiscalHp == 7 ? "7 CV+" : "${v.fiscalHp} CV"}\nOdomètre : ${v.odometerKm.toStringAsFixed(1)} km',
-                style: const TextStyle(fontSize: 12),
-              ),
-              isThreeLine: true,
-              trailing: widget.vehicles.length > 1
-                  ? IconButton(
-                      icon: const Icon(
-                        Icons.delete_outline,
-                        color: PirateTheme.bearRed,
-                      ),
-                      onPressed: () {
-                        widget.vehicles.removeWhere((item) => item.id == v.id);
-                        widget.onChanged();
-                      },
-                    )
-                  : null,
-            ),
-          );
-        }),
-
-        const SizedBox(height: 18),
-        // Section Conducteurs
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'PROFILS CONDUCTEURS',
-              style: TextStyle(
-                color: PirateTheme.goldPrimary,
-                fontWeight: FontWeight.w900,
-                fontSize: 13,
-              ),
-            ),
-            ElevatedButton.icon(
-              onPressed: _showAddDriverDialog,
-              icon: const Icon(Icons.add, size: 16),
-              label: const Text('Conducteur', style: TextStyle(fontSize: 12)),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        ...widget.drivers.map((d) {
-          return Card(
-            margin: const EdgeInsets.only(bottom: 8),
-            child: ListTile(
-              leading: const CircleAvatar(
-                backgroundColor: PirateTheme.bgElevated,
-                child: Icon(Icons.person, color: PirateTheme.goldPrimary),
-              ),
-              title: Text(
-                d.fullName,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text('Statut : ${d.status}'),
-              trailing: widget.drivers.length > 1
-                  ? IconButton(
-                      icon: const Icon(
-                        Icons.delete_outline,
-                        color: PirateTheme.bearRed,
-                      ),
-                      onPressed: () {
-                        widget.drivers.removeWhere((item) => item.id == d.id);
-                        widget.onChanged();
-                      },
-                    )
-                  : null,
-            ),
-          );
-        }),
-
-        const SizedBox(height: 18),
-        // Section Adresses Favorites
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'RÉPERTOIRE D\'ADRESSES FAVORITES',
-              style: TextStyle(
-                color: PirateTheme.goldPrimary,
-                fontWeight: FontWeight.w900,
-                fontSize: 13,
-              ),
-            ),
-            ElevatedButton.icon(
-              onPressed: _showAddPlaceDialog,
-              icon: const Icon(Icons.add, size: 16),
-              label: const Text('Favori', style: TextStyle(fontSize: 12)),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        ...widget.savedPlaces.map((p) {
-          return Card(
-            margin: const EdgeInsets.only(bottom: 8),
-            child: ListTile(
-              leading: const Icon(Icons.star, color: PirateTheme.goldPrimary),
-              title: Text(
-                '${p.label} (${p.category})',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-              ),
-              subtitle: Text(p.address, style: const TextStyle(fontSize: 12)),
-              trailing: IconButton(
-                icon: const Icon(
-                  Icons.delete_outline,
-                  color: PirateTheme.bearRed,
-                ),
-                onPressed: () {
-                  widget.savedPlaces.removeWhere((item) => item.id == p.id);
-                  widget.onChanged();
-                },
-              ),
-            ),
-          );
-        }),
-      ],
+        onSelected: (_) => onTap(),
+      ),
     );
   }
 }
 
 // ============================================================================
-// 12. ONGLET 5 : BARÈMES FISCAUX ÉDITABLES, API GOOGLE MAPS & À PROPOS
+// 11. ENTRÉE 3 (FAB `+`) : SAISIE MANUELLE GOOGLE MAPS, ÉTAPES & MARGE 0-15%
 // ============================================================================
-class FiscalSettingsAndAboutTab extends StatefulWidget {
-  final TaxRatesConfig taxConfig;
+class ManualTripCreatorSheet extends StatefulWidget {
+  final ScrollController scrollController;
+  final List<DriverProfile> drivers;
+  final List<VehicleEntity> vehicles;
+  final List<SavedLocationEntity> locations;
+  final TaxRulesRepository taxRules;
   final String defaultCountry;
   final double defaultMargin;
   final String googleMapsApiKey;
-  final String cloudSyncEndpoint;
-  final String? lastCloudSyncStatus;
-  final void Function({
-    required String country,
-    required double margin,
-    required String gmapsKey,
-    required String cloudUrl,
-  }) onUpdateSettings;
-  final VoidCallback onTaxConfigChanged;
-  final VoidCallback onTriggerCloudSync;
+  final double Function(String vehicleId, int year) getPriorAnnualFrenchKm;
+  final void Function(TripEntity trip) onTripCreated;
 
-  const FiscalSettingsAndAboutTab({
+  const ManualTripCreatorSheet({
     super.key,
-    required this.taxConfig,
+    required this.scrollController,
+    required this.drivers,
+    required this.vehicles,
+    required this.locations,
+    required this.taxRules,
     required this.defaultCountry,
     required this.defaultMargin,
     required this.googleMapsApiKey,
-    required this.cloudSyncEndpoint,
-    required this.lastCloudSyncStatus,
-    required this.onUpdateSettings,
-    required this.onTaxConfigChanged,
-    required this.onTriggerCloudSync,
+    required this.getPriorAnnualFrenchKm,
+    required this.onTripCreated,
   });
 
   @override
-  State<FiscalSettingsAndAboutTab> createState() =>
-      _FiscalSettingsAndAboutTabState();
+  State<ManualTripCreatorSheet> createState() => _ManualTripCreatorSheetState();
 }
 
-class _FiscalSettingsAndAboutTabState extends State<FiscalSettingsAndAboutTab> {
-  late TextEditingController _luCtrl;
-  late TextEditingController _beCtrl;
-  late TextEditingController _deDiensCtrl;
-  late TextEditingController _dePendler1Ctrl;
-  late TextEditingController _dePendler2Ctrl;
-  late TextEditingController _chCtrl;
-  late TextEditingController _elecBonusCtrl;
-  late TextEditingController _gmapsKeyCtrl;
-  late TextEditingController _cloudUrlCtrl;
-  late String _country;
-  late double _margin;
+class _ManualTripCreatorSheetState extends State<ManualTripCreatorSheet> {
+  late String _driverId;
+  late String _vehicleId;
+  late String _countryCode;
+  String _qualification = 'PRO';
+  String _purpose = 'Client';
+  bool _isRoundTrip = false;
+  late double _detourMargin; // Slider 0% à 15%
+  bool _calculating = false;
+  String _routeProviderNote = 'Google Maps Platform (Autocomplete + Directions)';
+  String? _receiptPhotoRef;
+
+  final TextEditingController _originCtrl = TextEditingController();
+  final TextEditingController _destCtrl = TextEditingController();
+  final TextEditingController _mapsKmCtrl =
+      TextEditingController(text: '32.0');
+  final TextEditingController _projectTagCtrl =
+      TextEditingController(text: 'Client Pro');
+  final TextEditingController _notesCtrl = TextEditingController();
+
+  final List<WaypointEntity> _waypoints = [];
+  List<String> _origPredict = [];
+  List<String> _destPredict = [];
 
   @override
   void initState() {
     super.initState();
-    _country = widget.defaultCountry;
-    _margin = widget.defaultMargin;
-    _luCtrl = TextEditingController(
-      text: widget.taxConfig.luxembourgRateEur.toStringAsFixed(2),
-    );
-    _beCtrl = TextEditingController(
-      text: widget.taxConfig.belgiumRateEur.toStringAsFixed(2),
-    );
-    _deDiensCtrl = TextEditingController(
-      text: widget.taxConfig.germanyDienstreisenEur.toStringAsFixed(2),
-    );
-    _dePendler1Ctrl = TextEditingController(
-      text: widget.taxConfig.germanyPendlerFirst20Eur.toStringAsFixed(2),
-    );
-    _dePendler2Ctrl = TextEditingController(
-      text: widget.taxConfig.germanyPendlerAfter20Eur.toStringAsFixed(2),
-    );
-    _chCtrl = TextEditingController(
-      text: widget.taxConfig.switzerlandRateChf.toStringAsFixed(2),
-    );
-    _elecBonusCtrl = TextEditingController(
-      text: widget.taxConfig.frenchElectricBonusPercent.toStringAsFixed(0),
-    );
-    _gmapsKeyCtrl = TextEditingController(text: widget.googleMapsApiKey);
-    _cloudUrlCtrl = TextEditingController(text: widget.cloudSyncEndpoint);
+    _driverId = widget.drivers.first.id;
+    _vehicleId = widget.vehicles.first.id;
+    _countryCode = widget.defaultCountry;
+    _detourMargin = widget.defaultMargin.clamp(0.0, 15.0);
+
+    if (widget.locations.length >= 2) {
+      _originCtrl.text = widget.locations[2].fullAddress;
+      _destCtrl.text = widget.locations[0].fullAddress;
+    }
   }
 
   @override
   void dispose() {
-    _luCtrl.dispose();
-    _beCtrl.dispose();
-    _deDiensCtrl.dispose();
-    _dePendler1Ctrl.dispose();
-    _dePendler2Ctrl.dispose();
-    _chCtrl.dispose();
-    _elecBonusCtrl.dispose();
-    _gmapsKeyCtrl.dispose();
-    _cloudUrlCtrl.dispose();
+    _originCtrl.dispose();
+    _destCtrl.dispose();
+    _mapsKmCtrl.dispose();
+    _projectTagCtrl.dispose();
+    _notesCtrl.dispose();
     super.dispose();
   }
 
-  void _saveRates() {
-    widget.taxConfig.luxembourgRateEur =
-        double.tryParse(_luCtrl.text.replaceAll(',', '.')) ?? 0.40;
-    widget.taxConfig.belgiumRateEur =
-        double.tryParse(_beCtrl.text.replaceAll(',', '.')) ?? 0.43;
-    widget.taxConfig.germanyDienstreisenEur =
-        double.tryParse(_deDiensCtrl.text.replaceAll(',', '.')) ?? 0.30;
-    widget.taxConfig.germanyPendlerFirst20Eur =
-        double.tryParse(_dePendler1Ctrl.text.replaceAll(',', '.')) ?? 0.30;
-    widget.taxConfig.germanyPendlerAfter20Eur =
-        double.tryParse(_dePendler2Ctrl.text.replaceAll(',', '.')) ?? 0.38;
-    widget.taxConfig.switzerlandRateChf =
-        double.tryParse(_chCtrl.text.replaceAll(',', '.')) ?? 0.70;
-    widget.taxConfig.frenchElectricBonusPercent =
-        double.tryParse(_elecBonusCtrl.text.replaceAll(',', '.')) ?? 20.0;
+  VehicleEntity get _selectedVehicle => widget.vehicles.firstWhere(
+        (v) => v.id == _vehicleId,
+        orElse: () => widget.vehicles.first,
+      );
 
-    widget.onTaxConfigChanged();
-    widget.onUpdateSettings(
-      country: _country,
-      margin: _margin,
-      gmapsKey: _gmapsKeyCtrl.text.trim(),
-      cloudUrl: _cloudUrlCtrl.text.trim(),
+  double get _baseDistanceKm {
+    final v = double.tryParse(_mapsKmCtrl.text.replaceAll(',', '.')) ?? 0.0;
+    return _isRoundTrip ? v * 2.0 : v;
+  }
+
+  double get _finalAdjustedKm {
+    final d = _baseDistanceKm * (1.0 + (_detourMargin / 100.0));
+    return double.parse(d.toStringAsFixed(1));
+  }
+
+  Future<void> _computeMapsRoute() async {
+    setState(() => _calculating = true);
+    final res = await GoogleMapsRoutingEngine.calculateRoute(
+      origin: _originCtrl.text,
+      destination: _destCtrl.text,
+      waypoints: _waypoints,
+      googleApiKey: widget.googleMapsApiKey,
+    );
+    if (!mounted) return;
+    setState(() {
+      _calculating = false;
+      _mapsKmCtrl.text = (res['km'] as double).toStringAsFixed(1);
+      _routeProviderNote =
+          '${res['provider']} • Durée : ${res['duration']}';
+    });
+  }
+
+  void _promptWaypointDialog() {
+    final lblCtrl = TextEditingController(text: 'Magasin pro / Chantier');
+    final adrCtrl = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: PiratePalette.bgSurface,
+        title: const Text('Ajouter une étape intermédiaire'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: lblCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Libellé (Magasin pro, Supermarché, Chantier)',
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: adrCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Adresse complète de l\'étape',
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (adrCtrl.text.trim().isNotEmpty) {
+                setState(() {
+                  _waypoints.add(
+                    WaypointEntity(
+                      label: lblCtrl.text.trim(),
+                      address: adrCtrl.text.trim(),
+                    ),
+                  );
+                });
+                Navigator.pop(ctx);
+                _computeMapsRoute();
+              }
+            },
+            child: const Text('Ajouter'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final veh = _selectedVehicle;
+    final priorFrKm =
+        widget.getPriorAnnualFrenchKm(veh.id, DateTime.now().year);
+    final eval = TaxEngineService.evaluateTrip(
+      countryCode: _countryCode,
+      distanceKm: _finalAdjustedKm,
+      priorAnnualFrenchKm: priorFrKm,
+      vehicle: veh,
+      purpose: _purpose,
+      qualificationStatus: _qualification,
+      rules: widget.taxRules,
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: PirateTheme.bullGreen,
-        content: Text('Barèmes fiscaux et paramètres enregistrés avec succès.'),
+    final workplaces = widget.locations
+        .where((l) => l.locationType == 'WORKPLACE')
+        .toList();
+    final emplacements = widget.locations
+        .where((l) => l.locationType != 'WORKPLACE')
+        .toList();
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: ListView(
+        controller: widget.scrollController,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  PiratePipsBadgeLogo(size: 28),
+                  SizedBox(width: 8),
+                  Text(
+                    'NOUVEAU TRAJET CERTIFIÉ GOOGLE MAPS',
+                    style: TextStyle(
+                      color: PiratePalette.goldPrimary,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+              IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.close),
+              ),
+            ],
+          ),
+          const Divider(color: PiratePalette.borderSubtle),
+          const SizedBox(height: 8),
+
+          // Statut Pro vs Perso
+          Row(
+            children: [
+              Expanded(
+                child: ChoiceChip(
+                  label: const Text('PROFESSIONNEL (DÉDUCTIBLE)'),
+                  selected: _qualification == 'PRO',
+                  selectedColor: PiratePalette.bullGreen,
+                  labelStyle: TextStyle(
+                    color: _qualification == 'PRO'
+                        ? Colors.black
+                        : PiratePalette.textPure,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                  ),
+                  onSelected: (_) => setState(() => _qualification = 'PRO'),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: ChoiceChip(
+                  label: const Text('PERSONNEL (NON DÉD.)'),
+                  selected: _qualification == 'PERSO',
+                  selectedColor: PiratePalette.bearRed,
+                  labelStyle: TextStyle(
+                    color: _qualification == 'PERSO'
+                        ? Colors.black
+                        : PiratePalette.textPure,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                  ),
+                  onSelected: (_) => setState(() => _qualification = 'PERSO'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Sélecteurs Conducteur, Pays & Véhicule
+          Row(
+            children: [
+              Expanded(
+                child: DropdownButtonFormField<String>(
+                  value: _driverId,
+                  decoration: const InputDecoration(labelText: 'Conducteur'),
+                  items: widget.drivers
+                      .map(
+                        (d) => DropdownMenuItem(
+                          value: d.id,
+                          child: Text(
+                            d.fullName,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (v) => setState(() => _driverId = v!),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: DropdownButtonFormField<String>(
+                  value: _countryCode,
+                  decoration: const InputDecoration(labelText: 'Juridiction'),
+                  items: const [
+                    DropdownMenuItem(value: 'FR', child: Text('France (FR)')),
+                    DropdownMenuItem(
+                        value: 'LU', child: Text('Luxembourg (LU)')),
+                    DropdownMenuItem(value: 'BE', child: Text('Belgique (BE)')),
+                    DropdownMenuItem(
+                        value: 'DE', child: Text('Allemagne (DE)')),
+                    DropdownMenuItem(value: 'CH', child: Text('Suisse (CH)')),
+                  ],
+                  onChanged: (v) => setState(() => _countryCode = v!),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          DropdownButtonFormField<String>(
+            value: _vehicleId,
+            decoration:
+                const InputDecoration(labelText: 'Véhicule & Catégorie fiscale'),
+            items: widget.vehicles
+                .map(
+                  (v) => DropdownMenuItem(
+                    value: v.id,
+                    child: Text(
+                      '${v.name} — ${v.fiscalCategory}',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                )
+                .toList(),
+            onChanged: (v) => setState(() => _vehicleId = v!),
+          ),
+          const SizedBox(height: 12),
+
+          // Favoris segmentés : Lieux de travail & Emplacements
+          const Text(
+            'FAVORIS : LIEUX DE TRAVAIL & EMPLACEMENTS',
+            style: TextStyle(
+              color: PiratePalette.goldPrimary,
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 6),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                ...workplaces.map(
+                  (w) => Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: ActionChip(
+                      avatar: const Icon(
+                        Icons.business,
+                        size: 14,
+                        color: PiratePalette.goldPrimary,
+                      ),
+                      label: Text(
+                        w.label,
+                        style: const TextStyle(fontSize: 11),
+                      ),
+                      onPressed: () =>
+                          setState(() => _destCtrl.text = w.fullAddress),
+                    ),
+                  ),
+                ),
+                ...emplacements.map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: ActionChip(
+                      avatar: const Icon(
+                        Icons.place,
+                        size: 14,
+                        color: PiratePalette.bullGreen,
+                      ),
+                      label: Text(
+                        e.label,
+                        style: const TextStyle(fontSize: 11),
+                      ),
+                      onPressed: () =>
+                          setState(() => _originCtrl.text = e.fullAddress),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // Départ Point A
+          TextField(
+            controller: _originCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Point de départ (Google Places Autocomplete)',
+              prefixIcon: Icon(
+                Icons.my_location,
+                color: PiratePalette.bullGreen,
+                size: 18,
+              ),
+            ),
+            onChanged: (v) async {
+              final list = await GoogleMapsRoutingEngine.searchPlacesWithCache(
+                query: v,
+                googleApiKey: widget.googleMapsApiKey,
+                savedLocations: widget.locations,
+              );
+              if (mounted) setState(() => _origPredict = list);
+            },
+          ),
+          if (_origPredict.isNotEmpty)
+            ..._origPredict.map(
+              (s) => ListTile(
+                dense: true,
+                title: Text(s, style: const TextStyle(fontSize: 11)),
+                onTap: () => setState(() {
+                  _originCtrl.text = GoogleMapsRoutingEngine.cleanAddress(s);
+                  _origPredict.clear();
+                }),
+              ),
+            ),
+
+          // Étapes intermédiaires
+          if (_waypoints.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            ..._waypoints.asMap().entries.map((entry) {
+              return ListTile(
+                dense: true,
+                tileColor: PiratePalette.bgElevated,
+                leading: const Icon(
+                  Icons.alt_route,
+                  color: PiratePalette.goldPrimary,
+                  size: 16,
+                ),
+                title: Text(
+                  'Étape ${entry.key + 1} (${entry.value.label}) : ${entry.value.address}',
+                  style: const TextStyle(fontSize: 11),
+                ),
+                trailing: IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                    size: 16,
+                    color: PiratePalette.bearRed,
+                  ),
+                  onPressed: () =>
+                      setState(() => _waypoints.removeAt(entry.key)),
+                ),
+              );
+            }),
+          ],
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: _promptWaypointDialog,
+              icon: const Icon(
+                Icons.add_location_alt,
+                size: 16,
+                color: PiratePalette.goldPrimary,
+              ),
+              label: const Text(
+                'Ajouter une étape intermédiaire (Magasin pro, Supermarché, Chantier)',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: PiratePalette.goldPrimary,
+                ),
+              ),
+            ),
+          ),
+
+          // Destination finale Point B
+          TextField(
+            controller: _destCtrl,
+            decoration: const InputDecoration(
+              labelText: 'Destination finale (Google Places Autocomplete)',
+              prefixIcon: Icon(
+                Icons.place,
+                color: PiratePalette.bearRed,
+                size: 18,
+              ),
+            ),
+            onChanged: (v) async {
+              final list = await GoogleMapsRoutingEngine.searchPlacesWithCache(
+                query: v,
+                googleApiKey: widget.googleMapsApiKey,
+                savedLocations: widget.locations,
+              );
+              if (mounted) setState(() => _destPredict = list);
+            },
+          ),
+          if (_destPredict.isNotEmpty)
+            ..._destPredict.map(
+              (s) => ListTile(
+                dense: true,
+                title: Text(s, style: const TextStyle(fontSize: 11)),
+                onTap: () => setState(() {
+                  _destCtrl.text = GoogleMapsRoutingEngine.cleanAddress(s);
+                  _destPredict.clear();
+                }),
+              ),
+            ),
+          const SizedBox(height: 10),
+
+          ElevatedButton.icon(
+            onPressed: _calculating ? null : _computeMapsRoute,
+            icon: const Icon(Icons.calculate, size: 18),
+            label: Text(
+              _calculating
+                  ? 'Calcul Google Directions en cours...'
+                  : 'CALCULER L\'ITINÉRAIRE VIA GOOGLE MAPS',
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            _routeProviderNote,
+            style: const TextStyle(
+              color: PiratePalette.textSteel,
+              fontSize: 11,
+            ),
+          ),
+
+          // Bouton Trajet retour identique
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            activeColor: PiratePalette.goldPrimary,
+            title: const Text(
+              'Trajet retour identique (Aller-Retour immédiat ×2)',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+            value: _isRoundTrip,
+            onChanged: (v) => setState(() => _isRoundTrip = v),
+          ),
+
+          // Slider Marge de compensation / Détours réels (+0% à +15%)
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: PiratePalette.bgSurface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: PiratePalette.borderSubtle),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Marge de compensation / Détours réels (0% à +15%)',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: PiratePalette.goldPrimary,
+                      ),
+                    ),
+                    Text(
+                      '+${_detourMargin.toStringAsFixed(0)} %',
+                      style: const TextStyle(
+                        color: PiratePalette.goldPrimary,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
+                ),
+                Slider(
+                  value: _detourMargin,
+                  min: 0.0,
+                  max: 15.0,
+                  divisions: 15,
+                  activeColor: PiratePalette.goldPrimary,
+                  label: '+${_detourMargin.toInt()}%',
+                  onChanged: (v) => setState(() => _detourMargin = v),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _mapsKmCtrl,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Distance Maps (Aller)',
+                          suffixText: 'km',
+                        ),
+                        onChanged: (_) => setState(() {}),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        value: _purpose,
+                        decoration: const InputDecoration(labelText: 'Motif'),
+                        items: const [
+                          DropdownMenuItem(
+                              value: 'Client', child: Text('Client')),
+                          DropdownMenuItem(
+                              value: 'Chantier', child: Text('Chantier')),
+                          DropdownMenuItem(
+                              value: 'Réunion', child: Text('Réunion')),
+                          DropdownMenuItem(
+                              value: 'Administratif',
+                              child: Text('Administratif')),
+                          DropdownMenuItem(
+                              value: 'Domicile-Travail',
+                              child: Text('Domicile-Travail')),
+                        ],
+                        onChanged: (v) => setState(() => _purpose = v!),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Résumé financier et bouton d'enregistrement
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: PiratePalette.bgSurface,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: PiratePalette.goldPrimary, width: 1.4),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'TOTAL CERTIFIÉ : ${_finalAdjustedKm.toStringAsFixed(1)} KM',
+                          style: const TextStyle(
+                            color: PiratePalette.goldPrimary,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        Text(
+                          eval.ruleSummary,
+                          style: const TextStyle(
+                            color: PiratePalette.textSteel,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '${eval.amount.toStringAsFixed(2)} ${eval.currency}',
+                      style: const TextStyle(
+                        color: PiratePalette.bullGreen,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 22,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      final newTrip = TripEntity(
+                        id: 'trp_${DateTime.now().millisecondsSinceEpoch}',
+                        date: DateTime.now(),
+                        startTime: '08:30',
+                        endTime: '09:15',
+                        driverId: _driverId,
+                        vehicleId: _vehicleId,
+                        countryCode: _countryCode,
+                        originAddress: _originCtrl.text.trim(),
+                        destinationAddress: _destCtrl.text.trim(),
+                        waypoints: List<WaypointEntity>.from(_waypoints),
+                        isRoundTrip: _isRoundTrip,
+                        captureMode: 'MANUAL_MAPS',
+                        qualificationStatus: _qualification,
+                        purpose: _purpose,
+                        projectTag: _projectTagCtrl.text.trim(),
+                        mapsDistanceKm: _baseDistanceKm,
+                        detourMarginPercent: _detourMargin,
+                        finalDistanceKm: _finalAdjustedKm,
+                        odometerStartKm: veh.currentOdometerKm,
+                        odometerEndKm:
+                            veh.currentOdometerKm + _finalAdjustedKm,
+                        reimbursementAmount: eval.amount,
+                        currency: eval.currency,
+                        appliedRuleLabel: eval.ruleSummary,
+                        notes: _notesCtrl.text.trim(),
+                        receiptPhotoRef: _receiptPhotoRef,
+                      );
+                      widget.onTripCreated(newTrip);
+                    },
+                    icon: const Icon(Icons.check_circle),
+                    label: const Text('ENREGISTRER LE TRAJET CERTIFIÉ'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// 12. ONGLET 4 : RAPPORTS ([MES RAPPORTS] | [RAPPORTS DE L'ÉQUIPE])
+//     & VÉRIFICATEUR PRÉ-EXPORT (AUDIT ANTI-REJET FISCAL)
+// ============================================================================
+class ReportsAndComplianceAuditScreen extends StatefulWidget {
+  final List<TripEntity> trips;
+  final List<DriverProfile> drivers;
+  final List<VehicleEntity> vehicles;
+  final List<OdometerLogEntity> odometerLogs;
+  final VoidCallback onDataUpdated;
+
+  const ReportsAndComplianceAuditScreen({
+    super.key,
+    required this.trips,
+    required this.drivers,
+    required this.vehicles,
+    required this.odometerLogs,
+    required this.onDataUpdated,
+  });
+
+  @override
+  State<ReportsAndComplianceAuditScreen> createState() =>
+      _ReportsAndComplianceAuditScreenState();
+}
+
+class _ReportsAndComplianceAuditScreenState
+    extends State<ReportsAndComplianceAuditScreen> {
+  int _subTab = 0; // 0 = Mes rapports, 1 = Rapports de l'équipe
+  late String _auditedDriverId;
+  late String _auditedVehicleId;
+
+  @override
+  void initState() {
+    super.initState();
+    _auditedDriverId = widget.drivers.first.id;
+    _auditedVehicleId = widget.vehicles.first.id;
+  }
+
+  DriverProfile get _activeDriver => widget.drivers.firstWhere(
+        (d) => d.id == _auditedDriverId,
+        orElse: () => widget.drivers.first,
+      );
+
+  VehicleEntity get _activeVehicle => widget.vehicles.firstWhere(
+        (v) => v.id == _auditedVehicleId,
+        orElse: () => widget.vehicles.first,
+      );
+
+  /// Permet de corriger immédiatement un champ manquant signalé par l'Audit Pré-Export
+  void _promptQuickFixDialog({
+    required String title,
+    required String initialValue,
+    required void Function(String newValue) onSave,
+  }) {
+    final ctrl = TextEditingController(text: initialValue);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: PiratePalette.bgSurface,
+        title: Text(title, style: const TextStyle(fontSize: 15)),
+        content: TextField(
+          controller: ctrl,
+          autofocus: true,
+          decoration: const InputDecoration(
+            labelText: 'Renseigner la valeur conforme',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              onSave(ctrl.text.trim());
+              widget.onDataUpdated();
+              Navigator.pop(ctx);
+            },
+            child: const Text('Corriger & Valider'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _buildCertifiedCsvExport() {
+    final sb = StringBuffer();
+    sb.writeln(
+      'Date;Heure;Conducteur;Entreprise;Vehicule;Plaque;Categorie_Fiscale;Pays;Depart;Etapes;Arrivee;Motif;Km_Google_Maps;Marge_Detours;Total_Km;Montant_Rembourse;Devise;Odo_Depart;Odo_Fin',
+    );
+    for (final t in widget.trips.where((e) => e.isPro)) {
+      final d = widget.drivers
+          .where((drv) => drv.id == t.driverId)
+          .firstOrNull;
+      final v = widget.vehicles
+          .where((veh) => veh.id == t.vehicleId)
+          .firstOrNull;
+      final dt =
+          '${t.date.day.toString().padLeft(2, '0')}/${t.date.month.toString().padLeft(2, '0')}/${t.date.year}';
+      final wps = t.waypoints.map((w) => w.address).join(' | ');
+      sb.writeln(
+        '$dt;${t.startTime};${d?.fullName ?? ""};${d?.companyName ?? ""};${v?.name ?? ""};${v?.licensePlate ?? ""};${v?.fiscalCategory ?? ""};${t.countryCode};"${t.originAddress}";"$wps";"${t.destinationAddress}";${t.purpose};${t.mapsDistanceKm.toStringAsFixed(1)};+${t.detourMarginPercent.toInt()}%;${t.finalDistanceKm.toStringAsFixed(1)};${t.reimbursementAmount.toStringAsFixed(2)};${t.currency};${t.odometerStartKm.toStringAsFixed(1)};${t.odometerEndKm.toStringAsFixed(1)}',
+      );
+    }
+    return sb.toString();
+  }
+
+  void _openCertifiedPdfPreview(
+    DriverProfile driver,
+    VehicleEntity vehicle,
+  ) {
+    final proTrips = widget.trips.where((t) => t.isPro).toList();
+    final totalKm =
+        proTrips.fold<double>(0.0, (s, t) => s + t.finalDistanceKm);
+    final totalEur = proTrips
+        .where((t) => t.currency == 'EUR')
+        .fold<double>(0.0, (s, t) => s + t.reimbursementAmount);
+    final totalChf = proTrips
+        .where((t) => t.currency == 'CHF')
+        .fold<double>(0.0, (s, t) => s + t.reimbursementAmount);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: PiratePalette.bgDeep,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.9,
+        maxChildSize: 0.96,
+        builder: (_, sc) => Padding(
+          padding: const EdgeInsets.all(16),
+          child: ListView(
+            controller: sc,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Row(
+                    children: [
+                      PiratePipsBadgeLogo(size: 34),
+                      SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'RAPPORT FISCAL CERTIFIÉ (EXPORT PDF PROBANT)',
+                            style: TextStyle(
+                              color: PiratePalette.goldPrimary,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 13,
+                            ),
+                          ),
+                          Text(
+                            'Audit pré-export validé • Prêt pour Expert-Comptable & Administration',
+                            style: TextStyle(
+                              color: PiratePalette.bullGreen,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
+              ),
+              const Divider(color: PiratePalette.goldPrimary),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: PiratePalette.bgSurface,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: PiratePalette.borderSubtle),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Conducteur : ${driver.fullName} (${driver.role}) — Domicile : ${driver.personalAddress}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Entreprise : ${driver.companyName} — Adresse : ${driver.companyAddress}',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Véhicule : ${vehicle.name} • Plaque : ${vehicle.licensePlate} • ${vehicle.fiscalCategory}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: PiratePalette.goldPrimary,
+                      ),
+                    ),
+                    const Divider(color: PiratePalette.borderSubtle),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Distance Pro : ${totalKm.toStringAsFixed(1)} km',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Total EUR : ${totalEur.toStringAsFixed(2)} €',
+                          style: const TextStyle(
+                            color: PiratePalette.bullGreen,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        if (totalChf > 0)
+                          Text(
+                            'Total CHF : ${totalChf.toStringAsFixed(2)} CHF',
+                            style: const TextStyle(
+                              color: PiratePalette.goldPrimary,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  headingRowColor:
+                      WidgetStateProperty.all(PiratePalette.bgElevated),
+                  columns: const [
+                    DataColumn(label: Text('Date & Heure')),
+                    DataColumn(label: Text('Départ')),
+                    DataColumn(label: Text('Arrivée')),
+                    DataColumn(label: Text('Motif')),
+                    DataColumn(label: Text('Odomètre')),
+                    DataColumn(label: Text('Total km')),
+                    DataColumn(label: Text('Indemnité')),
+                  ],
+                  rows: proTrips.map((t) {
+                    final dt =
+                        '${t.date.day.toString().padLeft(2, '0')}/${t.date.month.toString().padLeft(2, '0')}/${t.date.year} ${t.startTime}';
+                    return DataRow(
+                      cells: [
+                        DataCell(Text(dt)),
+                        DataCell(Text(t.originAddress)),
+                        DataCell(Text(t.destinationAddress)),
+                        DataCell(Text('${t.purpose} (${t.countryCode})')),
+                        DataCell(Text(
+                          '${t.odometerStartKm.toInt()} → ${t.odometerEndKm.toInt()} km',
+                        )),
+                        DataCell(Text('${t.finalDistanceKm.toStringAsFixed(1)} km')),
+                        DataCell(Text(
+                          '${t.reimbursementAmount.toStringAsFixed(2)} ${t.currency}',
+                          style: const TextStyle(
+                            color: PiratePalette.bullGreen,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final driver = _activeDriver;
+    final vehicle = _activeVehicle;
+
+    // Contrôles de complétude de l'Audit Pré-Export (5 points obligatoires)
+    final hasDriverName = driver.fullName.trim().isNotEmpty;
+    final hasPersonalAddress = driver.personalAddress.trim().isNotEmpty;
+    final hasLicensePlate = vehicle.licensePlate.trim().isNotEmpty;
+    final hasCompanyName = driver.companyName.trim().isNotEmpty;
+    final hasCompanyAddress = driver.companyAddress.trim().isNotEmpty;
+
+    final isAuditCompliant = hasDriverName &&
+        hasPersonalAddress &&
+        hasLicensePlate &&
+        hasCompanyName &&
+        hasCompanyAddress;
+
+    int missingCount = 0;
+    if (!hasDriverName) missingCount++;
+    if (!hasPersonalAddress) missingCount++;
+    if (!hasLicensePlate) missingCount++;
+    if (!hasCompanyName) missingCount++;
+    if (!hasCompanyAddress) missingCount++;
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        // Sélecteur d'onglets : [Mes rapports] | [Rapports de l'équipe]
+        SegmentedButton<int>(
+          segments: const [
+            ButtonSegment(
+              value: 0,
+              icon: Icon(Icons.fact_check, size: 16),
+              label: Text('Mes rapports'),
+            ),
+            ButtonSegment(
+              value: 1,
+              icon: Icon(Icons.groups, size: 16),
+              label: Text('Rapports de l\'équipe'),
+            ),
+          ],
+          selected: {_subTab},
+          onSelectionChanged: (s) => setState(() => _subTab = s.first),
+        ),
+        const SizedBox(height: 16),
+
+        if (_subTab == 0) ...[
+          // Sélection du profil et véhicule soumis à l'audit
+          Row(
+            children: [
+              Expanded(
+                child: DropdownButtonFormField<String>(
+                  value: _auditedDriverId,
+                  decoration:
+                      const InputDecoration(labelText: 'Conducteur audité'),
+                  items: widget.drivers
+                      .map(
+                        (d) => DropdownMenuItem(
+                          value: d.id,
+                          child: Text(
+                            d.fullName,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (v) => setState(() => _auditedDriverId = v!),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: DropdownButtonFormField<String>(
+                  value: _auditedVehicleId,
+                  decoration:
+                      const InputDecoration(labelText: 'Véhicule audité'),
+                  items: widget.vehicles
+                      .map(
+                        (v) => DropdownMenuItem(
+                          value: v.id,
+                          child: Text(
+                            v.name,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (v) => setState(() => _auditedVehicleId = v!),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+
+          // CARTE VÉRIFICATEUR PRÉ-EXPORT (AUDIT ANTI-REJET FISCAL)
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: PiratePalette.bgSurface,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: isAuditCompliant
+                    ? PiratePalette.bullGreen
+                    : PiratePalette.bearRed,
+                width: 1.5,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      isAuditCompliant
+                          ? Icons.verified
+                          : Icons.warning_amber_rounded,
+                      color: isAuditCompliant
+                          ? PiratePalette.bullGreen
+                          : PiratePalette.bearRed,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        isAuditCompliant
+                            ? 'AUDIT DE CONFORMITÉ FISCALE : 100 % CONFORME'
+                            : 'ALERTE AUDIT PRÉ-EXPORT : $missingCount CHAMP(S) OBLIGATOIRE(S) MANQUANT(S)',
+                        style: TextStyle(
+                          color: isAuditCompliant
+                              ? PiratePalette.bullGreen
+                              : PiratePalette.bearRed,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'Période : 1er au 31 du mois • Cliquez sur une ligne en alerte rouge pour renseigner immédiatement la donnée manquante.',
+                  style: TextStyle(
+                    color: PiratePalette.textSteel,
+                    fontSize: 11,
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // 1. Conducteur
+                _AuditChecklistItem(
+                  label: 'Conducteur assigné',
+                  value: driver.fullName,
+                  isValid: hasDriverName,
+                  onTapFix: () => _promptQuickFixDialog(
+                    title: 'Modifier le nom du conducteur',
+                    initialValue: driver.lastName,
+                    onSave: (val) => driver.lastName = val,
+                  ),
+                ),
+
+                // 2. Adresse personnelle
+                _AuditChecklistItem(
+                  label: 'Adresse personnelle',
+                  value: driver.personalAddress,
+                  isValid: hasPersonalAddress,
+                  onTapFix: () => _promptQuickFixDialog(
+                    title: 'Renseigner l\'adresse personnelle',
+                    initialValue: driver.personalAddress,
+                    onSave: (val) => driver.personalAddress = val,
+                  ),
+                ),
+
+                // 3. ⚠️ Plaque d'immatriculation (Alerte bloquante si manquante)
+                _AuditChecklistItem(
+                  label: 'Plaque d\'immatriculation (${vehicle.name})',
+                  value: vehicle.licensePlate,
+                  isValid: hasLicensePlate,
+                  blockingWarningText:
+                      '⚠️ Plaque d\'immatriculation manquante (Alerte bloquante)',
+                  onTapFix: () => _promptQuickFixDialog(
+                    title: 'Renseigner la plaque d\'immatriculation (${vehicle.name})',
+                    initialValue: vehicle.licensePlate,
+                    onSave: (val) => vehicle.licensePlate = val,
+                  ),
+                ),
+
+                // 4. Entreprise / Lieu de travail rattaché
+                _AuditChecklistItem(
+                  label: 'Entreprise / Lieu de travail rattaché',
+                  value: driver.companyName,
+                  isValid: hasCompanyName,
+                  onTapFix: () => _promptQuickFixDialog(
+                    title: 'Renseigner l\'entreprise rattachée',
+                    initialValue: driver.companyName,
+                    onSave: (val) => driver.companyName = val,
+                  ),
+                ),
+
+                // 5. ⚠️ Adresse de l'entreprise (Alerte si manquante)
+                _AuditChecklistItem(
+                  label: 'Adresse de l\'entreprise',
+                  value: driver.companyAddress,
+                  isValid: hasCompanyAddress,
+                  blockingWarningText:
+                      '⚠️ Adresse de l\'entreprise manquante (Requis pour contrôle fiscal)',
+                  onTapFix: () => _promptQuickFixDialog(
+                    title: 'Renseigner l\'adresse complète de l\'entreprise',
+                    initialValue: driver.companyAddress,
+                    onSave: (val) => driver.companyAddress = val,
+                  ),
+                ),
+
+                const SizedBox(height: 14),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          if (!isAuditCompliant) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: PiratePalette.bearRed,
+                                content: Text(
+                                  'Export bloqué par l\'audit fiscal : veuillez cliquer sur les alertes ⚠️ rouges ci-dessus pour compléter la plaque ou l\'adresse de l\'entreprise.',
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+                          _openCertifiedPdfPreview(driver, vehicle);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: isAuditCompliant
+                              ? PiratePalette.goldPrimary
+                              : PiratePalette.bgElevated,
+                          foregroundColor: isAuditCompliant
+                              ? Colors.black
+                              : PiratePalette.textSteel,
+                        ),
+                        icon: const Icon(Icons.picture_as_pdf, size: 17),
+                        label: const Text('GÉNÉRER PDF CERTIFIÉ'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          final csv = _buildCertifiedCsvExport();
+                          Clipboard.setData(ClipboardData(text: csv));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: PiratePalette.bullGreen,
+                              content: Text(
+                                'Export CSV / XLSX copié dans le presse-papiers !',
+                              ),
+                            ),
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: PiratePalette.goldPrimary,
+                          side: const BorderSide(
+                            color: PiratePalette.goldPrimary,
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        icon: const Icon(Icons.table_chart, size: 17),
+                        label: const Text('EXPORT CSV / XLSX'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ] else ...[
+          // ONGLET : RAPPORTS DE L'ÉQUIPE (Multi-conducteurs / Flotte d'entreprise)
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: PiratePalette.bgSurface,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: PiratePalette.goldPrimary),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'GESTION CENTRALISÉE DES RAPPORTS DE L\'ÉQUIPE',
+                  style: TextStyle(
+                    color: PiratePalette.goldPrimary,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'Vue gestionnaire de flotte : vérifiez et approuvez les relevés kilométriques soumis par chaque conducteur.',
+                  style: TextStyle(
+                    color: PiratePalette.textSteel,
+                    fontSize: 11,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ...widget.drivers.map((d) {
+                  final dTrips = widget.trips
+                      .where((t) => t.driverId == d.id && t.isPro)
+                      .toList();
+                  final km =
+                      dTrips.fold<double>(0.0, (s, t) => s + t.finalDistanceKm);
+                  final eur = dTrips
+                      .where((t) => t.currency == 'EUR')
+                      .fold<double>(0.0, (s, t) => s + t.reimbursementAmount);
+                  final compliant = d.personalAddress.isNotEmpty &&
+                      d.companyAddress.isNotEmpty;
+
+                  return Card(
+                    color: PiratePalette.bgElevated,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: compliant
+                            ? PiratePalette.bullGreen.withOpacity(0.2)
+                            : PiratePalette.bearRed.withOpacity(0.2),
+                        child: Icon(
+                          compliant ? Icons.check : Icons.warning_amber_rounded,
+                          color: compliant
+                              ? PiratePalette.bullGreen
+                              : PiratePalette.bearRed,
+                        ),
+                      ),
+                      title: Text(
+                        '${d.fullName} (${d.role})',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        '${dTrips.length} trajets pro • ${km.toStringAsFixed(1)} km\nStatut audit : ${compliant ? "Conforme" : "⚠️ Adresse entreprise manquante"}',
+                        style: const TextStyle(fontSize: 11),
+                      ),
+                      isThreeLine: true,
+                      trailing: Text(
+                        '${eur.toStringAsFixed(2)} €',
+                        style: const TextStyle(
+                          color: PiratePalette.bullGreen,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _AuditChecklistItem extends StatelessWidget {
+  final String label;
+  final String value;
+  final bool isValid;
+  final String? blockingWarningText;
+  final VoidCallback onTapFix;
+
+  const _AuditChecklistItem({
+    required this.label,
+    required this.value,
+    required this.isValid,
+    required this.onTapFix,
+    this.blockingWarningText,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTapFix,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: PiratePalette.bgElevated,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isValid ? PiratePalette.bullGreen : PiratePalette.bearRed,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              isValid ? Icons.check_circle : Icons.error_outline,
+              color: isValid ? PiratePalette.bullGreen : PiratePalette.bearRed,
+              size: 19,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: PiratePalette.textSteel,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    isValid
+                        ? value
+                        : (blockingWarningText ?? '⚠️ Champ obligatoire manquant'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: isValid
+                          ? PiratePalette.textPure
+                          : PiratePalette.bearRed,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.edit,
+              size: 16,
+              color: PiratePalette.goldPrimary,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// 13. ONGLET 5 : PARAMÈTRES (SOUS-MODULES DÉTAILLÉS & CATALOGUE 14 VÉHICULES)
+// ============================================================================
+class SettingsMasterScreen extends StatefulWidget {
+  final List<DriverProfile> drivers;
+  final List<VehicleEntity> vehicles;
+  final List<SavedLocationEntity> locations;
+  final List<OdometerLogEntity> odometerLogs;
+  final TaxRulesRepository taxRules;
+  final String defaultCountry;
+  final double defaultMargin;
+  final String googleMapsApiKey;
+  final int completedOnboardingSteps;
+  final VoidCallback onOpenPermissionsModal;
+  final void Function({String? country, double? margin, String? gmapsKey})
+      onStateMutated;
+
+  const SettingsMasterScreen({
+    super.key,
+    required this.drivers,
+    required this.vehicles,
+    required this.locations,
+    required this.odometerLogs,
+    required this.taxRules,
+    required this.defaultCountry,
+    required this.defaultMargin,
+    required this.googleMapsApiKey,
+    required this.completedOnboardingSteps,
+    required this.onOpenPermissionsModal,
+    required this.onStateMutated,
+  });
+
+  @override
+  State<SettingsMasterScreen> createState() => _SettingsMasterScreenState();
+}
+
+class _SettingsMasterScreenState extends State<SettingsMasterScreen> {
+  /// Sélecteur modal du Catalogue Fiscal officiel des 14 catégories de véhicules
+  void _showAddVehicleFromCatalogModal() {
+    final nameCtrl = TextEditingController();
+    final plateCtrl = TextEditingController();
+    final odoCtrl = TextEditingController(text: '15000');
+    final beaconCtrl = TextEditingController(text: 'BT-VEHICULE-PRO');
+    FiscalVehicleCategorySpec selectedSpec = kOfficialVehicleCatalog[4]; // Voiture (7 CV et plus)
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: PiratePalette.bgSurface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setModalState) => DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.88,
+          maxChildSize: 0.95,
+          builder: (_, sc) => Padding(
+            padding: const EdgeInsets.all(16),
+            child: ListView(
+              controller: sc,
+              children: [
+                const Text(
+                  'CATALOGUE FISCAL DES VÉHICULES (NOMENCLATURE OFFICIELLE)',
+                  style: TextStyle(
+                    color: PiratePalette.goldPrimary,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: nameCtrl,
+                  decoration: const InputDecoration(
+                    labelText: 'Nom / Modèle du véhicule (ex: Audi Q8 50 TDI)',
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: plateCtrl,
+                        decoration: const InputDecoration(
+                          labelText: 'Plaque d\'immatriculation (ex: PP-999-LU)',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextField(
+                        controller: odoCtrl,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Odomètre actuel (km)',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: beaconCtrl,
+                  decoration: const InputDecoration(
+                    labelText: 'Identifiant iBeacon / Bluetooth associé',
+                    prefixIcon: Icon(Icons.bluetooth, size: 18),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                const Text(
+                  'SÉLECTIONNEZ LA CATÉGORIE FISCALE EXACTE :',
+                  style: TextStyle(
+                    color: PiratePalette.goldWarm,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ...kOfficialVehicleCatalog.map((spec) {
+                  final isSelected = selectedSpec.label == spec.label;
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 6),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? PiratePalette.goldPrimary.withOpacity(0.18)
+                          : PiratePalette.bgElevated,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: isSelected
+                            ? PiratePalette.goldPrimary
+                            : PiratePalette.borderSubtle,
+                      ),
+                    ),
+                    child: RadioListTile<String>(
+                      dense: true,
+                      activeColor: PiratePalette.goldPrimary,
+                      value: spec.label,
+                      groupValue: selectedSpec.label,
+                      title: Text(
+                        spec.label,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                      subtitle: Text(
+                        spec.isElectric
+                            ? '100% Électrique • Majoration légale +20% incluse'
+                            : 'Groupe : ${spec.group} • ${spec.fiscalHp} CV',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: spec.isElectric
+                              ? PiratePalette.bullGreen
+                              : PiratePalette.textSteel,
+                        ),
+                      ),
+                      onChanged: (_) =>
+                          setModalState(() => selectedSpec = spec),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 12),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    if (nameCtrl.text.trim().isNotEmpty) {
+                      widget.vehicles.add(
+                        VehicleEntity(
+                          id: 'veh_${DateTime.now().millisecondsSinceEpoch}',
+                          name: nameCtrl.text.trim(),
+                          licensePlate: plateCtrl.text.trim(),
+                          fiscalCategory: selectedSpec.label,
+                          vehicleGroup: selectedSpec.group,
+                          fiscalHp: selectedSpec.fiscalHp,
+                          isElectric: selectedSpec.isElectric,
+                          currentOdometerKm:
+                              double.tryParse(odoCtrl.text) ?? 0.0,
+                          bluetoothBeaconName: beaconCtrl.text.trim(),
+                        ),
+                      );
+                      widget.onStateMutated();
+                      Navigator.pop(ctx);
+                    }
+                  },
+                  icon: const Icon(Icons.save),
+                  label: const Text('AJOUTER AU GARAGE FISCAL'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Ajout d'un relevé périodique d'odomètre certifié avec photo
+  void _showAddOdometerLogDialog() {
+    String vehId = widget.vehicles.first.id;
+    final odoCtrl = TextEditingController(
+      text: widget.vehicles.first.currentOdometerKm.toStringAsFixed(0),
+    );
+    final noteCtrl =
+        TextEditingController(text: 'Contrôle périodique certifié');
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          backgroundColor: PiratePalette.bgSurface,
+          title: const Text('Nouveau relevé d\'odomètre certifié'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<String>(
+                value: vehId,
+                decoration: const InputDecoration(labelText: 'Véhicule'),
+                items: widget.vehicles
+                    .map(
+                      (v) => DropdownMenuItem(
+                        value: v.id,
+                        child: Text(v.name, style: const TextStyle(fontSize: 12)),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (v) {
+                  setDialogState(() {
+                    vehId = v!;
+                    final sel =
+                        widget.vehicles.firstWhere((e) => e.id == vehId);
+                    odoCtrl.text = sel.currentOdometerKm.toStringAsFixed(0);
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: odoCtrl,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Valeur exacte du compteur (km)',
+                  suffixText: 'km',
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: noteCtrl,
+                decoration:
+                    const InputDecoration(labelText: 'Note d\'audit comptable'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Annuler'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                final val = double.tryParse(odoCtrl.text) ?? 0.0;
+                widget.odometerLogs.insert(
+                  0,
+                  OdometerLogEntity(
+                    id: 'odo_${DateTime.now().millisecondsSinceEpoch}',
+                    vehicleId: vehId,
+                    recordedAt: DateTime.now(),
+                    odometerValueKm: val,
+                    photoEvidenceRef:
+                        'PHOTO-ODO-${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}.JPG',
+                    note: noteCtrl.text.trim(),
+                  ),
+                );
+                final vIdx =
+                    widget.vehicles.indexWhere((e) => e.id == vehId);
+                if (vIdx != -1) {
+                  widget.vehicles[vIdx].currentOdometerKm = val;
+                }
+                widget.onStateMutated();
+                Navigator.pop(ctx);
+              },
+              icon: const Icon(Icons.camera_alt, size: 16),
+              label: const Text('Certifier avec Photo'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Éditeur des Taux kilométriques multi-pays (FR, LU, BE, DE, CH)
+  void _showTaxRatesEditorModal() {
+    final luCtrl = TextEditingController(
+      text: widget.taxRules.luxembourgFlatEur.toStringAsFixed(2),
+    );
+    final beCtrl = TextEditingController(
+      text: widget.taxRules.belgiumFlatEur.toStringAsFixed(2),
+    );
+    final deProCtrl = TextEditingController(
+      text: widget.taxRules.germanyDienstreisenEur.toStringAsFixed(2),
+    );
+    final deP1Ctrl = TextEditingController(
+      text: widget.taxRules.germanyPendlerFirst20Eur.toStringAsFixed(2),
+    );
+    final deP2Ctrl = TextEditingController(
+      text: widget.taxRules.germanyPendlerAfter20Eur.toStringAsFixed(2),
+    );
+    final chCtrl = TextEditingController(
+      text: widget.taxRules.switzerlandFlatChf.toStringAsFixed(2),
+    );
+    final gmapsCtrl = TextEditingController(text: widget.googleMapsApiKey);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: PiratePalette.bgSurface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'TAUX KILOMÉTRIQUES MULTI-PAYS & CLÉ API GOOGLE MAPS',
+                style: TextStyle(
+                  color: PiratePalette.goldPrimary,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: luCtrl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Luxembourg (€/km)',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: beCtrl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Belgique (€/km)',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: deProCtrl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Allemagne Dienstreisen (€/km)',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: chCtrl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Suisse TCS (CHF/km)',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: deP1Ctrl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'DE Pendler km 1-20 (€/km)',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: deP2Ctrl,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'DE Pendler >20 km (€/km)',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: gmapsCtrl,
+                decoration: const InputDecoration(
+                  labelText: 'Clé API Google Maps (Autocomplete + Directions)',
+                ),
+              ),
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    widget.taxRules.luxembourgFlatEur =
+                        double.tryParse(luCtrl.text) ?? 0.40;
+                    widget.taxRules.belgiumFlatEur =
+                        double.tryParse(beCtrl.text) ?? 0.43;
+                    widget.taxRules.germanyDienstreisenEur =
+                        double.tryParse(deProCtrl.text) ?? 0.30;
+                    widget.taxRules.germanyPendlerFirst20Eur =
+                        double.tryParse(deP1Ctrl.text) ?? 0.30;
+                    widget.taxRules.germanyPendlerAfter20Eur =
+                        double.tryParse(deP2Ctrl.text) ?? 0.38;
+                    widget.taxRules.switzerlandFlatChf =
+                        double.tryParse(chCtrl.text) ?? 0.72;
+                    widget.onStateMutated(gmapsKey: gmapsCtrl.text.trim());
+                    Navigator.pop(ctx);
+                  },
+                  child: const Text('SAUVEGARDER LES BARÈMES FISCAUX'),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -4411,231 +4950,207 @@ class _FiscalSettingsAndAboutTabState extends State<FiscalSettingsAndAboutTab> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        // 1. BARÈMES INTERNATIONAUX ÉDITABLES
+        // 1. Sous-module : Enregistrement automatique & iBeacon
         Card(
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'PARAMÈTRES FISCAUX & BARÈMES LÉGAUX (FR / LU / BE / DE / CH)',
-                  style: TextStyle(
-                    color: PirateTheme.goldPrimary,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _luCtrl,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'Luxembourg (€/km)',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        controller: _beCtrl,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'Belgique (€/km)',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _deDiensCtrl,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'Allemagne Dienstreisen (€/km)',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        controller: _chCtrl,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'Suisse TCS (CHF/km)',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _dePendler1Ctrl,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'DE Pendler ≤ 20km (€/km)',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        controller: _dePendler2Ctrl,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'DE Pendler > 20km (€/km)',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: _elecBonusCtrl,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'France — Majoration Véhicule 100% Électrique (%)',
-                    suffixText: '%',
-                  ),
-                ),
-                const SizedBox(height: 14),
-                const Text(
-                  'BARÈME KILOMÉTRIQUE FRANÇAIS PAR TRANCHES (3 CV À 7 CV+)',
-                  style: TextStyle(
-                    color: PirateTheme.goldSecondary,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    visualDensity: VisualDensity.compact,
-                    columns: const [
-                      DataColumn(label: Text('CV')),
-                      DataColumn(label: Text('≤ 5 000 km')),
-                      DataColumn(label: Text('5 001 à 20 000 km')),
-                      DataColumn(label: Text('> 20 000 km')),
-                    ],
-                    rows: [3, 4, 5, 6, 7].map((hp) {
-                      final r = widget.taxConfig.frenchBrackets[hp]!;
-                      return DataRow(
-                        cells: [
-                          DataCell(Text(hp == 7 ? '7 CV+' : '$hp CV')),
-                          DataCell(Text('d × ${r.rateUpTo5000}')),
-                          DataCell(Text(
-                              '(d × ${r.rate5001To20000}) + ${r.fixed5001To20000.toInt()}€')),
-                          DataCell(Text('d × ${r.rateOver20000}')),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
+          child: ListTile(
+            leading: const Icon(
+              Icons.sensors,
+              color: PiratePalette.bullGreen,
             ),
+            title: const Text(
+              'Enregistrement automatique & Autorisations',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+            ),
+            subtitle: Text(
+              'Motion API, GPS Toujours, Batterie & iBeacon (${widget.completedOnboardingSteps}/5 étapes actives)',
+              style: const TextStyle(fontSize: 11),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: widget.onOpenPermissionsModal,
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        // 2. Sous-module : Catalogue Fiscal des Véhicules (14 catégories)
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: PiratePalette.bgSurface,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: PiratePalette.borderSubtle),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'VÉHICULES & NOMENCLATURE FISCALE',
+                    style: TextStyle(
+                      color: PiratePalette.goldPrimary,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 12,
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: _showAddVehicleFromCatalogModal,
+                    icon: const Icon(Icons.add, size: 15),
+                    label: const Text(
+                      'Ajouter (14 catégories)',
+                      style: TextStyle(fontSize: 11),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              ...widget.vehicles.map((v) {
+                final missingPlate = v.licensePlate.trim().isEmpty;
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(
+                    v.isElectric
+                        ? Icons.electric_car
+                        : v.vehicleGroup == 'MOTO' ||
+                                v.vehicleGroup == 'SCOOTER'
+                            ? Icons.two_wheeler
+                            : Icons.directions_car,
+                    color: PiratePalette.goldPrimary,
+                  ),
+                  title: Text(
+                    '${v.name} — ${v.fiscalCategory}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                  subtitle: Text(
+                    missingPlate
+                        ? '⚠️ Plaque manquante • Odo: ${v.currentOdometerKm.toInt()} km • BT: ${v.bluetoothBeaconName}'
+                        : 'Plaque: ${v.licensePlate} • Odo: ${v.currentOdometerKm.toInt()} km • BT: ${v.bluetoothBeaconName}',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: missingPlate
+                          ? PiratePalette.bearRed
+                          : PiratePalette.textSteel,
+                    ),
+                  ),
+                );
+              }),
+            ],
           ),
         ),
         const SizedBox(height: 12),
 
-        // 2. CONFIGURATION GOOGLE MAPS API & CLOUD SYNC OPTIONNEL
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'INTÉGRATION GOOGLE MAPS API & SYNCHRONISATION CLOUD',
-                  style: TextStyle(
-                    color: PirateTheme.goldPrimary,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 12,
+        // 3. Sous-module : Relevés périodiques d'odomètre (Compteur véhicule)
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: PiratePalette.bgSurface,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: PiratePalette.borderSubtle),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'RELEVÉS PÉRIODIQUES D\'ODOMÈTRE CERTIFIÉS',
+                    style: TextStyle(
+                      color: PiratePalette.goldPrimary,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 12,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: _gmapsKeyCtrl,
-                  decoration: const InputDecoration(
-                    labelText:
-                        'Clé API Google Maps (Places Autocomplete + Directions)',
-                    hintText: 'AIzaSy... (Optionnel : routage GPS actif par défaut)',
-                  ),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: _cloudUrlCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Endpoint Cloud Sync (Webhook REST JSON optionnel)',
-                    hintText: 'https://...',
-                  ),
-                ),
-                if (widget.lastCloudSyncStatus != null) ...[
-                  const SizedBox(height: 6),
-                  Text(
-                    widget.lastCloudSyncStatus!,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: PirateTheme.bullGreen,
+                  OutlinedButton.icon(
+                    onPressed: _showAddOdometerLogDialog,
+                    icon: const Icon(
+                      Icons.speed,
+                      size: 15,
+                      color: PiratePalette.goldPrimary,
+                    ),
+                    label: const Text(
+                      'Nouveau relevé',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: PiratePalette.goldPrimary,
+                      ),
                     ),
                   ),
                 ],
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: _saveRates,
-                        icon: const Icon(Icons.check_circle, size: 18),
-                        label: const Text('ENREGISTRER LES PARAMÈTRES'),
-                      ),
+              ),
+              const SizedBox(height: 8),
+              ...widget.odometerLogs.map((log) {
+                final v = widget.vehicles.firstWhere(
+                  (e) => e.id == log.vehicleId,
+                  orElse: () => widget.vehicles.first,
+                );
+                final dt =
+                    '${log.recordedAt.day.toString().padLeft(2, '0')}/${log.recordedAt.month.toString().padLeft(2, '0')}/${log.recordedAt.year}';
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(
+                    Icons.camera_alt,
+                    color: PiratePalette.bullGreen,
+                    size: 18,
+                  ),
+                  title: Text(
+                    '${v.name} : ${log.odometerValueKm.toStringAsFixed(0)} km ($dt)',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
                     ),
-                    const SizedBox(width: 8),
-                    OutlinedButton.icon(
-                      onPressed: widget.onTriggerCloudSync,
-                      icon: const Icon(
-                        Icons.cloud_upload,
-                        size: 18,
-                        color: PirateTheme.goldPrimary,
-                      ),
-                      label: const Text(
-                        'SYNC CLOUD',
-                        style: TextStyle(color: PirateTheme.goldPrimary),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                  subtitle: Text(
+                    'Preuve : ${log.photoEvidenceRef} • ${log.note}',
+                    style: const TextStyle(fontSize: 11),
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // 4. Sous-module : Taux kilométriques multi-pays (FR / LU / BE / DE / CH)
+        Card(
+          child: ListTile(
+            leading: const Icon(
+              Icons.euro,
+              color: PiratePalette.goldPrimary,
             ),
+            title: const Text(
+              'Taux kilométriques & Barèmes fiscaux (FR / LU / BE / DE / CH)',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+            ),
+            subtitle: const Text(
+              'Tranches progressives France (+20% Élec), Forfaits LU, BE, DE (Pendler/Dienstreisen), CH',
+              style: TextStyle(fontSize: 11),
+            ),
+            trailing: const Icon(Icons.edit, color: PiratePalette.goldPrimary),
+            onTap: _showTaxRatesEditorModal,
           ),
         ),
         const SizedBox(height: 16),
 
-        // 3. ÉCRAN À PROPOS / MENTIONS DE MARQUE PIRATE PIPS™
+        // 5. Écran légal / À propos : Protection légale Pirate Pips™
         Container(
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: PirateTheme.bgSecondary,
+            color: PiratePalette.bgSurface,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: PirateTheme.goldPrimary, width: 1.2),
+            border: Border.all(color: PiratePalette.goldPrimary, width: 1.3),
           ),
           child: const Column(
             children: [
-              PiratePipsLogo(size: 70),
+              PiratePipsBadgeLogo(size: 68),
               SizedBox(height: 12),
               Text(
                 'Développé par Pirate Pips™',
                 style: TextStyle(
-                  color: PirateTheme.textWhite,
+                  color: PiratePalette.textPure,
                   fontWeight: FontWeight.w900,
                   fontSize: 16,
                 ),
@@ -4645,24 +5160,24 @@ class _FiscalSettingsAndAboutTabState extends State<FiscalSettingsAndAboutTab> {
                 'Protection légale, propriété exclusive de Pirate Pips™.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: PirateTheme.goldPrimary,
+                  color: PiratePalette.goldPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 13,
                 ),
               ),
               SizedBox(height: 8),
               Text(
-                'Architecture Local-First avec synchronisation Cloud optionnelle • Moteur fiscal multi-juridictions (France, Luxembourg, Belgique, Allemagne, Suisse).',
+                'Solution mobile Local-First d\'enregistrement automatisé des trajets (Motion API, GPS & iBeacon Bluetooth) et d\'audit fiscal certifié multi-juridictions.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: PirateTheme.textMuted,
+                  color: PiratePalette.textSteel,
                   fontSize: 11,
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 32),
       ],
     );
   }
