@@ -33,13 +33,13 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: 4. Creation du projet Android et injection des permissions natives
+      - name: 4. Creation du projet Android et installation des modules GPS, PDF et Excel
         run: |
           flutter create --platforms=android --org com.piratepips kilotracker_pro
           cp main.dart kilotracker_pro/lib/main.dart
           cd kilotracker_pro
-          flutter pub add shared_preferences http
-          sed -i 's/<application/<uses-permission android:name="android.permission.INTERNET"\/>\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"\/>\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"\/>\n    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"\/>\n    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"\/>\n    <uses-permission android:name="android.permission.BLUETOOTH"\/>\n    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"\/>\n    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"\/>\n    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"\/>\n    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"\/>\n    <uses-permission android:name="android.permission.CAMERA"\/>\n    <application/g' android/app/src/main/AndroidManifest.xml
+          flutter pub add shared_preferences http geolocator path_provider share_plus pdf printing
+          sed -i 's/<application/<uses-permission android:name="android.permission.INTERNET"\/>\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"\/>\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"\/>\n    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"\/>\n    <uses-permission android:name="android.permission.BLUETOOTH"\/>\n    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"\/>\n    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"\/>\n    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"\/>\n    <application/g' android/app/src/main/AndroidManifest.xml
           sed -i 's/android:label="[^"]*"/android:label="Pirate Pips KiloTracker"/g' android/app/src/main/AndroidManifest.xml
 
       - name: 5. Compilation du fichier APK Release
